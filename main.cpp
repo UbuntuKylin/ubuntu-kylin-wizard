@@ -11,10 +11,7 @@
 #include <iostream>
 
 
-#define PAGES_NUM 2
-
-const gint PANEL_HEIGHT = 24;
-const gint LAUNCHER_SIZE = 64;
+#define PAGES_NUM 6
 
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, gpointer *user_data)
 {
@@ -217,11 +214,11 @@ int main (int argc, char *argv[])
 
   lightspot1 = WID(info.builder, WIDGET, "lightspot1");
   gtk_image_set_from_file(GTK_IMAGE(lightspot1), PKGDATADIR"/lightspot.png");
-  gtk_fixed_move(GTK_FIXED(fixed), lightspot1, get_spot1_pos("Nautilus").x, get_spot1_pos("Nautilus").y);
+//  gtk_fixed_move(GTK_FIXED(fixed), lightspot1, get_spot1_pos("Nautilus").x - 0.5 * LIGHTSPOT_SIZE, get_spot1_pos("Nautilus").y  - 0.5 * LIGHTSPOT_SIZE);
 
   lightspot2 = WID(info.builder, WIDGET, "lightspot2");
   gtk_image_set_from_file(GTK_IMAGE(lightspot2), PKGDATADIR"/lightspot.png");
-  gtk_fixed_move(GTK_FIXED(fixed), lightspot2, get_spot2_pos().x, get_spot2_pos().y);
+  gtk_fixed_move(GTK_FIXED(fixed), lightspot2, get_spot2_pos().x - 0.5 * LIGHTSPOT_SIZE, get_spot2_pos().y - 0.5 * LIGHTSPOT_SIZE);
 
   g_signal_connect(G_OBJECT(window), "draw",
       G_CALLBACK(on_draw_event), &info);

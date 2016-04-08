@@ -1,7 +1,5 @@
 #include "style.h"
 
-#include "rawpixel.h"
-
 #include <gio/gio.h>
 #include <string>
 #include <memory>
@@ -14,17 +12,20 @@ const std::string UNITY_GSETTINGS_SCHEMA = "org.compiz.unityshell";
 const std::string UNITY_GSETTINGS_PATH = "/org/compiz/profiles/unity/plugins/unityshell/";
 const std::string ICON_SIZE = "icon-size";
 
-const RawPixel DEFAULT_ICON_SIZE       = 48_em;
-const RawPixel DEFAULT_ICON_SIZE_DELTA =  6_em;
-const RawPixel SPACE_BETWEEN_ICONS     =  5_em;
+const RawPixel DEFAULT_ICON_SIZE  = 48_em;
 
-const RawPixel ICON_PADDING     = 6_em;
 const RawPixel SIDE_LINE_WIDTH = 1_em;
-
-const gint LIGHTSPOT_SIZE = 21;
 
 const gint root_width = 1366;
 const gint root_height = 768;
+
+gint get_icon_size()
+{
+  GSettings *unity_settings = g_settings_new_with_path(UNITY_GSETTINGS_SCHEMA.c_str(), UNITY_GSETTINGS_PATH.c_str());
+  gint icon_size = g_settings_get_int(unity_settings, ICON_SIZE.c_str());
+  icon_size += DEFAULT_ICON_SIZE_DELTA;
+  return icon_size;
+}
 
 Point get_icon_position(std::string icon_name)
 {
@@ -52,11 +53,9 @@ Point get_icon_position(std::string icon_name)
   if (!found)
     return icon_pos;
 
-  GSettings *unity_settings = g_settings_new_with_path(UNITY_GSETTINGS_SCHEMA.c_str(), UNITY_GSETTINGS_PATH.c_str());
-  gint icon_size = g_settings_get_int(unity_settings, ICON_SIZE.c_str());
-
+  gint icon_size = get_icon_size();
   n++;
-  icon_pos.x = (n - 1) * (icon_size + DEFAULT_ICON_SIZE_DELTA + SPACE_BETWEEN_ICONS) + SPACE_BETWEEN_ICONS + (icon_size + DEFAULT_ICON_SIZE_DELTA) / 2;
+  icon_pos.x = (n - 1) * (icon_size + SPACE_BETWEEN_ICONS) + SPACE_BETWEEN_ICONS + icon_size / 2;
   icon_pos.y = 768 - 56;
 
   return icon_pos;
@@ -138,8 +137,6 @@ Point get_spot1_pos(std::string icon_name)
 {
   Point spot1_pos;
   spot1_pos = get_icon_position(icon_name);
-  spot1_pos.x -= 0.5 * LIGHTSPOT_SIZE;
-  spot1_pos.y -= 0.5 * LIGHTSPOT_SIZE;
 
   return spot1_pos;
 }
@@ -151,4 +148,13 @@ Point get_spot2_pos()
   spot2_pos.y = 0.25 * root_height;
 
   return spot2_pos;
+}
+
+Point get_inflexion_pos()
+{
+  Point inflexion_pos;
+  inflexion_pos.x = get_spot2_pos().x;
+  inflexion_pos.y = get_close_pos().y + 50;
+
+  return inflexion_pos;
 }

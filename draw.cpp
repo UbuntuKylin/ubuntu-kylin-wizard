@@ -6,27 +6,22 @@
 #include <cairo.h>
 #include <iostream>
 
+void clip_rec(cairo_t *cr, int x, int y, int width, int height)
+{
+  cairo_save(cr);
+  cairo_rectangle(cr, x, y, width, height);
+  cairo_clip(cr);
+  cairo_new_path(cr);
+  cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
+  cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint(cr);
+  cairo_restore(cr);
+}
+
 void do_drawing(cairo_t *cr, Info *info)
 {
-  Point icon_pos = get_icon_position("Nautilus");
-  if (icon_pos.x == 0)
-    std::cout << "Not found" << std::endl;
   draw_background(cr, info);
   draw_page(cr, info);
-  cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
-  cairo_set_line_width(cr, 4);
-  cairo_move_to(cr, icon_pos.x, icon_pos.y);
-  cairo_line_to(cr, icon_pos.x, icon_pos.y - 600);
-  cairo_stroke(cr);
-
-//   // blur and blend overlay onto initial image-surface
-//   cairo_surface_set_device_scale(surface, w_scale, h_scale);
-//   blur(blurred_cr, blurSize);
-//   cairo_set_source_surface(cr, surface, 0.0, 0.0);
-//   cairo_paint_with_alpha(cr, opacity);
-
-   // clean up
-//   cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 }
 
 void draw_background(cairo_t *cr, Info *info)
@@ -56,30 +51,65 @@ void draw_page(cairo_t *cr, Info *info)
 {
   switch (info->index) {
   case 0:
-    cairo_save(cr);
-    cairo_rectangle(cr, 0, 768 - 56, 1366, 56);
-    cairo_clip(cr);
-    cairo_new_path(cr);
-    cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
-    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(cr);
-    cairo_restore(cr);
-
+    clip_rec(cr, 0, 768 - LAUNCHER_SIZE, 1366, LAUNCHER_SIZE);
+    draw_polyline(cr, info, 0);
     gtk_image_set_from_file(WID(info->builder, IMAGE, "page_ind"), PKGDATADIR"/step_1.png");
     break;
  case 1:
-    cairo_save(cr);
-    cairo_rectangle(cr, 5, 768 - 56, 48 + 6, 48 + 6);
-    cairo_clip(cr);
-    cairo_new_path(cr);
-    cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
-    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(cr);
-    cairo_restore(cr);
-
+    clip_rec(cr, SPACE_BETWEEN_ICONS, 768 - LAUNCHER_SIZE + ICON_PADDING, 48 + DEFAULT_ICON_SIZE_DELTA, 48 + DEFAULT_ICON_SIZE_DELTA);
+    draw_polyline(cr, info, 1);
     gtk_image_set_from_file(WID(info->builder, IMAGE, "page_ind"), PKGDATADIR"/step_2.png");
+    break;
+  case 2:
+    clip_rec(cr, 2 * SPACE_BETWEEN_ICONS + 48 + DEFAULT_ICON_SIZE_DELTA, 768 - LAUNCHER_SIZE + ICON_PADDING, 48 + DEFAULT_ICON_SIZE_DELTA, 48 + DEFAULT_ICON_SIZE_DELTA);
+    draw_polyline(cr, info, 2);
+    gtk_image_set_from_file(WID(info->builder, IMAGE, "page_ind"), PKGDATADIR"/step_3.png");
+      break;
+  case 3:
+    break;
+  case 4:
+//    clip_rec(cr, );
+    break;
+  case 5:
     break;
   default:
     break;
   }
+}
+
+void draw_polyline(cairo_t *cr, Info *info, int index)
+{
+  cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 8.0);
+  cairo_set_line_width(cr, 2);
+
+  Point p;
+  switch (index) {
+  case 0:
+    p.x = get_spot2_pos().x;
+    p.y = 768 - 56;
+    break;
+  case 1:
+    p.x = SPACE_BETWEEN_ICONS + 0.5 * (48 + DEFAULT_ICON_SIZE_DELTA);
+    p.y = 768 - 56;
+    break;
+  case 2:
+    p.x = get_spot1_pos("Nautilus").x;
+    p.y = get_spot1_pos("Nautilus").y;
+    break;
+  case 3:
+    break;
+  case 4:
+    p.x = get_spot1_pos("unity-control-center").x;
+    p.y = get_spot1_pos("unity-control-center").y;
+    break;
+  default:
+    break;
+  }
+  gtk_fixed_move(WID(info->builder, FIXED, "fixed"), WID(info->builder, WIDGET, "lightspot1"),
+                 p.x - 0.5 * LIGHTSPOT_SIZE, p.y - 0.5 * LIGHTSPOT_SIZE);
+  cairo_move_to(cr, p.x, p.y);
+  cairo_line_to(cr, p.x, get_inflexion_pos().y);
+  cairo_line_to(cr, get_inflexion_pos().x, get_inflexion_pos().y);
+  cairo_line_to(cr, get_spot2_pos().x, get_spot2_pos().y);
+  cairo_stroke(cr);
 }

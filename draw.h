@@ -18,5 +18,6 @@ typedef struct{
 void do_drawing(cairo_t *, Info *info);
 void draw_background(cairo_t *, Info *info);
 void draw_page(cairo_t *cr, Info *info);
+void draw_polyline(cairo_t *cr, Info *info, int index);
 
 #endif
