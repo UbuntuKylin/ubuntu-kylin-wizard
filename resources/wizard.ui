@@ -58,40 +58,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="title1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">label</property>
-          </object>
-          <packing>
-            <property name="x">248</property>
-            <property name="y">64</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="title2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">label</property>
-          </object>
-          <packing>
-            <property name="x">248</property>
-            <property name="y">122</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="details">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">label</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="x">248</property>
-            <property name="y">186</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkEventBox" id="close_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -139,6 +105,65 @@
           <packing>
             <property name="x">196</property>
             <property name="y">66</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="resize_mode">queue</property>
+            <child>
+              <object class="GtkLabel" id="title1">
+                <property name="width_request">200</property>
+                <property name="height_request">50</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">label</property>
+                <property name="lines">1</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="details">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">label</property>
+                <property name="wrap">True</property>
+                <property name="lines">3</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="title2">
+                <property name="width_request">200</property>
+                <property name="height_request">50</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">label</property>
+                <property name="track_visited_links">False</property>
+                <property name="lines">1</property>
+                <property name="xalign">0</property>
+                <property name="yalign">1</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="x">255</property>
+            <property name="y">115</property>
           </packing>
         </child>
       </object>
