@@ -40,9 +40,10 @@ Style::Style()
 
   icon_order_[0] = MID_LAUNCHER;
   icon_order_[1] = 1;
-  icon_order_[2] = get_icon_order("Nautilus");
-  icon_order_[3] = get_icon_order("youker-assistant");
-  icon_order_[4] = get_icon_order("unity-control-center");
+  // +1 because of dash is not in the favorites list.
+  icon_order_[2] = get_icon_order("Nautilus") + 1;
+  icon_order_[3] = get_icon_order("youker-assistant") + 1;
+  icon_order_[4] = get_icon_order("unity-control-center") + 1;
   icon_order_[5] = UNDER_PANEL;
 
   Point p;
@@ -121,7 +122,7 @@ gint Style::get_icon_order(std::string icon_name)
   {
     std::string value = strings[i];
 
-    if (value.find("devices") != std::string::npos || value.find("running") != std::string::npos)
+    if (value.find("devices") != std::string::npos || value.find("running") != std::string::npos || value.find("expo-icon") != std::string::npos)
       adjust--;
 
     if (!value.empty() && value.find(icon_name) != std::string::npos)

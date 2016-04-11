@@ -20,8 +20,25 @@ set (PKGDATADIR "${WIZARDDATADIR}/images")
 set (SOURCEDATADIR "${CMAKE_CURRENT_SOURCE_DIR}/resources")
 
 configure_file (${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/config.h)
-
 include_directories(${CMAKE_BINARY_DIR})
+
+# XDG Autostart
+
+set(
+  WIZARD_XDG_AUTOSTART
+  "${CMAKE_CURRENT_BINARY_DIR}/ubuntu-kylin-wizard.desktop"
+)
+
+configure_file(
+  "ubuntu-kylin-wizard.desktop.in"
+  ${WIZARD_XDG_AUTOSTART}
+  @ONLY
+)
+
+install(
+  FILES "${WIZARD_XDG_AUTOSTART}"
+  DESTINATION "/etc/xdg/autostart"
+)
 
 # Resources
 file (GLOB _datafiles "${CMAKE_CURRENT_SOURCE_DIR}/resources/*")
@@ -31,10 +48,10 @@ find_package (PkgConfig REQUIRED)
 set (WIZARD_DEPS
      cairo>=1.13.1
      gtk+-3.0>=3.1
+     x11
 )
 pkg_check_modules (CACHED_WIZARD_DEPS REQUIRED ${WIZARD_DEPS})
 include_directories(${CACHED_WIZARD_DEPS_INCLUDE_DIRS})
-link_directories(${CACHED_WIZARD_DEPS_LIBRARY_DIRS})
 add_definitions(${CACHED_WIZARD_DEPS_CFLAGS_OTHER})
 add_executable(wizard ${SRC_LIST})
 target_link_libraries(wizard ${CACHED_WIZARD_DEPS_LIBRARIES})
