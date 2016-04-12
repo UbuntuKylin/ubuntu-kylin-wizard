@@ -1,0 +1,17 @@
+Source: ubuntu-kylin-wizard
+Section: gnome
+Priority: optional
+Maintainer: feng-kylin <jianfengli@ubuntukylin.com>
+Build-Depends: cmake,
+               debhelper (>= 9),
+               libcairo2-dev,
+               libgtk-3-dev (>= 3.1),
+               libpango1.0-dev,
+Standards-Version: 1.0
+Homepage: https://launchpad.net/ubuntu-kylin-wizard
+
+Package: ubuntu-kylin-wizard
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: This the wizard for ubuntu kylin.

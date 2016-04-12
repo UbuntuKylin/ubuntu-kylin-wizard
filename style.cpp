@@ -13,8 +13,6 @@ const std::string UNITY_GSETTINGS_SCHEMA = "org.compiz.unityshell";
 const std::string UNITY_GSETTINGS_PATH = "/org/compiz/profiles/unity/plugins/unityshell/";
 const std::string ICON_SIZE = "icon-size";
 
-
-
 const gint MID_LAUNCHER = -2;
 const gint UNDER_PANEL = -3;
 
@@ -23,6 +21,8 @@ const RawPixel DEFAULT_ICON_SIZE_DELTA =  6_em;
 
 const gint PANEL_HEIGHT = 24;
 const gint LAUNCHER_SIZE = 64;
+const gint ARROW_HEIGHT = 80;
+const gint ARROW_WIDTH  = 33;
 
 const RawPixel SIDE_LINE_WIDTH = 1_em;
 
@@ -54,11 +54,11 @@ Style::Style()
     icon_pos_[i].y = p.y;
   }
 
-  left_arrow_pos_.x = 0.05 * root_width_;
-  left_arrow_pos_.y = 0.5 * root_height_;
+  left_arrow_pos_.x = 0.05 * (root_width_ - ARROW_WIDTH);
+  left_arrow_pos_.y = 0.5 * (root_height_ - ARROW_HEIGHT);
 
-  right_arrow_pos_.x = 0.95 * root_width_;
-  right_arrow_pos_.y = 0.5 * root_height_;
+  right_arrow_pos_.x = 0.95 * (root_width_ - ARROW_WIDTH);
+  right_arrow_pos_.y = 0.5 * (root_height_ - ARROW_HEIGHT);
 
   base_pos_.x = 0.125 * root_width_;
   base_pos_.y = 0.25 * root_height_;

@@ -52,15 +52,15 @@ static gboolean on_arrow_left_pressed(GtkWidget *widget, GdkEventButton *event, 
   return FALSE;
 }
 
-static gboolean enter_left_box(GtkWidget *widget, GdkEventButton *event, gpointer *user_data)
+static gboolean enter_left_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
 {
-//  gtk_image_set_from_file(GTK_IMAGE(widget), PKGDATADIR"/");
+  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "arrow_left_img"), PKGDATADIR"/arrow_left_hover.png");
   return FALSE;
 }
 
-static gboolean leave_left_box(GtkWidget *widget, GdkEventButton *event, gpointer *user_data)
+static gboolean leave_left_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
 {
-//  gtk_image_set_from_file(GTK_IMAGE(widget), PKGDATADIR"/");
+  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "arrow_left_img"), PKGDATADIR"/arrow_left.png");
   return FALSE;
 }
 
@@ -74,15 +74,15 @@ static gboolean on_arrow_right_pressed(GtkWidget *widget, GdkEventButton *event,
   return FALSE;
 }
 
-static gboolean enter_right_box(GtkWidget *widget, GdkEventButton *event, gpointer *user_data)
+static gboolean enter_right_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
 {
-//  gtk_image_set_from_file(GTK_IMAGE(widget), PKGDATADIR"/");
+  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "arrow_right_img"), PKGDATADIR"/arrow_right_hover.png");
   return FALSE;
 }
 
-static gboolean leave_right_box(GtkWidget *widget, GdkEventButton *event, gpointer *user_data)
+static gboolean leave_right_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
 {
-//  gtk_image_set_from_file(GTK_IMAGE(widget), PKGDATADIR"/");
+  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "arrow_right_img"), PKGDATADIR"/arrow_right.png");
   return FALSE;
 }
 
@@ -134,24 +134,34 @@ Draw::Draw()
 
   fixed_ = WID(builder_, WIDGET, "fixed");
 
-  GdkPixbuf *image_buf = gdk_pixbuf_new_from_file_at_size(PKGDATADIR"/computer.png", 422, 334, &error);
-  if (!image_buf) {
-    std::cout << "error message: " << error->message << std::endl;
-  }
-  GdkPixbuf *preview = gdk_pixbuf_copy (image_buf);
-
   root_pixbuf_ = gdk_pixbuf_get_from_window(gdk_get_default_root_window(), 0, 0, style_->get_root_width(), style_->get_root_height());
-  GdkPixbuf *tmp = gdk_pixbuf_scale_simple(root_pixbuf_, 385, 230, GDK_INTERP_NEAREST);
 
-  if (tmp)
-  {
-    gdk_pixbuf_composite(tmp, preview,
-                         17, 22, 385, 230, 17, 22, 1,1,GDK_INTERP_NEAREST, 255);
-    g_object_unref(tmp);
-  }
+//  GdkPixbuf *image_buf = gdk_pixbuf_new_from_file_at_size(PKGDATADIR"/computer.png", 422, 334, &error);
+//  if (!image_buf) {
+//    std::cout << "error message: " << error->message << std::endl;
+//  }
+//  GdkPixbuf *preview = gdk_pixbuf_copy (image_buf);
+
+//  GdkPixbuf *tmp = gdk_pixbuf_scale_simple(root_pixbuf_, 385, 230, GDK_INTERP_NEAREST);
+
+//  if (tmp)
+//  {
+//    gdk_pixbuf_composite(tmp, preview,
+//                         17, 22, 385, 230, 17, 22, 1,1,GDK_INTERP_NEAREST, 255);
+//    g_object_unref(tmp);
+//  }
+//  base_img_ = WID(builder_, WIDGET, "base_img");
+//  gtk_image_set_from_pixbuf(GTK_IMAGE(base_img_), preview);
+//  gtk_fixed_move(GTK_FIXED(fixed_), base_img_, style_->get_base_pos().x, style_->get_base_pos().y);
+
   base_img_ = WID(builder_, WIDGET, "base_img");
-  gtk_image_set_from_pixbuf(GTK_IMAGE(base_img_), preview);
+  GdkPixbuf *base_pixbuf = gdk_pixbuf_new_from_file(PKGDATADIR"/computer.png", &error);
+  gtk_image_set_from_pixbuf(GTK_IMAGE(base_img_), base_pixbuf);
   gtk_fixed_move(GTK_FIXED(fixed_), base_img_, style_->get_base_pos().x, style_->get_base_pos().y);
+
+  thumbnail_ = WID(builder_, WIDGET, "thumbnail");
+  gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
+  gtk_fixed_move(GTK_FIXED(fixed_), thumbnail_, style_->get_base_pos().x + 17, style_->get_base_pos().y + 24);
 
   grid_ = WID(builder_, WIDGET, "grid");
   gtk_fixed_move(GTK_FIXED(fixed_), grid_, style_->get_title1_pos().x, style_->get_title1_pos().y);
@@ -167,7 +177,7 @@ Draw::Draw()
   gtk_widget_set_size_request(details_, 500, 50);
   gtk_label_set_line_wrap(GTK_LABEL(details_), TRUE);
 
-  PangoFontDescription *fd = pango_font_description_from_string("Serif 20");
+  PangoFontDescription *fd = pango_font_description_from_string("Serif 30");
   gtk_widget_override_font(title1_, fd);
 
   GdkColor color;
@@ -178,12 +188,12 @@ Draw::Draw()
 
   left_box_ = WID(builder_, WIDGET, "left_box");
   arrow_left_img_ = WID(builder_, WIDGET, "arrow_left_img");
-  gtk_image_set_from_file(GTK_IMAGE(arrow_left_img_), PKGDATADIR"/arrow_previous.svg");
+  gtk_image_set_from_file(GTK_IMAGE(arrow_left_img_), PKGDATADIR"/arrow_left.png");
   gtk_fixed_move(GTK_FIXED(fixed_), left_box_, style_->get_left_arrow_pos().x, style_->get_left_arrow_pos().y);
 
   right_box_ = WID(builder_, WIDGET, "right_box");
   arrow_right_img_ = WID(builder_, WIDGET, "arrow_right_img");
-  gtk_image_set_from_file(GTK_IMAGE(arrow_right_img_), PKGDATADIR"/arrow_next.svg");
+  gtk_image_set_from_file(GTK_IMAGE(arrow_right_img_), PKGDATADIR"/arrow_right.png");
   gtk_fixed_move(GTK_FIXED(fixed_), right_box_, style_->get_right_arrow_pos().x, style_->get_right_arrow_pos().y);
 
   close_box_ = WID(builder_, WIDGET, "close_box");
@@ -217,16 +227,16 @@ Draw::Draw()
   g_signal_connect(G_OBJECT(left_box_), "button_press_event",
       G_CALLBACK(on_arrow_left_pressed), this);
   g_signal_connect(G_OBJECT(left_box_), "enter_notify_event",
-      G_CALLBACK(enter_left_box), NULL);
+      G_CALLBACK(enter_left_box), this);
   g_signal_connect(G_OBJECT(left_box_), "leave_notify_event",
-      G_CALLBACK(leave_left_box), NULL);
+      G_CALLBACK(leave_left_box), this);
 
   g_signal_connect(G_OBJECT(right_box_), "button_press_event",
       G_CALLBACK(on_arrow_right_pressed), this);
   g_signal_connect(G_OBJECT(right_box_), "enter_notify_event",
-      G_CALLBACK(enter_right_box), NULL);
+      G_CALLBACK(enter_right_box), this);
   g_signal_connect(G_OBJECT(right_box_), "leave_notify_event",
-      G_CALLBACK(leave_right_box), NULL);
+      G_CALLBACK(leave_right_box), this);
 }
 
 void Draw::Run()
@@ -276,6 +286,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_label_set_text(GTK_LABEL(title2_), "Launcher");
     gtk_label_set_text(GTK_LABEL(details_), "Ubuntu特有的快速启动面板，可以方便快捷的打开和切换各种应用。同时可以根据使用习惯自由定制Launcher面板上的应用。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
     break;
  case 1:
     draw_polyline(cr);
@@ -284,6 +295,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_label_set_text(GTK_LABEL(title2_), "Dash");
     gtk_label_set_text(GTK_LABEL(details_), "点击此处可以打开Dash界面，Dash可以提供强大的快速智能搜索功能，可以方便快捷的搜索并打开本地和网络的各种资源，包括：应用、文件、音乐、视频等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_2.png");
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_2.png");
     break;
   case 2:
     draw_polyline(cr);
@@ -292,6 +304,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_label_set_text(GTK_LABEL(title2_), "文件管理器");
     gtk_label_set_text(GTK_LABEL(details_), "可以通过此处打开文件管理器，它可以方便的浏览和管理系统中的各种数据。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_3.png");
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_3.png");
     break;
   case 3:
     draw_polyline(cr);
@@ -300,6 +313,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_label_set_text(GTK_LABEL(title2_), "优客助手");
     gtk_label_set_text(GTK_LABEL(details_), "优麒麟为用户打造的系统管理和配置工具，具备强大的系统信息展示、一键垃圾清理和系统定制美化等功能");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_4.png");
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_4.png");
     break;
   case 4:
     draw_polyline(cr);
@@ -308,6 +322,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_label_set_text(GTK_LABEL(title2_), "控制面版");
     gtk_label_set_text(GTK_LABEL(details_), "允许用户查看并操作基本的系统设置。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_5.png");
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_5.png");
     break;
   case 5:
     draw_polyline(cr);
@@ -316,6 +331,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_label_set_text(GTK_LABEL(title2_), "Indicator");
     gtk_label_set_text(GTK_LABEL(details_), "可以在此区域方便快捷的查看和配置系统声音、网络、时间和消息等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_6.png");
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_6.png");
     break;
   default:
     break;

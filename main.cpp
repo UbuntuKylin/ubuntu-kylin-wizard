@@ -7,6 +7,23 @@
 #include <X11/Xlib.h>
 #include <unistd.h>
 
+gboolean first_run()
+{
+  std::string config_dir = g_get_user_config_dir();
+  std::string wizard_config = config_dir.append(G_DIR_SEPARATOR_S "wizard" G_DIR_SEPARATOR_S);
+  if (g_mkdir_with_parents(wizard_config.c_str(), 0700) < 0)
+    wizard_config = "";
+
+  if (!wizard_config.empty() && !g_file_test((wizard_config+"wizard_first_run.stamp").c_str(), G_FILE_TEST_EXISTS))
+  {
+    GError *error = NULL;
+    g_file_set_contents((wizard_config+"wizard_first_run.stamp").c_str(), "", 0, &error);
+//    if (error)
+//      LOG_OUT << error->message;
+    return true;
+  }
+  return false;
+}
 
 gboolean wait_launcher()
 {
@@ -36,6 +53,9 @@ gboolean wait_launcher()
 int main (int argc, char *argv[])
 {
   gtk_init(&argc, &argv);
+
+//  if (!first_run())
+//    return 0;
 
   gboolean launcher_showed = false;
   while(!launcher_showed)

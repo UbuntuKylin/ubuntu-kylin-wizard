@@ -1,4 +1,4 @@
-project (kylin-wizard)
+project (ubuntu-kylin-wizard)
 cmake_minimum_required (VERSION 2.8.9)
 
 include (GNUInstallDirs)
@@ -53,5 +53,7 @@ set (WIZARD_DEPS
 pkg_check_modules (CACHED_WIZARD_DEPS REQUIRED ${WIZARD_DEPS})
 include_directories(${CACHED_WIZARD_DEPS_INCLUDE_DIRS})
 add_definitions(${CACHED_WIZARD_DEPS_CFLAGS_OTHER})
-add_executable(wizard ${SRC_LIST})
-target_link_libraries(wizard ${CACHED_WIZARD_DEPS_LIBRARIES})
+add_executable(ubuntu-kylin-wizard ${SRC_LIST})
+target_link_libraries(ubuntu-kylin-wizard ${CACHED_WIZARD_DEPS_LIBRARIES})
+
+install (TARGETS ubuntu-kylin-wizard DESTINATION "bin")

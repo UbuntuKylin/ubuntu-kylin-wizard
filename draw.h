@@ -40,6 +40,7 @@ private:
   GtkWidget *arrow_left_img_;
   GtkWidget *arrow_right_img_;
   GtkWidget *base_img_;
+  GtkWidget *thumbnail_;
   GtkWidget *close_img_;
   GtkWidget *page_ind_;
   GtkWidget *grid_;
