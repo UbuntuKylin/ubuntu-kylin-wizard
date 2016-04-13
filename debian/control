@@ -7,7 +7,7 @@ Build-Depends: cmake,
                libcairo2-dev,
                libgtk-3-dev (>= 3.1),
                libpango1.0-dev,
-Standards-Version: 1.0
+Standards-Version: 16.04.0
 Homepage: https://launchpad.net/ubuntu-kylin-wizard
 
 Package: ubuntu-kylin-wizard

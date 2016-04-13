@@ -61,9 +61,12 @@ Style::Style()
 {
   UpdateDPI();
 
-  GdkWindow *root_win = gdk_get_default_root_window();
-  root_width_ = gdk_window_get_width(root_win);
-  root_height_ = gdk_window_get_height(root_win);
+  GdkScreen *root_screen = gdk_screen_get_default();
+  gint primary_monitor = gdk_screen_get_primary_monitor(root_screen);
+  GdkRectangle geo;
+  gdk_screen_get_monitor_geometry(root_screen, primary_monitor, &geo);
+  root_width_ = geo.width;
+  root_height_ = geo.height;
 
   icon_size_ = g_settings_get_int(unity_settings_, ICON_SIZE.c_str()) + DEFAULT_ICON_SIZE_DELTA;
   RawPixel launcher_size = icon_size_ + 2 * ICON_PADDING + SIDE_LINE_WIDTH - 2;
@@ -154,7 +157,8 @@ gint Style::get_icon_order(std::string icon_name)
   {
     std::string value = strings[i];
 
-    if (value.find("devices") != std::string::npos || value.find("running") != std::string::npos || value.find("expo-icon") != std::string::npos)
+    if (value.find("devices") != std::string::npos || value.find("running") != std::string::npos ||
+        value.find("expo-icon") != std::string::npos || value.find("ubiquity") != std::string::npos)
       adjust--;
 
     if (!value.empty() && value.find(icon_name) != std::string::npos)

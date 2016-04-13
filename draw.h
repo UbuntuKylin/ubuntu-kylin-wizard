@@ -18,7 +18,9 @@ public:
 
   GtkBuilder* Builer();
   void Run();
+  void Setup();
   void do_drawing(cairo_t *cr);
+  void draw_other(gint num);
   void draw_background(cairo_t *cr);
   void draw_page(cairo_t *cr);
   void draw_polyline(cairo_t *cr);
@@ -30,7 +32,8 @@ private:
   Style *style_;
   GtkBuilder *builder_;
   GdkPixbuf *root_pixbuf_;
-  int page_num_;
+  gint primary_screen_;
+  gint page_num_;
 
   GtkWidget *window_;
   GtkWidget *fixed_;

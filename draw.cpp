@@ -105,32 +105,16 @@ static gboolean on_draw_event(GtkWidget *widget, cairo_t *cr, Draw* draw)
   return FALSE;
 }
 
-static void setup(GtkWidget *win)
-{
-  gtk_widget_set_app_paintable(win, TRUE);
-  gtk_window_set_type_hint(GTK_WINDOW(win), GDK_WINDOW_TYPE_HINT_DOCK);
-  gtk_window_set_keep_above(GTK_WINDOW(win), TRUE);
-
-  GdkScreen *screen = gdk_screen_get_default();
-  GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
-  gint width = gdk_screen_get_width(screen);
-  gint height = gdk_screen_get_height(screen);
-  gtk_window_set_default_size(GTK_WINDOW(win), width, height);
-
-  if (visual != NULL && gdk_screen_is_composited(screen)) {
-      gtk_widget_set_visual(win, visual);
-  }
-}
-
 Draw::Draw()
   : builder_(gtk_builder_new_from_file(PKGDATADIR"/wizard.ui"))
   , style_(new Style())
+  , primary_screen_(0)
   , page_num_(0)
 {
   GError *error = NULL;
 
   window_ = WID(builder_, WIDGET, "window");
-  setup(window_);
+  Setup();
 
   fixed_ = WID(builder_, WIDGET, "fixed");
 
@@ -217,6 +201,10 @@ Draw::Draw()
   lightspot2_ = WID(builder_, WIDGET, "lightspot2");
   gtk_image_set_from_file(GTK_IMAGE(lightspot2_), PKGDATADIR"/lightspot.png");
 
+  gint screen_num = gdk_screen_get_n_monitors(gdk_screen_get_default());
+  if (screen_num > 1)
+    draw_other(screen_num);
+
   g_signal_connect(G_OBJECT(window_), "draw",
       G_CALLBACK(on_draw_event), this);
   g_signal_connect(G_OBJECT(window_), "key-press-event",
@@ -242,6 +230,37 @@ Draw::Draw()
       G_CALLBACK(enter_right_box), this);
   g_signal_connect(G_OBJECT(right_box_), "leave_notify_event",
       G_CALLBACK(leave_right_box), this);
+}
+
+void Draw::Setup()
+{
+  gtk_widget_set_app_paintable(window_, TRUE);
+  gtk_window_set_type_hint(GTK_WINDOW(window_), GDK_WINDOW_TYPE_HINT_DOCK);
+  gtk_window_set_keep_above(GTK_WINDOW(window_), TRUE);
+
+  GdkScreen *screen = gdk_screen_get_default();
+  GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
+
+  gint width = gdk_screen_get_width(screen);
+  gint height = gdk_screen_get_height(screen);
+  gtk_window_set_default_size(GTK_WINDOW(window_), width, height);
+
+  if (visual != NULL && gdk_screen_is_composited(screen)) {
+      gtk_widget_set_visual(window_, visual);
+  }
+}
+
+void Draw::draw_other(gint num)
+{
+  for (int i = 0; i < num; i++)
+  {
+    if (i == primary_screen_)
+      continue;
+    GtkWidget *button = gtk_image_new_from_file(PKGDATADIR"/close.png");
+    GdkRectangle geo;
+    gdk_screen_get_monitor_geometry(gdk_screen_get_default(), i, &geo);
+    gtk_fixed_put(GTK_FIXED(fixed_), button, geo.x + geo.width/2 - 115/2, geo.y + geo.height/2 - 35/2);
+  }
 }
 
 void Draw::Run()
