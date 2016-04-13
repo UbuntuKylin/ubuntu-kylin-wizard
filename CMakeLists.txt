@@ -12,6 +12,7 @@ set (SRC_LIST main.cpp
               draw.cpp
               style.cpp
               rawpixel.cpp
+              EMConverter.cpp
 )
 
 set (PREFIXPATH "${CMAKE_INSTALL_PREFIX}")

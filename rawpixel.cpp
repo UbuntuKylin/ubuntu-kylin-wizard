@@ -15,6 +15,11 @@ RawPixel::RawPixel(double raw_pixel)
   : raw_pixel_(raw_pixel)
 {}
 
+int RawPixel::CP(EMConverter::Ptr const& converter) const
+{
+  return converter->CP(raw_pixel_);
+}
+
 int RawPixel::CP(double scale) const
 {
   return std::round(raw_pixel_ * scale);

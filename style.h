@@ -6,6 +6,7 @@
 #include <string>
 
 #include "rawpixel.h"
+#include "EMConverter.h"
 
 const gint PAGES_NUM = 6;
 const gint LIGHTSPOT_SIZE = 21;
@@ -42,15 +43,18 @@ public:
   Point get_inflexion_pos();
 
   Point icon_pos_[PAGES_NUM];
+  EMConverter::Ptr cv_;
 
 private:
   gint get_icon_order(std::string icon_name);
   Point cal_icon_position(int index);
+  void UpdateDPI();
+
   gint root_width_;
   gint root_height_;
   gint launcher_size_;
   gint panel_height_;
-  gint icon_size_;
+  RawPixel icon_size_;
   gint icon_order_[PAGES_NUM];
 
   Point left_arrow_pos_;
@@ -66,7 +70,6 @@ private:
 
   GSettings *unity_settings_;
   GSettings *launcher_settings_;
-
 };
 
 #endif

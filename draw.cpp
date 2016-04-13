@@ -124,9 +124,9 @@ static void setup(GtkWidget *win)
 
 Draw::Draw()
   : builder_(gtk_builder_new_from_file(PKGDATADIR"/wizard.ui"))
+  , style_(new Style())
   , page_num_(0)
 {
-  style_ = new Style();
   GError *error = NULL;
 
   window_ = WID(builder_, WIDGET, "window");
@@ -136,6 +136,7 @@ Draw::Draw()
 
   root_pixbuf_ = gdk_pixbuf_get_from_window(gdk_get_default_root_window(), 0, 0, style_->get_root_width(), style_->get_root_height());
 
+//  // Get the thumbnail from current screen.
 //  GdkPixbuf *image_buf = gdk_pixbuf_new_from_file_at_size(PKGDATADIR"/computer.png", 422, 334, &error);
 //  if (!image_buf) {
 //    std::cout << "error message: " << error->message << std::endl;
@@ -174,11 +175,15 @@ Draw::Draw()
 
   details_ = WID(builder_, WIDGET, "details");
   gtk_label_set_text(GTK_LABEL(details_), "Ubuntu特有的快速启动面板，可以方便快捷的打开和切换各种应用。同时可以根据使用习惯自由定制Launcher面板上的应用。");
-  gtk_widget_set_size_request(details_, 500, 50);
+  gtk_widget_set_size_request(details_, 0.8 * (style_->get_right_arrow_pos().x - style_->get_spot_pos().x), -1);
   gtk_label_set_line_wrap(GTK_LABEL(details_), TRUE);
 
-  PangoFontDescription *fd = pango_font_description_from_string("Serif 30");
-  gtk_widget_override_font(title1_, fd);
+  PangoFontDescription *fd_1 = pango_font_description_from_string("Serif 30");
+  gtk_widget_override_font(title1_, fd_1);
+  PangoFontDescription *fd_2 = pango_font_description_from_string("Serif 24");
+  gtk_widget_override_font(title2_, fd_2);
+  PangoFontDescription *fd_3 = pango_font_description_from_string("Serif 18");
+  gtk_widget_override_font(details_, fd_3);
 
   GdkColor color;
   gdk_color_parse("white", &color);
@@ -290,7 +295,7 @@ void Draw::draw_page(cairo_t *cr)
     break;
  case 1:
     draw_polyline(cr);
-    clip_rec(cr, SPACE_BETWEEN_ICONS, root_height - launcher_size + ICON_PADDING, icon_size, icon_size);
+    clip_rec(cr, SPACE_BETWEEN_ICONS.CP(style_->cv_), root_height - launcher_size + ICON_PADDING.CP(style_->cv_), icon_size, icon_size);
     gtk_label_set_text(GTK_LABEL(title1_), "快速的智能搜索");
     gtk_label_set_text(GTK_LABEL(title2_), "Dash");
     gtk_label_set_text(GTK_LABEL(details_), "点击此处可以打开Dash界面，Dash可以提供强大的快速智能搜索功能，可以方便快捷的搜索并打开本地和网络的各种资源，包括：应用、文件、音乐、视频等。");
@@ -299,7 +304,7 @@ void Draw::draw_page(cairo_t *cr)
     break;
   case 2:
     draw_polyline(cr);
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING, icon_size, icon_size);
+    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING.CP(style_->cv_), icon_size, icon_size);
     gtk_label_set_text(GTK_LABEL(title1_), "浏览并管理您的文件");
     gtk_label_set_text(GTK_LABEL(title2_), "文件管理器");
     gtk_label_set_text(GTK_LABEL(details_), "可以通过此处打开文件管理器，它可以方便的浏览和管理系统中的各种数据。");
@@ -308,7 +313,7 @@ void Draw::draw_page(cairo_t *cr)
     break;
   case 3:
     draw_polyline(cr);
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING, icon_size, icon_size);
+    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING.CP(style_->cv_), icon_size, icon_size);
     gtk_label_set_text(GTK_LABEL(title1_), "查看和修改系统设置");
     gtk_label_set_text(GTK_LABEL(title2_), "优客助手");
     gtk_label_set_text(GTK_LABEL(details_), "优麒麟为用户打造的系统管理和配置工具，具备强大的系统信息展示、一键垃圾清理和系统定制美化等功能");
@@ -317,7 +322,7 @@ void Draw::draw_page(cairo_t *cr)
     break;
   case 4:
     draw_polyline(cr);
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING, icon_size, icon_size);
+    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING.CP(style_->cv_), icon_size, icon_size);
     gtk_label_set_text(GTK_LABEL(title1_), "如何合理的管理系统配置");
     gtk_label_set_text(GTK_LABEL(title2_), "控制面版");
     gtk_label_set_text(GTK_LABEL(details_), "允许用户查看并操作基本的系统设置。");
@@ -355,7 +360,7 @@ void Draw::draw_polyline(cairo_t *cr)
   if (page_num_ != 5)
     inflexion_y = style_->get_inflexion_pos().y;
   else
-    inflexion_y = 100;
+    inflexion_y = (style_->get_spot_pos().y + style_->get_panel_height()) / 2;
 
   cairo_line_to(cr, p.x, inflexion_y);
   cairo_line_to(cr, style_->get_inflexion_pos().x, inflexion_y);

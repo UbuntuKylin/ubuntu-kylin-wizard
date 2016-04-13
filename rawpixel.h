@@ -1,11 +1,14 @@
 #ifndef RAW_PIXEL_H
 #define RAW_PIXEL_H
 
+#include "EMConverter.h"
+
 class RawPixel
 {
 public:
   RawPixel(double raw_pixel = 0);
 
+  int CP(EMConverter::Ptr const&) const;
   int CP(double scale) const;
 
   operator int() const;
