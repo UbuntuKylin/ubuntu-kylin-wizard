@@ -5,7 +5,10 @@
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
     <property name="is_focus">True</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
     <property name="decorated">False</property>
+    <property name="deletable">False</property>
     <child>
       <object class="GtkFixed" id="fixed">
         <property name="visible">True</property>
@@ -58,7 +61,7 @@
         <child>
           <object class="GtkEventBox" id="close_box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <child>
               <object class="GtkImage" id="close_img">
                 <property name="visible">True</property>

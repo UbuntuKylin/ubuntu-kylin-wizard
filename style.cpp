@@ -1,3 +1,22 @@
+// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 2 -*-
+/*
+ * Copyright (C) 2015, National University of Defense Technology(NUDT) & Kylin Ltd
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authored by: handsome_feng <jianfengli@ubuntukylin.com>
+ */
+
 #include "style.h"
 
 #include <gtk/gtk.h>
@@ -21,12 +40,11 @@ const gint UNDER_PANEL = -3;
 
 const RawPixel DEFAULT_ICON_SIZE  = 48_em;
 const RawPixel DEFAULT_ICON_SIZE_DELTA =  6_em;
-
-const RawPixel PANEL_HEIGHT = 24;
+const RawPixel SIDE_LINE_WIDTH = 1_em;
+const RawPixel PANEL_HEIGHT = 24_em;
 const gint ARROW_HEIGHT = 80;
 const gint ARROW_WIDTH  = 33;
 
-const RawPixel SIDE_LINE_WIDTH = 1_em;
 const double DEFAULT_DPI = 96.0f;
 
 void Style::UpdateDPI()
@@ -101,7 +119,7 @@ Style::Style()
   spot_pos_.y = 0.25 * root_height_;
 
   inflexion_pos_.x = spot_pos_.x;
-  inflexion_pos_.y = close_pos_.y + 30;
+  inflexion_pos_.y = close_pos_.y + CLOSE_BUTTON_HEIGHT + 5;
 
   icon_order_[0] = MID_LAUNCHER;
   icon_order_[1] = 1;

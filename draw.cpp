@@ -1,3 +1,22 @@
+// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 2 -*-
+/*
+ * Copyright (C) 2015, National University of Defense Technology(NUDT) & Kylin Ltd
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authored by: handsome_feng <jianfengli@ubuntukylin.com>
+ */
+
 #include "draw.h"
 
 #include "style.h"
@@ -30,15 +49,15 @@ static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, gpoin
   return FALSE;
 }
 
-static gboolean enter_close_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
+static gboolean enter_close_box(GtkWidget *widget, GdkEventButton *event, GtkWidget *img)
 {
-  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "close_img"), PKGDATADIR"/close_hover.png");
+  gtk_image_set_from_file(GTK_IMAGE(img), PKGDATADIR"/close_hover.png");
   return FALSE;
 }
 
-static gboolean leave_close_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
+static gboolean leave_close_box(GtkWidget *widget, GdkEventButton *event, GtkWidget *img)
 {
-  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "close_img"), PKGDATADIR"/close.png");
+  gtk_image_set_from_file(GTK_IMAGE(img), PKGDATADIR"/close.png");
   return FALSE;
 }
 
@@ -52,15 +71,15 @@ static gboolean on_arrow_left_pressed(GtkWidget *widget, GdkEventButton *event, 
   return FALSE;
 }
 
-static gboolean enter_left_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
+static gboolean enter_left_box(GtkWidget *widget, GdkEventButton *event, GtkWidget *img)
 {
-  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "arrow_left_img"), PKGDATADIR"/arrow_left_hover.png");
+  gtk_image_set_from_file(GTK_IMAGE(img), PKGDATADIR"/arrow_left_hover.png");
   return FALSE;
 }
 
-static gboolean leave_left_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
+static gboolean leave_left_box(GtkWidget *widget, GdkEventButton *event, GtkWidget *img)
 {
-  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "arrow_left_img"), PKGDATADIR"/arrow_left.png");
+  gtk_image_set_from_file(GTK_IMAGE(img), PKGDATADIR"/arrow_left.png");
   return FALSE;
 }
 
@@ -74,15 +93,15 @@ static gboolean on_arrow_right_pressed(GtkWidget *widget, GdkEventButton *event,
   return FALSE;
 }
 
-static gboolean enter_right_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
+static gboolean enter_right_box(GtkWidget *widget, GdkEventButton *event, GtkWidget *img)
 {
-  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "arrow_right_img"), PKGDATADIR"/arrow_right_hover.png");
+  gtk_image_set_from_file(GTK_IMAGE(img), PKGDATADIR"/arrow_right_hover.png");
   return FALSE;
 }
 
-static gboolean leave_right_box(GtkWidget *widget, GdkEventButton *event, Draw *draw)
+static gboolean leave_right_box(GtkWidget *widget, GdkEventButton *event, GtkWidget *img)
 {
-  gtk_image_set_from_file(WID(draw->Builer(), IMAGE, "arrow_right_img"), PKGDATADIR"/arrow_right.png");
+  gtk_image_set_from_file(GTK_IMAGE(img), PKGDATADIR"/arrow_right.png");
   return FALSE;
 }
 
@@ -96,6 +115,7 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer use
   default:
     break;
   }
+  return FALSE;
 }
 
 static gboolean on_draw_event(GtkWidget *widget, cairo_t *cr, Draw* draw)
@@ -213,30 +233,32 @@ Draw::Draw()
   g_signal_connect(G_OBJECT(close_box_), "button_press_event",
       G_CALLBACK(on_close_pressed), NULL);
   g_signal_connect(G_OBJECT(close_box_), "enter_notify_event",
-      G_CALLBACK(enter_close_box), this);
+      G_CALLBACK(enter_close_box), close_img_);
   g_signal_connect(G_OBJECT(close_box_), "leave_notify_event",
-      G_CALLBACK(leave_close_box), this);
+      G_CALLBACK(leave_close_box), close_img_);
 
   g_signal_connect(G_OBJECT(left_box_), "button_press_event",
       G_CALLBACK(on_arrow_left_pressed), this);
   g_signal_connect(G_OBJECT(left_box_), "enter_notify_event",
-      G_CALLBACK(enter_left_box), this);
+      G_CALLBACK(enter_left_box), arrow_left_img_);
   g_signal_connect(G_OBJECT(left_box_), "leave_notify_event",
-      G_CALLBACK(leave_left_box), this);
+      G_CALLBACK(leave_left_box), arrow_left_img_);
 
   g_signal_connect(G_OBJECT(right_box_), "button_press_event",
       G_CALLBACK(on_arrow_right_pressed), this);
   g_signal_connect(G_OBJECT(right_box_), "enter_notify_event",
-      G_CALLBACK(enter_right_box), this);
+      G_CALLBACK(enter_right_box), arrow_right_img_);
   g_signal_connect(G_OBJECT(right_box_), "leave_notify_event",
-      G_CALLBACK(leave_right_box), this);
+      G_CALLBACK(leave_right_box), arrow_right_img_);
 }
 
 void Draw::Setup()
 {
   gtk_widget_set_app_paintable(window_, TRUE);
+  gtk_window_set_decorated(GTK_WINDOW(window_), FALSE);
   gtk_window_set_type_hint(GTK_WINDOW(window_), GDK_WINDOW_TYPE_HINT_DOCK);
   gtk_window_set_keep_above(GTK_WINDOW(window_), TRUE);
+//  gtk_window_fullscreen(GTK_WINDOW(window_));
 
   GdkScreen *screen = gdk_screen_get_default();
   GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
@@ -257,15 +279,21 @@ void Draw::draw_other(gint num)
     if (i == primary_screen_)
       continue;
     GtkWidget *button = gtk_image_new_from_file(PKGDATADIR"/close.png");
+    GtkWidget *box = gtk_event_box_new();
+    gtk_container_add(GTK_CONTAINER(box), button);
+    g_signal_connect(G_OBJECT(box), "button_press_event", G_CALLBACK(on_close_pressed), NULL);
+    g_signal_connect(G_OBJECT(box), "enter_notify_event", G_CALLBACK(enter_close_box), button);
+    g_signal_connect(G_OBJECT(box), "leave_notify_event", G_CALLBACK(leave_close_box), button);
     GdkRectangle geo;
     gdk_screen_get_monitor_geometry(gdk_screen_get_default(), i, &geo);
-    gtk_fixed_put(GTK_FIXED(fixed_), button, geo.x + geo.width/2 - 115/2, geo.y + geo.height/2 - 35/2);
+    gtk_fixed_put(GTK_FIXED(fixed_), box, geo.x + (geo.width - CLOSE_BUTTON_WIDTH)/2, geo.y + (geo.height - CLOSE_BUTTON_HEIGHT)/2);
   }
 }
 
 void Draw::Run()
 {
   gtk_widget_show_all(window_);
+  gtk_window_present(GTK_WINDOW(window_));
 }
 
 GtkBuilder* Draw::Builer()

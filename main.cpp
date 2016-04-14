@@ -1,3 +1,22 @@
+// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 2 -*-
+/*
+ * Copyright (C) 2015, National University of Defense Technology(NUDT) & Kylin Ltd
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authored by: handsome_feng <jianfengli@ubuntukylin.com>
+ */
+
 #include "blur.h"
 #include "draw.h"
 #include "style.h"
@@ -18,8 +37,11 @@ gboolean first_run()
   {
     GError *error = NULL;
     g_file_set_contents((wizard_config+"wizard_first_run.stamp").c_str(), "", 0, &error);
-//    if (error)
-//      LOG_OUT << error->message;
+    if (error != NULL)
+    {
+      g_printerr("%s. \n", error->message);
+      g_error_free(error);
+    }
     return true;
   }
   return false;
@@ -54,8 +76,8 @@ int main (int argc, char *argv[])
 {
   gtk_init(&argc, &argv);
 
-//  if (!first_run())
-//    return 0;
+  if (!first_run())
+    return 0;
 
   gboolean launcher_showed = false;
   while(!launcher_showed)

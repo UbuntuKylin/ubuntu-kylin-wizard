@@ -1,3 +1,22 @@
+// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 2 -*-
+/*
+ * Copyright (C) 2015, National University of Defense Technology(NUDT) & Kylin Ltd
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authored by: handsome_feng <jianfengli@ubuntukylin.com>
+ */
+
 #ifndef STYLE_H
 #define STYLE_H
 
@@ -10,6 +29,8 @@
 
 const gint PAGES_NUM = 6;
 const gint LIGHTSPOT_SIZE = 21;
+const gint CLOSE_BUTTON_WIDTH = 115;
+const gint CLOSE_BUTTON_HEIGHT = 35;
 const RawPixel SPACE_BETWEEN_ICONS     =  5_em;
 const RawPixel ICON_PADDING            =  6_em;
 
