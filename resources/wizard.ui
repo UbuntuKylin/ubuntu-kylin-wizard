@@ -115,10 +115,9 @@
             <property name="resize_mode">queue</property>
             <child>
               <object class="GtkLabel" id="title1">
-                <property name="width_request">200</property>
-                <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_bottom">10</property>
                 <property name="label" translatable="yes">label</property>
                 <property name="lines">1</property>
                 <property name="xalign">0</property>
@@ -146,8 +145,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="title2">
-                <property name="width_request">200</property>
-                <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">label</property>

@@ -28,7 +28,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <pango/pango.h>
 
-#include <iostream>
 
 void clip_rec(cairo_t *cr, int x, int y, int width, int height)
 {
@@ -42,10 +41,13 @@ void clip_rec(cairo_t *cr, int x, int y, int width, int height)
   cairo_restore(cr);
 }
 
-static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, gpointer *user_data)
+static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
 {
   if (event->button == 1)
+  {
+    gtk_widget_destroy(win);
     gtk_main_quit();
+  }
   return FALSE;
 }
 
@@ -105,12 +107,29 @@ static gboolean leave_right_box(GtkWidget *widget, GdkEventButton *event, GtkWid
   return FALSE;
 }
 
-static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, Draw *draw)
 {
   switch(event->keyval)
   {
   case GDK_KEY_Escape:
-    gtk_main_quit();
+    {
+      gtk_widget_destroy(WID(draw->Builer(), WIDGET, "window"));
+      gtk_main_quit();
+    }
+    break;
+  case GDK_KEY_Left:
+    if (draw->page() != 0)
+    {
+      draw->pre_page();
+      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
+    }
+    break;
+  case GDK_KEY_Right:
+    if (draw->page() != PAGES_NUM - 1)
+    {
+      draw->next_page();
+      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
+    }
     break;
   default:
     break;
@@ -228,10 +247,10 @@ Draw::Draw()
   g_signal_connect(G_OBJECT(window_), "draw",
       G_CALLBACK(on_draw_event), this);
   g_signal_connect(G_OBJECT(window_), "key-press-event",
-      G_CALLBACK(on_key_press), NULL);
+      G_CALLBACK(on_key_press), this);
 
   g_signal_connect(G_OBJECT(close_box_), "button_press_event",
-      G_CALLBACK(on_close_pressed), NULL);
+      G_CALLBACK(on_close_pressed), window_);
   g_signal_connect(G_OBJECT(close_box_), "enter_notify_event",
       G_CALLBACK(enter_close_box), close_img_);
   g_signal_connect(G_OBJECT(close_box_), "leave_notify_event",
@@ -404,7 +423,7 @@ void Draw::draw_polyline(cairo_t *cr)
   cairo_move_to(cr, p.x, p.y);
 
   gint inflexion_y = 0;
-  if (page_num_ != 5)
+  if (page_num_ != PAGES_NUM - 1)
     inflexion_y = style_->get_inflexion_pos().y;
   else
     inflexion_y = (style_->get_spot_pos().y + style_->get_panel_height()) / 2;

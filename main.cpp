@@ -24,19 +24,22 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <X11/Xlib.h>
+#include <X11/extensions/XTest.h>
 #include <unistd.h>
+
+#include <iostream>
 
 gboolean first_run()
 {
   std::string config_dir = g_get_user_config_dir();
-  std::string wizard_config = config_dir.append(G_DIR_SEPARATOR_S "wizard" G_DIR_SEPARATOR_S);
+  std::string wizard_config = config_dir.append(G_DIR_SEPARATOR_S "unity" G_DIR_SEPARATOR_S);
   if (g_mkdir_with_parents(wizard_config.c_str(), 0700) < 0)
     wizard_config = "";
 
-  if (!wizard_config.empty() && !g_file_test((wizard_config+"wizard_first_run.stamp").c_str(), G_FILE_TEST_EXISTS))
+  if (!wizard_config.empty() && !g_file_test((wizard_config+"first_run.stamp").c_str(), G_FILE_TEST_EXISTS))
   {
     GError *error = NULL;
-    g_file_set_contents((wizard_config+"wizard_first_run.stamp").c_str(), "", 0, &error);
+    g_file_set_contents((wizard_config+"first_run.stamp").c_str(), "", 0, &error);
     if (error != NULL)
     {
       g_printerr("%s. \n", error->message);
@@ -72,6 +75,16 @@ gboolean wait_launcher()
   return found;
 }
 
+void call_unity_hint()
+{
+  KeySym key = XK_Super_L;
+  GdkDisplay *gdk_display = gdk_display_get_default();
+  Display *display = gdk_x11_display_get_xdisplay(gdk_display);
+  XTestFakeKeyEvent(display, XKeysymToKeycode(display, key), True, CurrentTime);
+  XTestFakeKeyEvent(display, XKeysymToKeycode(display, key), False, 5000);
+  XSync(display, False);
+}
+
 int main (int argc, char *argv[])
 {
   gtk_init(&argc, &argv);
@@ -89,6 +102,9 @@ int main (int argc, char *argv[])
   draw->Run();
 
   gtk_main();
+
+  sleep(1);
+  call_unity_hint();
 
   return 0;
 }

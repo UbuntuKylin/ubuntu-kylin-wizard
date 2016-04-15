@@ -50,6 +50,8 @@ set (WIZARD_DEPS
      cairo>=1.13.1
      gtk+-3.0>=3.1
      x11
+#     xext
+     xtst
 )
 pkg_check_modules (CACHED_WIZARD_DEPS REQUIRED ${WIZARD_DEPS})
 include_directories(${CACHED_WIZARD_DEPS_INCLUDE_DIRS})

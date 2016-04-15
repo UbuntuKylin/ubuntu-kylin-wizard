@@ -42,8 +42,11 @@ const RawPixel DEFAULT_ICON_SIZE  = 48_em;
 const RawPixel DEFAULT_ICON_SIZE_DELTA =  6_em;
 const RawPixel SIDE_LINE_WIDTH = 1_em;
 const RawPixel PANEL_HEIGHT = 24_em;
+
 const gint ARROW_HEIGHT = 80;
 const gint ARROW_WIDTH  = 33;
+const gint PAGE_IND_HEIGTH = 22;
+const gint PAGE_IND_WIDTH = 253;
 
 const double DEFAULT_DPI = 96.0f;
 
@@ -113,7 +116,7 @@ Style::Style()
   close_pos_.y = 0.9 * (root_height_ - launcher_size_);
 
   page_ind_pos_.x = 0.75 * root_width_;
-  page_ind_pos_.y = 0.9 * (root_height_ - launcher_size_);
+  page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
 
   spot_pos_.x = (base_pos_.x + 422 + title1_pos_.x) / 2;
   spot_pos_.y = 0.25 * root_height_;

@@ -31,6 +31,7 @@ const gint PAGES_NUM = 6;
 const gint LIGHTSPOT_SIZE = 21;
 const gint CLOSE_BUTTON_WIDTH = 115;
 const gint CLOSE_BUTTON_HEIGHT = 35;
+
 const RawPixel SPACE_BETWEEN_ICONS     =  5_em;
 const RawPixel ICON_PADDING            =  6_em;
 
