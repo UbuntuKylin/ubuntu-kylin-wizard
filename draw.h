@@ -41,6 +41,7 @@ public:
   void do_drawing(cairo_t *cr);
   void draw_other(gint num);
   void draw_background(cairo_t *cr);
+  void clip_blur_region(cairo_t *cr);
   void draw_page(cairo_t *cr);
   void draw_polyline(cairo_t *cr);
   gint page();
@@ -56,6 +57,7 @@ private:
 
   GtkWidget *window_;
   GtkWidget *fixed_;
+  GtkWidget *background_;
   GtkWidget *left_box_;
   GtkWidget *right_box_;
   GtkWidget *close_box_;

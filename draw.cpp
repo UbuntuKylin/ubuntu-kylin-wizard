@@ -28,18 +28,17 @@
 #include <gdk/gdkkeysyms.h>
 #include <pango/pango.h>
 
-
-void clip_rec(cairo_t *cr, int x, int y, int width, int height)
-{
-  cairo_save(cr);
-  cairo_rectangle(cr, x, y, width, height);
-  cairo_clip(cr);
-  cairo_new_path(cr);
-  cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
-  cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-  cairo_paint(cr);
-  cairo_restore(cr);
-}
+//void clip_rec(cairo_t *cr, int x, int y, int width, int height)
+//{
+//  cairo_save(cr);
+//  cairo_rectangle(cr, x, y, width, height);
+//  cairo_clip(cr);
+//  cairo_new_path(cr);
+//  cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
+//  cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+//  cairo_paint(cr);
+//  cairo_restore(cr);
+//}
 
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
 {
@@ -68,7 +67,7 @@ static gboolean on_arrow_left_pressed(GtkWidget *widget, GdkEventButton *event, 
   if (event->button == 1 && draw->page() != 0)
   {
     draw->pre_page();
-    gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
+    gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "draw_area"));
   }
   return FALSE;
 }
@@ -90,7 +89,7 @@ static gboolean on_arrow_right_pressed(GtkWidget *widget, GdkEventButton *event,
   if (event->button == 1 && draw->page() != PAGES_NUM - 1)
   {
     draw->next_page();
-    gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
+    gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "draw_area"));
   }
   return FALSE;
 }
@@ -121,14 +120,14 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, Draw *draw)
     if (draw->page() != 0)
     {
       draw->pre_page();
-      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
+      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "draw_area"));
     }
     break;
   case GDK_KEY_Right:
     if (draw->page() != PAGES_NUM - 1)
     {
       draw->next_page();
-      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
+      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "draw_area"));
     }
     break;
   default:
@@ -158,6 +157,9 @@ Draw::Draw()
   fixed_ = WID(builder_, WIDGET, "fixed");
 
   root_pixbuf_ = gdk_pixbuf_get_from_window(gdk_get_default_root_window(), 0, 0, style_->get_root_width(), style_->get_root_height());
+
+  background_ = WID(builder_, WIDGET, "background");
+  gtk_image_set_from_pixbuf(GTK_IMAGE(background_), root_pixbuf_);
 
 //  // Get the thumbnail from current screen.
 //  GdkPixbuf *image_buf = gdk_pixbuf_new_from_file_at_size(PKGDATADIR"/computer.png", 422, 334, &error);
@@ -201,11 +203,11 @@ Draw::Draw()
   gtk_widget_set_size_request(details_, 0.8 * (style_->get_right_arrow_pos().x - style_->get_spot_pos().x), -1);
   gtk_label_set_line_wrap(GTK_LABEL(details_), TRUE);
 
-  PangoFontDescription *fd_1 = pango_font_description_from_string("Serif 30");
+  PangoFontDescription *fd_1 = pango_font_description_from_string("Ubuntu 30");
   gtk_widget_override_font(title1_, fd_1);
-  PangoFontDescription *fd_2 = pango_font_description_from_string("Serif 24");
+  PangoFontDescription *fd_2 = pango_font_description_from_string("Ubuntu 24");
   gtk_widget_override_font(title2_, fd_2);
-  PangoFontDescription *fd_3 = pango_font_description_from_string("Serif 18");
+  PangoFontDescription *fd_3 = pango_font_description_from_string("Ubuntu 16");
   gtk_widget_override_font(details_, fd_3);
 
   GdkColor color;
@@ -244,7 +246,7 @@ Draw::Draw()
   if (screen_num > 1)
     draw_other(screen_num);
 
-  g_signal_connect(G_OBJECT(window_), "draw",
+  g_signal_connect(G_OBJECT(WID(builder_, WIDGET, "draw_area")), "draw",
       G_CALLBACK(on_draw_event), this);
   g_signal_connect(G_OBJECT(window_), "key-press-event",
       G_CALLBACK(on_key_press), this);
@@ -280,15 +282,11 @@ void Draw::Setup()
 //  gtk_window_fullscreen(GTK_WINDOW(window_));
 
   GdkScreen *screen = gdk_screen_get_default();
-  GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
 
   gint width = gdk_screen_get_width(screen);
   gint height = gdk_screen_get_height(screen);
   gtk_window_set_default_size(GTK_WINDOW(window_), width, height);
-
-  if (visual != NULL && gdk_screen_is_composited(screen)) {
-      gtk_widget_set_visual(window_, visual);
-  }
+  gtk_window_set_resizable(GTK_WINDOW(window_), FALSE);
 }
 
 void Draw::draw_other(gint num)
@@ -334,25 +332,73 @@ void Draw::draw_background(cairo_t *cr)
   cairo_paint(bg_cr);
 
   blur(bg_sur, 8);
+  clip_blur_region(cr);
+  cairo_save(cr);
+  cairo_clip(cr);
   cairo_set_source_surface(cr, bg_sur, 0, 0);
   cairo_paint(cr);
+  cairo_restore(cr);
 
   cairo_destroy(bg_cr);
   cairo_surface_destroy(bg_sur);
 }
 
-void Draw::draw_page(cairo_t *cr)
+void Draw::clip_blur_region(cairo_t *cr)
 {
   gint root_height = style_->get_root_height();
   gint root_width = style_->get_root_width();
   gint launcher_size = style_->get_launcher_size();
   gint panel_height = style_->get_panel_height();
   gint icon_size = style_->get_icon_size();
+  gint icon_padding = ICON_PADDING.CP(style_->cv_);
+  gint icon_y = root_height - launcher_size + icon_padding;
+  gint space = SPACE_BETWEEN_ICONS.CP(style_->cv_);
+  gint icon_x = 0;
 
   switch (page_num_) {
   case 0:
+    cairo_rectangle(cr, 0, 0, root_width, root_height - launcher_size);
+    break;
+  case 1:
+    cairo_rectangle(cr, 0, 0, root_width, icon_y);
+    cairo_rectangle(cr, 0, icon_y, space, launcher_size - icon_padding);
+    cairo_rectangle(cr, space + icon_size, icon_y, root_width - space - icon_size, root_height - icon_y);
+    cairo_rectangle(cr, space, root_height - icon_padding, icon_size, icon_padding);
+    break;
+  case 2:
+    icon_x = style_->icon_pos_[page_num_].x;
+    cairo_rectangle(cr, 0, 0, root_width, icon_y);
+    cairo_rectangle(cr, 0, icon_y, style_->icon_pos_[page_num_].x - 0.5 * icon_size, launcher_size - icon_padding);
+    cairo_rectangle(cr, icon_x + 0.5 * icon_size, icon_y, root_width - icon_x - 0.5 * icon_size, root_height - icon_y);
+    cairo_rectangle(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - icon_padding, icon_size, icon_padding);
+    break;
+  case 3:
+    icon_x = style_->icon_pos_[page_num_].x;
+    cairo_rectangle(cr, 0, 0, root_width, icon_y);
+    cairo_rectangle(cr, 0, icon_y, style_->icon_pos_[page_num_].x - 0.5 * icon_size, launcher_size - icon_padding);
+    cairo_rectangle(cr, icon_x + 0.5 * icon_size, icon_y, root_width - icon_x - 0.5 * icon_size, root_height - icon_y);
+    cairo_rectangle(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - icon_padding, icon_size, icon_padding);
+    break;
+  case 4:
+    icon_x = style_->icon_pos_[page_num_].x;
+    cairo_rectangle(cr, 0, 0, root_width, icon_y);
+    cairo_rectangle(cr, 0, icon_y, style_->icon_pos_[page_num_].x - 0.5 * icon_size, launcher_size - icon_padding);
+    cairo_rectangle(cr, icon_x + 0.5 * icon_size, icon_y, root_width - icon_x - 0.5 * icon_size, root_height - icon_y);
+    cairo_rectangle(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - icon_padding, icon_size, icon_padding);
+    break;
+  case 5:
+    cairo_rectangle(cr, 0, panel_height, root_width, root_height - panel_height);
+    break;
+  default:
+    break;
+  }
+}
+
+void Draw::draw_page(cairo_t *cr)
+{
+  switch (page_num_) {
+  case 0:
     draw_polyline(cr);
-    clip_rec(cr, 0, root_height - launcher_size, root_width, launcher_size);
     gtk_label_set_text(GTK_LABEL(title1_), "如何快速启动应用程序");
     gtk_label_set_text(GTK_LABEL(title2_), "Launcher");
     gtk_label_set_text(GTK_LABEL(details_), "Ubuntu特有的快速启动面板，可以方便快捷的打开和切换各种应用。同时可以根据使用习惯自由定制Launcher面板上的应用。");
@@ -361,7 +407,6 @@ void Draw::draw_page(cairo_t *cr)
     break;
  case 1:
     draw_polyline(cr);
-    clip_rec(cr, SPACE_BETWEEN_ICONS.CP(style_->cv_), root_height - launcher_size + ICON_PADDING.CP(style_->cv_), icon_size, icon_size);
     gtk_label_set_text(GTK_LABEL(title1_), "快速的智能搜索");
     gtk_label_set_text(GTK_LABEL(title2_), "Dash");
     gtk_label_set_text(GTK_LABEL(details_), "点击此处可以打开Dash界面，Dash可以提供强大的快速智能搜索功能，可以方便快捷的搜索并打开本地和网络的各种资源，包括：应用、文件、音乐、视频等。");
@@ -370,7 +415,6 @@ void Draw::draw_page(cairo_t *cr)
     break;
   case 2:
     draw_polyline(cr);
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING.CP(style_->cv_), icon_size, icon_size);
     gtk_label_set_text(GTK_LABEL(title1_), "浏览并管理您的文件");
     gtk_label_set_text(GTK_LABEL(title2_), "文件管理器");
     gtk_label_set_text(GTK_LABEL(details_), "可以通过此处打开文件管理器，它可以方便的浏览和管理系统中的各种数据。");
@@ -379,7 +423,6 @@ void Draw::draw_page(cairo_t *cr)
     break;
   case 3:
     draw_polyline(cr);
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING.CP(style_->cv_), icon_size, icon_size);
     gtk_label_set_text(GTK_LABEL(title1_), "查看和修改系统设置");
     gtk_label_set_text(GTK_LABEL(title2_), "优客助手");
     gtk_label_set_text(GTK_LABEL(details_), "优麒麟为用户打造的系统管理和配置工具，具备强大的系统信息展示、一键垃圾清理和系统定制美化等功能");
@@ -388,7 +431,6 @@ void Draw::draw_page(cairo_t *cr)
     break;
   case 4:
     draw_polyline(cr);
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - launcher_size + ICON_PADDING.CP(style_->cv_), icon_size, icon_size);
     gtk_label_set_text(GTK_LABEL(title1_), "如何合理的管理系统配置");
     gtk_label_set_text(GTK_LABEL(title2_), "控制面版");
     gtk_label_set_text(GTK_LABEL(details_), "允许用户查看并操作基本的系统设置。");
@@ -397,7 +439,6 @@ void Draw::draw_page(cairo_t *cr)
     break;
   case 5:
     draw_polyline(cr);
-    clip_rec(cr, 0, 0, root_width, panel_height);
     gtk_label_set_text(GTK_LABEL(title1_), "查看系统基本状态");
     gtk_label_set_text(GTK_LABEL(title2_), "Indicator");
     gtk_label_set_text(GTK_LABEL(details_), "可以在此区域方便快捷的查看和配置系统声音、网络、时间和消息等。");
