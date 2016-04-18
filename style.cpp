@@ -214,7 +214,7 @@ Point Style::cal_icon_position(int index)
   }
   else if (index == UNDER_PANEL)
   {
-    icon_pos.x = root_width_ - 15;
+    icon_pos.x = root_width_ - 100;
     icon_pos.y = panel_height_;
   }
   else

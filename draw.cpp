@@ -27,6 +27,7 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include <pango/pango.h>
+#include <math.h>
 
 //void clip_rec(cairo_t *cr, int x, int y, int width, int height)
 //{
@@ -193,13 +194,13 @@ Draw::Draw()
   gtk_fixed_move(GTK_FIXED(fixed_), grid_, style_->get_title1_pos().x, style_->get_title1_pos().y);
 
   title1_ = WID(builder_, WIDGET, "title1");
-  gtk_label_set_text(GTK_LABEL(title1_), "如何快速启动应用程序");
+  gtk_label_set_text(GTK_LABEL(title1_), "快速启动应用程序");
 
   title2_ = WID(builder_, WIDGET, "title2");
-  gtk_label_set_text(GTK_LABEL(title2_), "Launcher");
+  gtk_label_set_text(GTK_LABEL(title2_), "启动器");
 
   details_ = WID(builder_, WIDGET, "details");
-  gtk_label_set_text(GTK_LABEL(details_), "Ubuntu特有的快速启动面板，可以方便快捷的打开和切换各种应用。同时可以根据使用习惯自由定制Launcher面板上的应用。");
+  gtk_label_set_text(GTK_LABEL(details_), "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。");
   gtk_widget_set_size_request(details_, 0.8 * (style_->get_right_arrow_pos().x - style_->get_spot_pos().x), -1);
   gtk_label_set_line_wrap(GTK_LABEL(details_), TRUE);
 
@@ -209,6 +210,8 @@ Draw::Draw()
   gtk_widget_override_font(title2_, fd_2);
   PangoFontDescription *fd_3 = pango_font_description_from_string("Ubuntu 16");
   gtk_widget_override_font(details_, fd_3);
+
+  gtk_widget_set_size_request(title2_, -1, 50);
 
   GdkColor color;
   gdk_color_parse("white", &color);
@@ -220,6 +223,7 @@ Draw::Draw()
   arrow_left_img_ = WID(builder_, WIDGET, "arrow_left_img");
   gtk_image_set_from_file(GTK_IMAGE(arrow_left_img_), PKGDATADIR"/arrow_left.png");
   gtk_fixed_move(GTK_FIXED(fixed_), left_box_, style_->get_left_arrow_pos().x, style_->get_left_arrow_pos().y);
+  gtk_widget_hide(left_box_);
 
   right_box_ = WID(builder_, WIDGET, "right_box");
   arrow_right_img_ = WID(builder_, WIDGET, "arrow_right_img");
@@ -234,13 +238,6 @@ Draw::Draw()
   page_ind_ = WID(builder_, WIDGET, "page_ind");
   gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
   gtk_fixed_move(GTK_FIXED(fixed_), page_ind_, style_->get_page_ind_pos().x, style_->get_page_ind_pos().y);
-
-  lightspot1_ = WID(builder_, WIDGET, "lightspot1");
-  gtk_image_set_from_file(GTK_IMAGE(lightspot1_), PKGDATADIR"/lightspot.png");
-  gtk_fixed_move(GTK_FIXED(fixed_), lightspot1_, style_->get_spot_pos().x - 0.5 * LIGHTSPOT_SIZE, style_->get_spot_pos().y - 0.5 * LIGHTSPOT_SIZE);
-
-  lightspot2_ = WID(builder_, WIDGET, "lightspot2");
-  gtk_image_set_from_file(GTK_IMAGE(lightspot2_), PKGDATADIR"/lightspot.png");
 
   gint screen_num = gdk_screen_get_n_monitors(gdk_screen_get_default());
   if (screen_num > 1)
@@ -298,7 +295,7 @@ void Draw::draw_other(gint num)
     GtkWidget *button = gtk_image_new_from_file(PKGDATADIR"/close.png");
     GtkWidget *box = gtk_event_box_new();
     gtk_container_add(GTK_CONTAINER(box), button);
-    g_signal_connect(G_OBJECT(box), "button_press_event", G_CALLBACK(on_close_pressed), NULL);
+    g_signal_connect(G_OBJECT(box), "button_press_event", G_CALLBACK(on_close_pressed), window_);
     g_signal_connect(G_OBJECT(box), "enter_notify_event", G_CALLBACK(enter_close_box), button);
     g_signal_connect(G_OBJECT(box), "leave_notify_event", G_CALLBACK(leave_close_box), button);
     GdkRectangle geo;
@@ -399,25 +396,27 @@ void Draw::draw_page(cairo_t *cr)
   switch (page_num_) {
   case 0:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "如何快速启动应用程序");
-    gtk_label_set_text(GTK_LABEL(title2_), "Launcher");
-    gtk_label_set_text(GTK_LABEL(details_), "Ubuntu特有的快速启动面板，可以方便快捷的打开和切换各种应用。同时可以根据使用习惯自由定制Launcher面板上的应用。");
+    gtk_label_set_text(GTK_LABEL(title1_), "快速启动应用程序");
+    gtk_label_set_text(GTK_LABEL(title2_), "启动器");
+    gtk_label_set_text(GTK_LABEL(details_), "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
+    gtk_widget_hide(left_box_);
     break;
  case 1:
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "快速的智能搜索");
     gtk_label_set_text(GTK_LABEL(title2_), "Dash");
-    gtk_label_set_text(GTK_LABEL(details_), "点击此处可以打开Dash界面，Dash可以提供强大的快速智能搜索功能，可以方便快捷的搜索并打开本地和网络的各种资源，包括：应用、文件、音乐、视频等。");
+    gtk_label_set_text(GTK_LABEL(details_), "可以提供强大的快速智能搜索功能，点击 Dash 图标可以方便快捷的搜索本地和在线的各种资源，包括：应用、文件、音乐、视频、图片等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_2.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_2.png");
+    gtk_widget_show(left_box_);
     break;
   case 2:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "浏览并管理您的文件");
+    gtk_label_set_text(GTK_LABEL(title1_), "浏览并管理文件");
     gtk_label_set_text(GTK_LABEL(title2_), "文件管理器");
-    gtk_label_set_text(GTK_LABEL(details_), "可以通过此处打开文件管理器，它可以方便的浏览和管理系统中的各种数据。");
+    gtk_label_set_text(GTK_LABEL(details_), "可以浏览和组织电脑上的文件或管理本地存储设备、文件服务器和网络共享上的文件。点击启动器上的图标，可以新建、删除、浏览、复制、移动文件或文件夹。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_3.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_3.png");
     break;
@@ -425,25 +424,27 @@ void Draw::draw_page(cairo_t *cr)
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "查看和修改系统设置");
     gtk_label_set_text(GTK_LABEL(title2_), "优客助手");
-    gtk_label_set_text(GTK_LABEL(details_), "优麒麟为用户打造的系统管理和配置工具，具备强大的系统信息展示、一键垃圾清理和系统定制美化等功能");
+    gtk_label_set_text(GTK_LABEL(details_), "系统管理和配置工具。使用优客助手可以一键清理系统垃圾、系统定制美化以及查看系统信息等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_4.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_4.png");
     break;
   case 4:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "如何合理的管理系统配置");
+    gtk_label_set_text(GTK_LABEL(title1_), "常用工具配置");
     gtk_label_set_text(GTK_LABEL(title2_), "控制面版");
-    gtk_label_set_text(GTK_LABEL(details_), "允许用户查看并操作基本的系统设置。");
+    gtk_label_set_text(GTK_LABEL(details_), "集成了用户常用配置工具。通过控制面板可以设置个人喜好，网络、键盘、鼠标等常用硬件配置以及系统信息等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_5.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_5.png");
+    gtk_widget_show(right_box_);
     break;
   case 5:
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "查看系统基本状态");
     gtk_label_set_text(GTK_LABEL(title2_), "Indicator");
-    gtk_label_set_text(GTK_LABEL(details_), "可以在此区域方便快捷的查看和配置系统声音、网络、时间和消息等。");
+    gtk_label_set_text(GTK_LABEL(details_), "可以在此区域方便快捷的查看系统声音、网络、时间信息，同时可以查看用户手册，设置锁屏、注销、重启、关闭系统等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_6.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_6.png");
+    gtk_widget_hide(right_box_);
     break;
   default:
     break;
@@ -452,17 +453,14 @@ void Draw::draw_page(cairo_t *cr)
 
 void Draw::draw_polyline(cairo_t *cr)
 {
-  cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 8.0);
+  cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.9);
   cairo_set_line_width(cr, 2);
 
   Point p;
   p.x = style_->icon_pos_[page_num_].x;
   p.y = style_->icon_pos_[page_num_].y;
 
-  gtk_fixed_move(GTK_FIXED(fixed_), lightspot2_,
-                 p.x - 0.5 * LIGHTSPOT_SIZE, p.y - 0.5 * LIGHTSPOT_SIZE);
   cairo_move_to(cr, p.x, p.y);
-
   gint inflexion_y = 0;
   if (page_num_ != PAGES_NUM - 1)
     inflexion_y = style_->get_inflexion_pos().y;
@@ -473,6 +471,24 @@ void Draw::draw_polyline(cairo_t *cr)
   cairo_line_to(cr, style_->get_inflexion_pos().x, inflexion_y);
   cairo_line_to(cr, style_->get_spot_pos().x, style_->get_spot_pos().y);
   cairo_stroke(cr);
+
+  draw_ring(cr, p.x, p.y);
+  draw_ring(cr, style_->get_spot_pos().x, style_->get_spot_pos().y);
+}
+
+void Draw::draw_ring(cairo_t *cr, gint x, gint y)
+{
+  cairo_set_source_rgba(cr, 1., 1., 1., 0.1);
+  cairo_arc(cr, x, y, 10, 0., 2 * M_PI);
+  cairo_fill(cr);
+
+  cairo_set_source_rgba(cr, 1., 1., 1., 0.4);
+  cairo_arc(cr, x, y, 7, 0., 2 * M_PI);
+  cairo_fill(cr);
+
+  cairo_set_source_rgba(cr, 1., 1., 1., 0.9);
+  cairo_arc(cr, x, y, 4, 0., 2 * M_PI);
+  cairo_fill(cr);
 }
 
 gint Draw::page()

@@ -44,6 +44,7 @@ public:
   void clip_blur_region(cairo_t *cr);
   void draw_page(cairo_t *cr);
   void draw_polyline(cairo_t *cr);
+  void draw_ring(cairo_t *cr, gint x, gint y);
   gint page();
   void next_page();
   void pre_page();
@@ -71,8 +72,6 @@ private:
   GtkWidget *title1_;
   GtkWidget *title2_;
   GtkWidget *details_;
-  GtkWidget *lightspot1_;
-  GtkWidget *lightspot2_;
 };
 
 #endif
