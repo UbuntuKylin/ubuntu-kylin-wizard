@@ -27,8 +27,6 @@
 #include <X11/extensions/XTest.h>
 #include <unistd.h>
 
-#include <iostream>
-
 gboolean first_run()
 {
   std::string config_dir = g_get_user_config_dir();
@@ -50,14 +48,11 @@ gboolean first_run()
   return false;
 }
 
-gboolean wait_launcher()
+gboolean wait_launcher(GdkScreen *screen, GdkDisplay *display)
 {
-  GdkScreen *screen = gdk_screen_get_default();
-  GdkDisplay *display = gdk_screen_get_display(screen);
   GList* stack =  gdk_screen_get_window_stack(screen);
 
   gboolean launcher_found = false;
-  gboolean panel_found = false;
   for( GList* iter = g_list_last(stack); iter; iter = iter->prev)
   {
     GdkWindow* window = static_cast<GdkWindow*>(iter->data);
@@ -67,18 +62,14 @@ gboolean wait_launcher()
     if (g_strcmp0(name, "unity-launcher") == 0)
     {
       launcher_found = true;
-      continue;
-    }
-    else if (g_strcmp0(name, "unity-panel") == 0)
-    {
-      panel_found = true;
-      continue;
+      sleep(2);
+      break;
     }
   }
   g_list_foreach(stack, (GFunc)g_object_unref, NULL);
   g_list_free(stack);
   sleep(1);
-  return (launcher_found && panel_found);
+  return launcher_found;
 }
 
 void call_unity_hint()
@@ -98,10 +89,13 @@ int main (int argc, char *argv[])
   if (!first_run())
     return 0;
 
+  GdkScreen *screen = gdk_screen_get_default();
+  GdkDisplay *display = gdk_screen_get_display(screen);
+
   gboolean launcher_showed = false;
   while(!launcher_showed)
   {
-    launcher_showed = wait_launcher();
+    launcher_showed = wait_launcher(screen, display);
   }
 
   Draw *draw = new Draw();
