@@ -35,6 +35,9 @@ const std::string UNITY_GSETTINGS_SCHEMA = "org.compiz.unityshell";
 const std::string UNITY_GSETTINGS_PATH = "/org/compiz/profiles/unity/plugins/unityshell/";
 const std::string ICON_SIZE = "icon-size";
 
+const std::string BACKGROUND_SETTINGS = "org.gnome.desktop.background";
+const std::string PICTURE_URI = "picture-uri";
+
 const gint MID_LAUNCHER = -2;
 const gint UNDER_PANEL = -3;
 
@@ -78,6 +81,7 @@ void Style::UpdateDPI()
 Style::Style()
   : unity_settings_(g_settings_new_with_path(UNITY_GSETTINGS_SCHEMA.c_str(), UNITY_GSETTINGS_PATH.c_str()))
   , launcher_settings_(g_settings_new(LAUNCHER_SETTINGS.c_str()))
+  , background_settings_(g_settings_new(BACKGROUND_SETTINGS.c_str()))
   , cv_(new EMConverter())
 {
   UpdateDPI();
@@ -88,6 +92,8 @@ Style::Style()
   gdk_screen_get_monitor_geometry(root_screen, primary_monitor, &geo);
   root_width_ = geo.width;
   root_height_ = geo.height;
+
+  background_url_ = g_settings_get_string(background_settings_, PICTURE_URI.c_str());
 
   icon_size_ = g_settings_get_int(unity_settings_, ICON_SIZE.c_str()) + DEFAULT_ICON_SIZE_DELTA;
   RawPixel launcher_size = icon_size_ + 2 * ICON_PADDING + SIDE_LINE_WIDTH - 2;
@@ -149,6 +155,11 @@ gint Style::get_root_width()
 gint Style::get_root_height()
 {
   return root_height_;
+}
+
+std::string Style::get_background_url()
+{
+  return background_url_.substr(6);
 }
 
 gint Style::get_launcher_size()

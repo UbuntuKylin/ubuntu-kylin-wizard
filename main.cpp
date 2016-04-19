@@ -56,7 +56,8 @@ gboolean wait_launcher()
   GdkDisplay *display = gdk_screen_get_display(screen);
   GList* stack =  gdk_screen_get_window_stack(screen);
 
-  gboolean found = false;
+  gboolean launcher_found = false;
+  gboolean panel_found = false;
   for( GList* iter = g_list_last(stack); iter; iter = iter->prev)
   {
     GdkWindow* window = static_cast<GdkWindow*>(iter->data);
@@ -65,14 +66,19 @@ gboolean wait_launcher()
     XFetchName(GDK_DISPLAY_XDISPLAY(display), xid, &name);
     if (g_strcmp0(name, "unity-launcher") == 0)
     {
-      found = true;
-      break;
+      launcher_found = true;
+      continue;
+    }
+    else if (g_strcmp0(name, "unity-panel") == 0)
+    {
+      panel_found = true;
+      continue;
     }
   }
   g_list_foreach(stack, (GFunc)g_object_unref, NULL);
   g_list_free(stack);
   sleep(1);
-  return found;
+  return (launcher_found && panel_found);
 }
 
 void call_unity_hint()

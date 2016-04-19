@@ -29,18 +29,6 @@
 #include <pango/pango.h>
 #include <math.h>
 
-//void clip_rec(cairo_t *cr, int x, int y, int width, int height)
-//{
-//  cairo_save(cr);
-//  cairo_rectangle(cr, x, y, width, height);
-//  cairo_clip(cr);
-//  cairo_new_path(cr);
-//  cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
-//  cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-//  cairo_paint(cr);
-//  cairo_restore(cr);
-//}
-
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
 {
   if (event->button == 1)
@@ -279,28 +267,44 @@ void Draw::Setup()
 //  gtk_window_fullscreen(GTK_WINDOW(window_));
 
   GdkScreen *screen = gdk_screen_get_default();
+  GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
 
   gint width = gdk_screen_get_width(screen);
   gint height = gdk_screen_get_height(screen);
   gtk_window_set_default_size(GTK_WINDOW(window_), width, height);
   gtk_window_set_resizable(GTK_WINDOW(window_), FALSE);
+
+  if (visual != NULL && gdk_screen_is_composited(screen)) {
+    gtk_widget_set_visual(window_, visual);
+  }
 }
 
 void Draw::draw_other(gint num)
 {
+  GtkWidget *root_fixed = WID(builder_, WIDGET, "root_fixed");
+  GdkPixbuf *bg_pixbuf;
+  GtkWidget *other_bg;
+
   for (int i = 0; i < num; i++)
   {
     if (i == primary_screen_)
       continue;
+
+    GdkRectangle geo;
+    gdk_screen_get_monitor_geometry(gdk_screen_get_default(), i, &geo);
+    if (geo.x == 0 && geo.y == 0)
+      continue;
+
     GtkWidget *button = gtk_image_new_from_file(PKGDATADIR"/close.png");
     GtkWidget *box = gtk_event_box_new();
     gtk_container_add(GTK_CONTAINER(box), button);
     g_signal_connect(G_OBJECT(box), "button_press_event", G_CALLBACK(on_close_pressed), window_);
     g_signal_connect(G_OBJECT(box), "enter_notify_event", G_CALLBACK(enter_close_box), button);
     g_signal_connect(G_OBJECT(box), "leave_notify_event", G_CALLBACK(leave_close_box), button);
-    GdkRectangle geo;
-    gdk_screen_get_monitor_geometry(gdk_screen_get_default(), i, &geo);
-    gtk_fixed_put(GTK_FIXED(fixed_), box, geo.x + (geo.width - CLOSE_BUTTON_WIDTH)/2, geo.y + (geo.height - CLOSE_BUTTON_HEIGHT)/2);
+    bg_pixbuf = gdk_pixbuf_new_from_file_at_scale((style_->get_background_url()).c_str(), geo.width, geo.height, FALSE, NULL);
+    other_bg = gtk_image_new_from_pixbuf(bg_pixbuf);
+    gtk_fixed_put(GTK_FIXED(root_fixed), other_bg, geo.x, geo.y);
+    gtk_fixed_put(GTK_FIXED(root_fixed), box, geo.x + (geo.width - CLOSE_BUTTON_WIDTH)/2, geo.y + (geo.height - CLOSE_BUTTON_HEIGHT)/2);
   }
 }
 

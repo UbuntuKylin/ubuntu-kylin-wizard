@@ -49,6 +49,7 @@ public:
 
   gint get_root_width();
   gint get_root_height();
+  std::string get_background_url();
   gint get_launcher_size();
   gint get_panel_height();
   gint get_icon_size();
@@ -74,6 +75,7 @@ private:
 
   gint root_width_;
   gint root_height_;
+  std::string background_url_;
   gint launcher_size_;
   gint panel_height_;
   RawPixel icon_size_;
@@ -92,6 +94,7 @@ private:
 
   GSettings *unity_settings_;
   GSettings *launcher_settings_;
+  GSettings *background_settings_;
 };
 
 #endif

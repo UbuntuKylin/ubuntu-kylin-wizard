@@ -11,200 +11,206 @@
     <property name="decorated">False</property>
     <property name="deletable">False</property>
     <child>
-      <object class="GtkOverlay" id="overlay1">
+      <object class="GtkFixed" id="root_fixed">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkImage" id="background">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="stock">gtk-missing-image</property>
-            <property name="icon_size">6</property>
-          </object>
-          <packing>
-            <property name="index">-1</property>
-          </packing>
-        </child>
-        <child type="overlay">
-          <object class="GtkOverlay" id="overlay2">
+          <object class="GtkOverlay" id="overlay1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkDrawingArea" id="draw_area">
+              <object class="GtkImage" id="background">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">6</property>
               </object>
               <packing>
                 <property name="index">-1</property>
               </packing>
             </child>
             <child type="overlay">
-              <object class="GtkOverlay" id="overlay3">
+              <object class="GtkOverlay" id="overlay2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkFixed" id="fixed">
+                  <object class="GtkDrawingArea" id="draw_area">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="index">-1</property>
+                  </packing>
+                </child>
+                <child type="overlay">
+                  <object class="GtkOverlay" id="overlay3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkEventBox" id="left_box">
+                      <object class="GtkFixed" id="fixed">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkImage" id="arrow_left_img">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="stock">gtk-missing-image</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="x">30</property>
-                        <property name="y">144</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEventBox" id="right_box">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkImage" id="arrow_right_img">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="stock">gtk-missing-image</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="x">407</property>
-                        <property name="y">144</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="base_img">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="stock">gtk-missing-image</property>
-                      </object>
-                      <packing>
-                        <property name="x">86</property>
-                        <property name="y">144</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEventBox" id="close_box">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkImage" id="close_img">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="stock">gtk-missing-image</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="x">255</property>
-                        <property name="y">301</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="page_ind">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="stock">gtk-missing-image</property>
-                      </object>
-                      <packing>
-                        <property name="x">408</property>
-                        <property name="y">300</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkGrid" id="grid">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="resize_mode">queue</property>
-                        <child>
-                          <object class="GtkLabel" id="title1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin_bottom">10</property>
-                            <property name="label" translatable="yes">label</property>
-                            <property name="single_line_mode">True</property>
-                            <property name="track_visited_links">False</property>
-                            <property name="lines">1</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkViewport" id="viewport3">
+                          <object class="GtkEventBox" id="left_box">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkLabel" id="details">
+                              <object class="GtkImage" id="arrow_left_img">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label</property>
-                                <property name="wrap">True</property>
-                                <property name="track_visited_links">False</property>
-                                <property name="lines">4</property>
-                                <property name="xalign">0</property>
-                                <property name="yalign">0</property>
+                                <property name="stock">gtk-missing-image</property>
                               </object>
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
+                            <property name="x">30</property>
+                            <property name="y">144</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkViewport" id="viewport1">
+                          <object class="GtkEventBox" id="right_box">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkLabel" id="title2">
+                              <object class="GtkImage" id="arrow_right_img">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="stock">gtk-missing-image</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="x">407</property>
+                            <property name="y">144</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="base_img">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="stock">gtk-missing-image</property>
+                          </object>
+                          <packing>
+                            <property name="x">86</property>
+                            <property name="y">144</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEventBox" id="close_box">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkImage" id="close_img">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="stock">gtk-missing-image</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="x">255</property>
+                            <property name="y">301</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="page_ind">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="stock">gtk-missing-image</property>
+                          </object>
+                          <packing>
+                            <property name="x">408</property>
+                            <property name="y">300</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="grid">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="resize_mode">queue</property>
+                            <child>
+                              <object class="GtkLabel" id="title1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="margin_bottom">10</property>
                                 <property name="label" translatable="yes">label</property>
+                                <property name="single_line_mode">True</property>
                                 <property name="track_visited_links">False</property>
                                 <property name="lines">1</property>
                                 <property name="xalign">0</property>
                                 <property name="yalign">0</property>
                               </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkViewport" id="viewport3">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="details">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">label</property>
+                                    <property name="wrap">True</property>
+                                    <property name="track_visited_links">False</property>
+                                    <property name="lines">4</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkViewport" id="viewport1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="title2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">label</property>
+                                    <property name="track_visited_links">False</property>
+                                    <property name="lines">1</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
+                            <property name="x">255</property>
+                            <property name="y">115</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="thumbnail">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="stock">gtk-missing-image</property>
+                          </object>
+                          <packing>
+                            <property name="x">115</property>
+                            <property name="y">144</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="x">255</property>
-                        <property name="y">115</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="thumbnail">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="stock">gtk-missing-image</property>
-                      </object>
-                      <packing>
-                        <property name="x">115</property>
-                        <property name="y">144</property>
+                        <property name="index">-1</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="index">-1</property>
-                  </packing>
                 </child>
               </object>
             </child>
