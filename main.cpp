@@ -84,10 +84,10 @@ void call_unity_hint()
 
 int main (int argc, char *argv[])
 {
-  gtk_init(&argc, &argv);
-
   if (!first_run())
     return 0;
+
+  gtk_init(&argc, &argv);
 
   GdkScreen *screen = gdk_screen_get_default();
   GdkDisplay *display = gdk_screen_get_display(screen);
