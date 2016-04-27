@@ -27,6 +27,16 @@
 #include <X11/extensions/XTest.h>
 #include <unistd.h>
 
+const std::string UBIQUITY_DESKTOP = "/usr/share/applications/ubiquity.desktop";
+
+gboolean live_mode()
+{
+  if (g_file_test(UBIQUITY_DESKTOP.c_str(), G_FILE_TEST_EXISTS))
+    return true;
+  else
+    return false;
+}
+
 gboolean first_run()
 {
   std::string config_dir = g_get_user_config_dir();
@@ -84,7 +94,7 @@ void call_unity_hint()
 
 int main (int argc, char *argv[])
 {
-  if (!first_run())
+  if (live_mode() || !first_run())
     return 0;
 
   gtk_init(&argc, &argv);

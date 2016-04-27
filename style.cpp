@@ -53,24 +53,6 @@ const gint PAGE_IND_WIDTH = 253;
 
 const double DEFAULT_DPI = 96.0f;
 
-const std::string BOOT_CONFIG = "/proc/cmdline";
-
-gboolean live_mode()
-{
-  std::ifstream fin(BOOT_CONFIG.c_str());
-  if (!fin)
-  {
-    g_printerr("Can't open %s!", BOOT_CONFIG.c_str());
-  }
-  std::string s;
-  while(std::getline(fin, s))
-  {
-    if (s.rfind("maybe-ubiquity") != std::string::npos)
-      return true;
-  }
-  return false;
-}
-
 void Style::UpdateDPI()
 {
   GSettings *ubuntu_ui_settings = g_settings_new(UBUNTU_UI_SETTINGS.c_str());
@@ -208,8 +190,7 @@ gint Style::get_icon_order(std::string icon_name)
     std::string value = strings[i];
 
     if (value.find("devices") != std::string::npos || value.find("running") != std::string::npos ||
-        value.find("expo-icon") != std::string::npos ||
-        (value.find("ubiquity") != std::string::npos && !live_mode()))
+        value.find("expo-icon") != std::string::npos || value.find("ubiquity") != std::string::npos)
       adjust--;
 
     if (!value.empty() && value.find(icon_name) != std::string::npos)
