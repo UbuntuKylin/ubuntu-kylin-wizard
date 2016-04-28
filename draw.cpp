@@ -267,17 +267,12 @@ void Draw::Setup()
 //  gtk_window_fullscreen(GTK_WINDOW(window_));
 
   GdkScreen *screen = gdk_screen_get_default();
-  GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
+  gtk_widget_set_visual(window_, gdk_screen_get_rgba_visual(screen));
 
   gint width = gdk_screen_get_width(screen);
   gint height = gdk_screen_get_height(screen);
 
-  if (visual != NULL && gdk_screen_is_composited(screen)) {
-    gtk_widget_set_visual(window_, visual);
-  }
-
   gtk_window_set_default_size(GTK_WINDOW(window_), width, height);
-//  gtk_window_set_resizable(GTK_WINDOW(window_), FALSE);
 }
 
 void Draw::draw_other(gint num)
