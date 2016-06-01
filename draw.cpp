@@ -28,6 +28,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <pango/pango.h>
 #include <math.h>
+#include <glib/gi18n.h>
 
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
 {
@@ -185,7 +186,7 @@ Draw::Draw()
   gtk_label_set_text(GTK_LABEL(title1_), "快速启动应用程序");
 
   title2_ = WID(builder_, WIDGET, "title2");
-  gtk_label_set_text(GTK_LABEL(title2_), "启动器");
+  gtk_label_set_text(GTK_LABEL(title2_), _("Launcher"));
 
   details_ = WID(builder_, WIDGET, "details");
   gtk_label_set_text(GTK_LABEL(details_), "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。");
@@ -397,7 +398,7 @@ void Draw::draw_page(cairo_t *cr)
   case 0:
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "快速启动应用程序");
-    gtk_label_set_text(GTK_LABEL(title2_), "启动器");
+    gtk_label_set_text(GTK_LABEL(title2_), _("Launcher"));
     gtk_label_set_text(GTK_LABEL(details_), "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
@@ -406,7 +407,7 @@ void Draw::draw_page(cairo_t *cr)
  case 1:
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "快速的智能搜索");
-    gtk_label_set_text(GTK_LABEL(title2_), "Dash");
+    gtk_label_set_text(GTK_LABEL(title2_), _("Dash"));
     gtk_label_set_text(GTK_LABEL(details_), "可以提供强大的快速智能搜索功能，点击 Dash 图标可以方便快捷的搜索本地和在线的各种资源，包括：应用、文件、音乐、视频、图片等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_2.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_2.png");
@@ -415,7 +416,7 @@ void Draw::draw_page(cairo_t *cr)
   case 2:
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "浏览并管理文件");
-    gtk_label_set_text(GTK_LABEL(title2_), "文件管理器");
+    gtk_label_set_text(GTK_LABEL(title2_), _("Nautilus"));
     gtk_label_set_text(GTK_LABEL(details_), "可以浏览和组织电脑上的文件或管理本地存储设备、文件服务器和网络共享上的文件。点击启动器上的图标，可以新建、删除、浏览、复制、移动文件或文件夹。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_3.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_3.png");
@@ -423,7 +424,7 @@ void Draw::draw_page(cairo_t *cr)
   case 3:
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "查看和修改系统设置");
-    gtk_label_set_text(GTK_LABEL(title2_), "优客助手");
+    gtk_label_set_text(GTK_LABEL(title2_), _("Youker assistant"));
     gtk_label_set_text(GTK_LABEL(details_), "系统管理和配置工具。使用优客助手可以一键清理系统垃圾、系统定制美化以及查看系统信息等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_4.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_4.png");
@@ -431,7 +432,7 @@ void Draw::draw_page(cairo_t *cr)
   case 4:
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "常用工具配置");
-    gtk_label_set_text(GTK_LABEL(title2_), "控制面版");
+    gtk_label_set_text(GTK_LABEL(title2_), _("Unity control center"));
     gtk_label_set_text(GTK_LABEL(details_), "集成了用户常用配置工具。通过控制面板可以设置个人喜好，网络、键盘、鼠标等常用硬件配置以及系统信息等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_5.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_5.png");
@@ -440,7 +441,7 @@ void Draw::draw_page(cairo_t *cr)
   case 5:
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title1_), "查看系统基本状态");
-    gtk_label_set_text(GTK_LABEL(title2_), "Indicator");
+    gtk_label_set_text(GTK_LABEL(title2_), _("Indicator"));
     gtk_label_set_text(GTK_LABEL(details_), "可以在此区域方便快捷的查看系统声音、网络、时间信息，同时可以查看用户手册，设置锁屏、注销、重启、关闭系统等。");
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_6.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_6.png");

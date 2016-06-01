@@ -26,6 +26,9 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
 #include <unistd.h>
+#include <libintl.h>
+
+#include "config.h"
 
 const std::string UBIQUITY_DESKTOP = "/usr/share/applications/ubiquity.desktop";
 
@@ -96,6 +99,12 @@ int main (int argc, char *argv[])
 {
   if (live_mode() || !first_run())
     return 0;
+
+  /* i18n init */
+  setlocale (LC_ALL, "");
+  bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
+  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
 
   gtk_init(&argc, &argv);
 
