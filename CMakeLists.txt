@@ -7,14 +7,6 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set (CMAKE_CXX_FLAGS_DEBUG "-g3 -DWIZARD_DEBUG_BUILD")
 set (CMAKE_CXX_FLAGS_RELEASE "")
 
-set (SRC_LIST main.cpp
-              blur.cpp
-              draw.cpp
-              style.cpp
-              rawpixel.cpp
-              EMConverter.cpp
-)
-
 #
 # config.h
 #
@@ -85,9 +77,5 @@ set (WIZARD_DEPS
      xtst
 )
 pkg_check_modules (CACHED_WIZARD_DEPS REQUIRED ${WIZARD_DEPS})
-include_directories(${CACHED_WIZARD_DEPS_INCLUDE_DIRS})
-add_definitions(${CACHED_WIZARD_DEPS_CFLAGS_OTHER})
-add_executable(ubuntu-kylin-wizard ${SRC_LIST})
-target_link_libraries(ubuntu-kylin-wizard ${CACHED_WIZARD_DEPS_LIBRARIES})
 
-install (TARGETS ubuntu-kylin-wizard DESTINATION "bin")
+add_subdirectory (src)

@@ -109,13 +109,13 @@ Style::Style()
   base_pos_.x = 0.125 * root_width_;
   base_pos_.y = 0.25 * root_height_;
 
-  title1_pos_.x = 0.5 * root_width_;
-  title1_pos_.y = 0.25 * root_height_;
+  title_pos_.x = 0.5 * root_width_;
+  title_pos_.y = 0.25 * root_height_;
 
-  title2_pos_.x = title1_pos_.x;
-  title2_pos_.y = 0.35 * root_height_;
+  subtitle_pos_.x = title_pos_.x;
+  subtitle_pos_.y = 0.35 * root_height_;
 
-  details_pos_.x = title1_pos_.x;
+  details_pos_.x = title_pos_.x;
   details_pos_.y = 0.4 * root_height_;
 
   close_pos_.x = 0.5 * root_width_;
@@ -124,7 +124,7 @@ Style::Style()
   page_ind_pos_.x = 0.75 * root_width_;
   page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
 
-  spot_pos_.x = (base_pos_.x + 422 + title1_pos_.x) / 2;
+  spot_pos_.x = (base_pos_.x + 422 + title_pos_.x) / 2;
   spot_pos_.y = 0.25 * root_height_;
 
   inflexion_pos_.x = spot_pos_.x;
@@ -252,14 +252,14 @@ Point Style::get_base_pos()
   return base_pos_;
 }
 
-Point Style::get_title1_pos()
+Point Style::get_title_pos()
 {
-  return title1_pos_;
+  return title_pos_;
 }
 
-Point Style::get_title2_pos()
+Point Style::get_subtitle_pos()
 {
-  return title2_pos_;
+  return subtitle_pos_;
 }
 
 Point Style::get_details_pos()

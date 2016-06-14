@@ -1,0 +1,14 @@
+GtkLabel#title {
+color: white;
+font: Ubuntu 30;
+}
+
+GtkLabel#subtitle {
+color: white;
+font: Ubuntu 24;
+}
+
+GtkLabel#details {
+color: white;
+font: Ubuntu 16;
+}

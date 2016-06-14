@@ -26,9 +26,33 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
 #include <pango/pango.h>
 #include <math.h>
-#include <glib/gi18n.h>
+
+const gchar* title_1 = "快速启动应用程序";
+const gchar* subtitle_1 = "Launcher";
+const gchar* details_1 = "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。";
+
+const gchar* title_2 = "快速的智能搜索";
+const gchar* subtitle_2 = "Dash";
+const gchar* details_2 = "可以提供强大的快速智能搜索功能，点击 Dash 图标可以方便快捷的搜索本地和在线的各种资源，包括：应用、文件、音乐、视频、图片等。";
+
+const gchar* title_3 = "浏览并管理文件";
+const gchar* subtitle_3 = "Nautilus";
+const gchar* details_3 = "可以浏览和组织电脑上的文件或管理本地存储设备、文件服务器和网络共享上的文件。点击启动器上的图标，可以新建、删除、浏览、复制、移动文件或文件夹。";
+
+const gchar* title_4 = "查看和修改系统设置";
+const gchar* subtitle_4 = "Youker assistant";
+const gchar* details_4 = "系统管理和配置工具。使用优客助手可以一键清理系统垃圾、系统定制美化以及查看系统信息等。";
+
+const gchar* title_5 = "常用工具配置";
+const gchar* subtitle_5 = "Unity control center";
+const gchar* details_5 = "集成了用户常用配置工具。通过控制面板可以设置个人喜好，网络、键盘、鼠标等常用硬件配置以及系统信息等。";
+
+const gchar* title_6 = "查看系统基本状态";
+const gchar* subtitle_6 = "Indicator";
+const gchar* details_6 = "可以在此区域方便快捷的查看系统声音、网络、时间信息，同时可以查看用户手册，设置锁屏、注销、重启、关闭系统等。";
 
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
 {
@@ -151,6 +175,11 @@ Draw::Draw()
   background_ = WID(builder_, WIDGET, "background");
   gtk_image_set_from_pixbuf(GTK_IMAGE(background_), root_pixbuf_);
 
+  /*  css   */
+  GtkCssProvider *provider;
+  GdkDisplay *display;
+  GdkScreen *screen;
+
 //  // Get the thumbnail from current screen.
 //  GdkPixbuf *image_buf = gdk_pixbuf_new_from_file_at_size(PKGDATADIR"/computer.png", 422, 334, &error);
 //  if (!image_buf) {
@@ -180,33 +209,22 @@ Draw::Draw()
   gtk_fixed_move(GTK_FIXED(fixed_), thumbnail_, style_->get_base_pos().x + 17, style_->get_base_pos().y + 24);
 
   grid_ = WID(builder_, WIDGET, "grid");
-  gtk_fixed_move(GTK_FIXED(fixed_), grid_, style_->get_title1_pos().x, style_->get_title1_pos().y);
+  gtk_fixed_move(GTK_FIXED(fixed_), grid_, style_->get_title_pos().x, style_->get_title_pos().y);
 
-  title1_ = WID(builder_, WIDGET, "title1");
-  gtk_label_set_text(GTK_LABEL(title1_), "快速启动应用程序");
+  title_ = WID(builder_, WIDGET, "title");
+  gtk_label_set_text(GTK_LABEL(title_), title_1);
+  gtk_widget_set_name(GTK_WIDGET(title_),"title");   // name this so we can apply css to it later
 
-  title2_ = WID(builder_, WIDGET, "title2");
-  gtk_label_set_text(GTK_LABEL(title2_), _("Launcher"));
+  subtitle_ = WID(builder_, WIDGET, "subtitle");
+  gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_1));
+  gtk_widget_set_name(GTK_WIDGET(subtitle_), "subtitle");
+  gtk_widget_set_size_request(subtitle_, -1, 50);
 
   details_ = WID(builder_, WIDGET, "details");
-  gtk_label_set_text(GTK_LABEL(details_), "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。");
+  gtk_widget_set_name(GTK_WIDGET(details_), "details");
+  gtk_label_set_text(GTK_LABEL(details_), details_1);
   gtk_widget_set_size_request(details_, 0.8 * (style_->get_right_arrow_pos().x - style_->get_spot_pos().x), -1);
   gtk_label_set_line_wrap(GTK_LABEL(details_), TRUE);
-
-  PangoFontDescription *fd_1 = pango_font_description_from_string("Ubuntu 30");
-  gtk_widget_override_font(title1_, fd_1);
-  PangoFontDescription *fd_2 = pango_font_description_from_string("Ubuntu 24");
-  gtk_widget_override_font(title2_, fd_2);
-  PangoFontDescription *fd_3 = pango_font_description_from_string("Ubuntu 16");
-  gtk_widget_override_font(details_, fd_3);
-
-  gtk_widget_set_size_request(title2_, -1, 50);
-
-  GdkColor color;
-  gdk_color_parse("white", &color);
-  gtk_widget_modify_fg(title1_, GTK_STATE_NORMAL, &color);
-  gtk_widget_modify_fg(title2_, GTK_STATE_NORMAL, &color);
-  gtk_widget_modify_fg(details_, GTK_STATE_NORMAL, &color);
 
   left_box_ = WID(builder_, WIDGET, "left_box");
   arrow_left_img_ = WID(builder_, WIDGET, "arrow_left_img");
@@ -231,6 +249,20 @@ Draw::Draw()
   gint screen_num = gdk_screen_get_n_monitors(gdk_screen_get_default());
   if (screen_num > 1)
     draw_other(screen_num);
+
+  provider = gtk_css_provider_new();
+  display = gdk_display_get_default();
+  screen = gdk_display_get_default_screen(display);
+  gtk_style_context_add_provider_for_screen(screen,
+                                            GTK_STYLE_PROVIDER(provider),
+                                            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gsize bytes_written, bytes_read;
+  const gchar* css_file = PKGDATADIR"/wizard.css";
+  error = 0;
+  gtk_css_provider_load_from_path(provider,
+                                  g_filename_to_utf8(css_file, strlen(css_file), &bytes_read, &bytes_written, &error),
+                                  NULL);
+  g_object_unref(provider);
 
   g_signal_connect(G_OBJECT(WID(builder_, WIDGET, "draw_area")), "draw",
       G_CALLBACK(on_draw_event), this);
@@ -397,52 +429,52 @@ void Draw::draw_page(cairo_t *cr)
   switch (page_num_) {
   case 0:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "快速启动应用程序");
-    gtk_label_set_text(GTK_LABEL(title2_), _("Launcher"));
-    gtk_label_set_text(GTK_LABEL(details_), "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。");
+    gtk_label_set_text(GTK_LABEL(title_), title_1);
+    gtk_label_set_text(GTK_LABEL(subtitle_),_(subtitle_1));
+    gtk_label_set_text(GTK_LABEL(details_), details_1);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
     gtk_widget_hide(left_box_);
     break;
  case 1:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "快速的智能搜索");
-    gtk_label_set_text(GTK_LABEL(title2_), _("Dash"));
-    gtk_label_set_text(GTK_LABEL(details_), "可以提供强大的快速智能搜索功能，点击 Dash 图标可以方便快捷的搜索本地和在线的各种资源，包括：应用、文件、音乐、视频、图片等。");
+    gtk_label_set_text(GTK_LABEL(title_), title_2);
+    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_2));
+    gtk_label_set_text(GTK_LABEL(details_), details_2);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_2.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_2.png");
     gtk_widget_show(left_box_);
     break;
   case 2:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "浏览并管理文件");
-    gtk_label_set_text(GTK_LABEL(title2_), _("Nautilus"));
-    gtk_label_set_text(GTK_LABEL(details_), "可以浏览和组织电脑上的文件或管理本地存储设备、文件服务器和网络共享上的文件。点击启动器上的图标，可以新建、删除、浏览、复制、移动文件或文件夹。");
+    gtk_label_set_text(GTK_LABEL(title_), title_3);
+    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_3));
+    gtk_label_set_text(GTK_LABEL(details_), details_3);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_3.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_3.png");
     break;
   case 3:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "查看和修改系统设置");
-    gtk_label_set_text(GTK_LABEL(title2_), _("Youker assistant"));
-    gtk_label_set_text(GTK_LABEL(details_), "系统管理和配置工具。使用优客助手可以一键清理系统垃圾、系统定制美化以及查看系统信息等。");
+    gtk_label_set_text(GTK_LABEL(title_), title_4);
+    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_4));
+    gtk_label_set_text(GTK_LABEL(details_), details_4);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_4.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_4.png");
     break;
   case 4:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "常用工具配置");
-    gtk_label_set_text(GTK_LABEL(title2_), _("Unity control center"));
-    gtk_label_set_text(GTK_LABEL(details_), "集成了用户常用配置工具。通过控制面板可以设置个人喜好，网络、键盘、鼠标等常用硬件配置以及系统信息等。");
+    gtk_label_set_text(GTK_LABEL(title_), title_5);
+    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_5));
+    gtk_label_set_text(GTK_LABEL(details_), details_5);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_5.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_5.png");
     gtk_widget_show(right_box_);
     break;
   case 5:
     draw_polyline(cr);
-    gtk_label_set_text(GTK_LABEL(title1_), "查看系统基本状态");
-    gtk_label_set_text(GTK_LABEL(title2_), _("Indicator"));
-    gtk_label_set_text(GTK_LABEL(details_), "可以在此区域方便快捷的查看系统声音、网络、时间信息，同时可以查看用户手册，设置锁屏、注销、重启、关闭系统等。");
+    gtk_label_set_text(GTK_LABEL(title_), title_6);
+    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_6));
+    gtk_label_set_text(GTK_LABEL(details_), details_6);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_6.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_6.png");
     gtk_widget_hide(right_box_);

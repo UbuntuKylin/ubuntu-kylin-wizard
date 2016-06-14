@@ -69,8 +69,8 @@ private:
   GtkWidget *close_img_;
   GtkWidget *page_ind_;
   GtkWidget *grid_;
-  GtkWidget *title1_;
-  GtkWidget *title2_;
+  GtkWidget *title_;
+  GtkWidget *subtitle_;
   GtkWidget *details_;
 };
 

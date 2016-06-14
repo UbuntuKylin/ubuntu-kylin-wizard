@@ -57,8 +57,8 @@ public:
   Point get_left_arrow_pos();
   Point get_right_arrow_pos();
   Point get_base_pos();
-  Point get_title1_pos();
-  Point get_title2_pos();
+  Point get_title_pos();
+  Point get_subtitle_pos();
   Point get_details_pos();
   Point get_close_pos();
   Point get_page_ind_pos();
@@ -84,8 +84,8 @@ private:
   Point left_arrow_pos_;
   Point right_arrow_pos_;
   Point base_pos_;
-  Point title1_pos_;
-  Point title2_pos_;
+  Point title_pos_;
+  Point subtitle_pos_;
   Point details_pos_;
   Point close_pos_;
   Point page_ind_pos_;
