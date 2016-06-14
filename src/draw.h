@@ -61,12 +61,11 @@ private:
   GtkWidget *background_;
   GtkWidget *left_box_;
   GtkWidget *right_box_;
-  GtkWidget *close_box_;
   GtkWidget *arrow_left_img_;
   GtkWidget *arrow_right_img_;
   GtkWidget *base_img_;
   GtkWidget *thumbnail_;
-  GtkWidget *close_img_;
+  GtkWidget *close_button_;
   GtkWidget *page_ind_;
   GtkWidget *grid_;
   GtkWidget *title_;

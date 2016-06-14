@@ -32,8 +32,8 @@ set (POT_FILE ${CMAKE_SOURCE_DIR}/po/${PROJECT_NAME}.pot)
 
 add_custom_command(OUTPUT ${POT_FILE}
                    COMMAND xgettext -c --from-code=UTF-8 --files-from ${CMAKE_SOURCE_DIR}/po/POTFILES.in --keyword=_ -o ${POT_FILE} --copyright-holder="NUDT & Kylin Ltd" --msgid-bugs-address="https://bugs.launchpad.net/ubuntukylin" --no-wrap --no-location
-                   DEPENDS ${SRC_LIST}
-                   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                   DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp
+                   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/
                    COMMENT "Extract translatable messages to ${POT_FILE}"
 )
 

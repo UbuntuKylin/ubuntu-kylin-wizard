@@ -12,3 +12,25 @@ GtkLabel#details {
 color: white;
 font: Ubuntu 16;
 }
+
+/* Theme button in it's normal state */
+GtkButton {
+-GtkWidget-focus-line-width: 0;
+font: Ubuntu 12;
+color: white;
+padding: 5px;
+background-image: none;
+background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Theme button when the mouse pointer's on it, both are equivalent */
+GtkButton:hover,
+GtkButton:prelight {
+background-image: none;
+background-color: rgba(0, 0, 0, 0.3);
+}
+/* Theme button when it's active (pressed) AND has pointer over it.  */
+GtkButton:hover:active {
+background-image: none;
+background-color: rgba(0, 0, 0, 0.5);
+}

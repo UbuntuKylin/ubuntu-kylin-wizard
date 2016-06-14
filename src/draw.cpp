@@ -31,27 +31,27 @@
 #include <math.h>
 
 const gchar* title_1 = "快速启动应用程序";
-const gchar* subtitle_1 = "Launcher";
+const gchar* subtitle_1 = _("Launcher");
 const gchar* details_1 = "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。";
 
 const gchar* title_2 = "快速的智能搜索";
-const gchar* subtitle_2 = "Dash";
+const gchar* subtitle_2 = _("Dash");
 const gchar* details_2 = "可以提供强大的快速智能搜索功能，点击 Dash 图标可以方便快捷的搜索本地和在线的各种资源，包括：应用、文件、音乐、视频、图片等。";
 
 const gchar* title_3 = "浏览并管理文件";
-const gchar* subtitle_3 = "Nautilus";
+const gchar* subtitle_3 = _("Nautilus");
 const gchar* details_3 = "可以浏览和组织电脑上的文件或管理本地存储设备、文件服务器和网络共享上的文件。点击启动器上的图标，可以新建、删除、浏览、复制、移动文件或文件夹。";
 
 const gchar* title_4 = "查看和修改系统设置";
-const gchar* subtitle_4 = "Youker assistant";
+const gchar* subtitle_4 = _("Youker assistant");
 const gchar* details_4 = "系统管理和配置工具。使用优客助手可以一键清理系统垃圾、系统定制美化以及查看系统信息等。";
 
 const gchar* title_5 = "常用工具配置";
-const gchar* subtitle_5 = "Unity control center";
+const gchar* subtitle_5 = _("Unity control center");
 const gchar* details_5 = "集成了用户常用配置工具。通过控制面板可以设置个人喜好，网络、键盘、鼠标等常用硬件配置以及系统信息等。";
 
 const gchar* title_6 = "查看系统基本状态";
-const gchar* subtitle_6 = "Indicator";
+const gchar* subtitle_6 = _("Indicator");
 const gchar* details_6 = "可以在此区域方便快捷的查看系统声音、网络、时间信息，同时可以查看用户手册，设置锁屏、注销、重启、关闭系统等。";
 
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
@@ -61,18 +61,6 @@ static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWi
     gtk_widget_destroy(win);
     gtk_main_quit();
   }
-  return FALSE;
-}
-
-static gboolean enter_close_box(GtkWidget *widget, GdkEventButton *event, GtkWidget *img)
-{
-  gtk_image_set_from_file(GTK_IMAGE(img), PKGDATADIR"/close_hover.png");
-  return FALSE;
-}
-
-static gboolean leave_close_box(GtkWidget *widget, GdkEventButton *event, GtkWidget *img)
-{
-  gtk_image_set_from_file(GTK_IMAGE(img), PKGDATADIR"/close.png");
   return FALSE;
 }
 
@@ -237,10 +225,10 @@ Draw::Draw()
   gtk_image_set_from_file(GTK_IMAGE(arrow_right_img_), PKGDATADIR"/arrow_right.png");
   gtk_fixed_move(GTK_FIXED(fixed_), right_box_, style_->get_right_arrow_pos().x, style_->get_right_arrow_pos().y);
 
-  close_box_ = WID(builder_, WIDGET, "close_box");
-  close_img_ = WID(builder_, WIDGET, "close_img");
-  gtk_image_set_from_file(GTK_IMAGE(close_img_), PKGDATADIR"/close.png");
-  gtk_fixed_move(GTK_FIXED(fixed_), close_box_, style_->get_close_pos().x, style_->get_close_pos().y);
+  close_button_ = WID(builder_, WIDGET, "close_button");
+  gtk_button_set_label(GTK_BUTTON(close_button_), _("Login System"));
+  gtk_widget_set_name(GTK_WIDGET(close_button_), "close_button");
+  gtk_fixed_move(GTK_FIXED(fixed_), close_button_, style_->get_close_pos().x, style_->get_close_pos().y);
 
   page_ind_ = WID(builder_, WIDGET, "page_ind");
   gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
@@ -256,11 +244,10 @@ Draw::Draw()
   gtk_style_context_add_provider_for_screen(screen,
                                             GTK_STYLE_PROVIDER(provider),
                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  gsize bytes_written, bytes_read;
+
   const gchar* css_file = PKGDATADIR"/wizard.css";
-  error = 0;
   gtk_css_provider_load_from_path(provider,
-                                  g_filename_to_utf8(css_file, strlen(css_file), &bytes_read, &bytes_written, &error),
+                                  css_file,//g_filename_to_utf8(css_file, strlen(css_file), &bytes_read, &bytes_written, &error),
                                   NULL);
   g_object_unref(provider);
 
@@ -269,12 +256,8 @@ Draw::Draw()
   g_signal_connect(G_OBJECT(window_), "key-press-event",
       G_CALLBACK(on_key_press), this);
 
-  g_signal_connect(G_OBJECT(close_box_), "button_press_event",
+  g_signal_connect(G_OBJECT(close_button_), "button_press_event",
       G_CALLBACK(on_close_pressed), window_);
-  g_signal_connect(G_OBJECT(close_box_), "enter_notify_event",
-      G_CALLBACK(enter_close_box), close_img_);
-  g_signal_connect(G_OBJECT(close_box_), "leave_notify_event",
-      G_CALLBACK(leave_close_box), close_img_);
 
   g_signal_connect(G_OBJECT(left_box_), "button_press_event",
       G_CALLBACK(on_arrow_left_pressed), this);
@@ -324,16 +307,14 @@ void Draw::draw_other(gint num)
     if (geo.x == 0 && geo.y == 0)
       continue;
 
-    GtkWidget *button = gtk_image_new_from_file(PKGDATADIR"/close.png");
-    GtkWidget *box = gtk_event_box_new();
-    gtk_container_add(GTK_CONTAINER(box), button);
-    g_signal_connect(G_OBJECT(box), "button_press_event", G_CALLBACK(on_close_pressed), window_);
-    g_signal_connect(G_OBJECT(box), "enter_notify_event", G_CALLBACK(enter_close_box), button);
-    g_signal_connect(G_OBJECT(box), "leave_notify_event", G_CALLBACK(leave_close_box), button);
+    GtkWidget *button = gtk_button_new_with_label(_("Login System"));
+    gtk_widget_set_size_request(button, 115, 35);
+    g_signal_connect(G_OBJECT(button), "button_press_event", G_CALLBACK(on_close_pressed), window_);
+
     bg_pixbuf = gdk_pixbuf_new_from_file_at_scale((style_->get_background_url()).c_str(), geo.width, geo.height, FALSE, NULL);
     other_bg = gtk_image_new_from_pixbuf(bg_pixbuf);
     gtk_fixed_put(GTK_FIXED(root_fixed), other_bg, geo.x, geo.y);
-    gtk_fixed_put(GTK_FIXED(root_fixed), box, geo.x + (geo.width - CLOSE_BUTTON_WIDTH)/2, geo.y + (geo.height - CLOSE_BUTTON_HEIGHT)/2);
+    gtk_fixed_put(GTK_FIXED(root_fixed), button, geo.x + (geo.width - CLOSE_BUTTON_WIDTH)/2, geo.y + (geo.height - CLOSE_BUTTON_HEIGHT)/2);
   }
 }
 

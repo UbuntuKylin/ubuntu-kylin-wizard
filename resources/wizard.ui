@@ -96,23 +96,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEventBox" id="close_box">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkImage" id="close_img">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="stock">gtk-missing-image</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="x">255</property>
-                            <property name="y">301</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkImage" id="page_ind">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -203,6 +186,23 @@
                           <packing>
                             <property name="x">115</property>
                             <property name="y">144</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="close_button">
+                            <property name="width_request">115</property>
+                            <property name="height_request">35</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="relief">none</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="x">737</property>
+                            <property name="y">221</property>
                           </packing>
                         </child>
                       </object>
