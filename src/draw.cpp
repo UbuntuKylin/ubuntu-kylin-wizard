@@ -69,7 +69,7 @@ static gboolean on_arrow_left_pressed(GtkWidget *widget, GdkEventButton *event, 
   if (event->button == 1 && draw->page() != 0)
   {
     draw->pre_page();
-    gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "draw_area"));
+    gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
   }
   return FALSE;
 }
@@ -91,7 +91,7 @@ static gboolean on_arrow_right_pressed(GtkWidget *widget, GdkEventButton *event,
   if (event->button == 1 && draw->page() != PAGES_NUM - 1)
   {
     draw->next_page();
-    gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "draw_area"));
+    gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
   }
   return FALSE;
 }
@@ -122,14 +122,14 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, Draw *draw)
     if (draw->page() != 0)
     {
       draw->pre_page();
-      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "draw_area"));
+      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
     }
     break;
   case GDK_KEY_Right:
     if (draw->page() != PAGES_NUM - 1)
     {
       draw->next_page();
-      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "draw_area"));
+      gtk_widget_queue_draw(WID(draw->Builer(), WIDGET, "window"));
     }
     break;
   default:
@@ -157,11 +157,6 @@ Draw::Draw()
   Setup();
 
   fixed_ = WID(builder_, WIDGET, "fixed");
-
-  root_pixbuf_ = gdk_pixbuf_get_from_window(gdk_get_default_root_window(), 0, 0, style_->get_root_width(), style_->get_root_height());
-
-  background_ = WID(builder_, WIDGET, "background");
-  gtk_image_set_from_pixbuf(GTK_IMAGE(background_), root_pixbuf_);
 
   /*  css   */
   GtkCssProvider *provider;
@@ -234,10 +229,6 @@ Draw::Draw()
   gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
   gtk_fixed_move(GTK_FIXED(fixed_), page_ind_, style_->get_page_ind_pos().x, style_->get_page_ind_pos().y);
 
-  gint screen_num = gdk_screen_get_n_monitors(gdk_screen_get_default());
-  if (screen_num > 1)
-    draw_other(screen_num);
-
   provider = gtk_css_provider_new();
   display = gdk_display_get_default();
   screen = gdk_display_get_default_screen(display);
@@ -251,7 +242,7 @@ Draw::Draw()
                                   NULL);
   g_object_unref(provider);
 
-  g_signal_connect(G_OBJECT(WID(builder_, WIDGET, "draw_area")), "draw",
+  g_signal_connect(G_OBJECT(window_), "draw",
       G_CALLBACK(on_draw_event), this);
   g_signal_connect(G_OBJECT(window_), "key-press-event",
       G_CALLBACK(on_key_press), this);
@@ -272,6 +263,12 @@ Draw::Draw()
       G_CALLBACK(enter_right_box), arrow_right_img_);
   g_signal_connect(G_OBJECT(right_box_), "leave_notify_event",
       G_CALLBACK(leave_right_box), arrow_right_img_);
+
+  root_pixbuf_ = gdk_pixbuf_get_from_window(gdk_get_default_root_window(), 0, 0, style_->get_screen_width(), style_->get_screen_height());
+
+  gint screen_num = gdk_screen_get_n_monitors(gdk_screen_get_default());
+  if (screen_num > 1)
+    draw_other(screen_num);
 }
 
 void Draw::Setup()
@@ -285,15 +282,12 @@ void Draw::Setup()
   GdkScreen *screen = gdk_screen_get_default();
   gtk_widget_set_visual(window_, gdk_screen_get_rgba_visual(screen));
 
-  gint width = gdk_screen_get_width(screen);
-  gint height = gdk_screen_get_height(screen);
-
-  gtk_window_set_default_size(GTK_WINDOW(window_), width, height);
+  gtk_widget_set_size_request(GTK_WIDGET(window_), style_->get_screen_width(), style_->get_screen_height());
 }
 
 void Draw::draw_other(gint num)
 {
-  GtkWidget *root_fixed = WID(builder_, WIDGET, "root_fixed");
+  GtkWidget *root_fixed = WID(builder_, WIDGET, "fixed");
   GdkPixbuf *bg_pixbuf;
   GtkWidget *other_bg;
 
@@ -337,78 +331,45 @@ void Draw::do_drawing(cairo_t *cr)
 
 void Draw::draw_background(cairo_t *cr)
 {
-  cairo_surface_t *bg_sur = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, style_->get_root_width(), style_->get_root_height());
+  cairo_surface_t *bg_sur = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, style_->get_screen_width(), style_->get_screen_height());
   cairo_t *bg_cr = cairo_create(bg_sur);
   gdk_cairo_set_source_pixbuf(bg_cr, root_pixbuf_, 0, 0);
   cairo_paint(bg_cr);
 
   blur(bg_sur, 8);
-  clip_blur_region(cr);
-  cairo_save(cr);
-  cairo_clip(cr);
   cairo_set_source_surface(cr, bg_sur, 0, 0);
   cairo_paint(cr);
-  cairo_restore(cr);
 
   cairo_destroy(bg_cr);
   cairo_surface_destroy(bg_sur);
 }
 
-void Draw::clip_blur_region(cairo_t *cr)
+void clip_rec(cairo_t *cr, int x, int y, int width, int height)
 {
-  gint root_height = style_->get_root_height();
-  gint root_width = style_->get_root_width();
-  gint launcher_size = style_->get_launcher_size();
-  gint panel_height = style_->get_panel_height();
-  gint icon_size = style_->get_icon_size();
-  gint icon_padding = ICON_PADDING.CP(style_->cv_);
-  gint icon_y = root_height - launcher_size + icon_padding;
-  gint space = SPACE_BETWEEN_ICONS.CP(style_->cv_);
-  gint icon_x = 0;
-
-  switch (page_num_) {
-  case 0:
-    cairo_rectangle(cr, 0, 0, root_width, root_height - launcher_size);
-    break;
-  case 1:
-    cairo_rectangle(cr, 0, 0, root_width, icon_y);
-    cairo_rectangle(cr, 0, icon_y, space, launcher_size - icon_padding);
-    cairo_rectangle(cr, space + icon_size, icon_y, root_width - space - icon_size, root_height - icon_y);
-    cairo_rectangle(cr, space, root_height - icon_padding, icon_size, icon_padding);
-    break;
-  case 2:
-    icon_x = style_->icon_pos_[page_num_].x;
-    cairo_rectangle(cr, 0, 0, root_width, icon_y);
-    cairo_rectangle(cr, 0, icon_y, style_->icon_pos_[page_num_].x - 0.5 * icon_size, launcher_size - icon_padding);
-    cairo_rectangle(cr, icon_x + 0.5 * icon_size, icon_y, root_width - icon_x - 0.5 * icon_size, root_height - icon_y);
-    cairo_rectangle(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - icon_padding, icon_size, icon_padding);
-    break;
-  case 3:
-    icon_x = style_->icon_pos_[page_num_].x;
-    cairo_rectangle(cr, 0, 0, root_width, icon_y);
-    cairo_rectangle(cr, 0, icon_y, style_->icon_pos_[page_num_].x - 0.5 * icon_size, launcher_size - icon_padding);
-    cairo_rectangle(cr, icon_x + 0.5 * icon_size, icon_y, root_width - icon_x - 0.5 * icon_size, root_height - icon_y);
-    cairo_rectangle(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - icon_padding, icon_size, icon_padding);
-    break;
-  case 4:
-    icon_x = style_->icon_pos_[page_num_].x;
-    cairo_rectangle(cr, 0, 0, root_width, icon_y);
-    cairo_rectangle(cr, 0, icon_y, style_->icon_pos_[page_num_].x - 0.5 * icon_size, launcher_size - icon_padding);
-    cairo_rectangle(cr, icon_x + 0.5 * icon_size, icon_y, root_width - icon_x - 0.5 * icon_size, root_height - icon_y);
-    cairo_rectangle(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, root_height - icon_padding, icon_size, icon_padding);
-    break;
-  case 5:
-    cairo_rectangle(cr, 0, panel_height, root_width, root_height - panel_height);
-    break;
-  default:
-    break;
-  }
+  cairo_save(cr);
+  cairo_rectangle(cr, x, y, width, height);
+  cairo_clip(cr);
+  cairo_new_path(cr);
+  cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
+  cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint(cr);
+  cairo_restore(cr);
 }
 
 void Draw::draw_page(cairo_t *cr)
 {
+  gint monitor_height = style_->get_pri_monitor_height();
+  gint monitor_width = style_->get_pri_monitor_width();
+  gint launcher_size = style_->get_launcher_size();
+  gint panel_height = style_->get_panel_height();
+  gint icon_size = style_->get_icon_size();
+  gint icon_padding = ICON_PADDING.CP(style_->cv_);
+  gint icon_y = monitor_height - launcher_size + icon_padding;
+  gint space = SPACE_BETWEEN_ICONS.CP(style_->cv_);
+
   switch (page_num_) {
   case 0:
+    clip_rec(cr, 0, monitor_height - launcher_size, monitor_width, launcher_size);
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_1);
     gtk_label_set_text(GTK_LABEL(subtitle_),_(subtitle_1));
@@ -418,6 +379,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_widget_hide(left_box_);
     break;
  case 1:
+    clip_rec(cr, space, icon_y, icon_size, icon_size);
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_2);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_2));
@@ -427,6 +389,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_widget_show(left_box_);
     break;
   case 2:
+    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, icon_y, icon_size, icon_size);
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_3);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_3));
@@ -435,6 +398,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_3.png");
     break;
   case 3:
+    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, icon_y, icon_size, icon_size);
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_4);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_4));
@@ -443,6 +407,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_4.png");
     break;
   case 4:
+    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, icon_y, icon_size, icon_size);
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_5);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_5));
@@ -452,6 +417,7 @@ void Draw::draw_page(cairo_t *cr)
     gtk_widget_show(right_box_);
     break;
   case 5:
+    clip_rec(cr, 0, 0, monitor_width, panel_height);
     draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_6);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_6));

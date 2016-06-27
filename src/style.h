@@ -47,8 +47,10 @@ public:
   Style();
   ~Style();
 
-  gint get_root_width();
-  gint get_root_height();
+  gint get_screen_width();
+  gint get_screen_height();
+  gint get_pri_monitor_width();
+  gint get_pri_monitor_height();
   std::string get_background_url();
   gint get_launcher_size();
   gint get_panel_height();
@@ -73,8 +75,10 @@ private:
   Point cal_icon_position(int index);
   void UpdateDPI();
 
-  gint root_width_;
-  gint root_height_;
+  gint screen_width_;
+  gint screen_height_;
+  gint pri_monitor_width_;
+  gint pri_monitor_height_;
   std::string background_url_;
   gint launcher_size_;
   gint panel_height_;

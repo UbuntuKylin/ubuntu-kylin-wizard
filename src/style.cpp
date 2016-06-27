@@ -86,12 +86,15 @@ Style::Style()
 {
   UpdateDPI();
 
-  GdkScreen *root_screen = gdk_screen_get_default();
-  gint primary_monitor = gdk_screen_get_primary_monitor(root_screen);
+  GdkScreen *screen = gdk_screen_get_default();
+  screen_width_ = gdk_screen_get_width(screen);
+  screen_height_ = gdk_screen_get_height(screen);
+
+  gint primary_monitor = gdk_screen_get_primary_monitor(screen);
   GdkRectangle geo;
-  gdk_screen_get_monitor_geometry(root_screen, primary_monitor, &geo);
-  root_width_ = geo.width;
-  root_height_ = geo.height;
+  gdk_screen_get_monitor_geometry(screen, primary_monitor, &geo);
+  pri_monitor_width_ = geo.width;
+  pri_monitor_height_ = geo.height;
 
   background_url_ = g_settings_get_string(background_settings_, PICTURE_URI.c_str());
 
@@ -100,32 +103,32 @@ Style::Style()
   launcher_size_ = launcher_size.CP(cv_) - (1_em).CP(cv_);
   panel_height_= PANEL_HEIGHT.CP(cv_);
 
-  left_arrow_pos_.x = 0.05 * (root_width_ - ARROW_WIDTH);
-  left_arrow_pos_.y = 0.5 * (root_height_ - ARROW_HEIGHT);
+  left_arrow_pos_.x = 0.05 * (pri_monitor_width_ - ARROW_WIDTH);
+  left_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
 
-  right_arrow_pos_.x = 0.95 * (root_width_ - ARROW_WIDTH);
-  right_arrow_pos_.y = 0.5 * (root_height_ - ARROW_HEIGHT);
+  right_arrow_pos_.x = 0.95 * (pri_monitor_width_ - ARROW_WIDTH);
+  right_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
 
-  base_pos_.x = 0.125 * root_width_;
-  base_pos_.y = 0.25 * root_height_;
+  base_pos_.x = 0.125 * pri_monitor_width_;
+  base_pos_.y = 0.25 * pri_monitor_height_;
 
-  title_pos_.x = 0.5 * root_width_;
-  title_pos_.y = 0.25 * root_height_;
+  title_pos_.x = 0.5 * pri_monitor_width_;
+  title_pos_.y = 0.25 * pri_monitor_height_;
 
   subtitle_pos_.x = title_pos_.x;
-  subtitle_pos_.y = 0.35 * root_height_;
+  subtitle_pos_.y = 0.35 * pri_monitor_height_;
 
   details_pos_.x = title_pos_.x;
-  details_pos_.y = 0.4 * root_height_;
+  details_pos_.y = 0.4 * pri_monitor_height_;
 
-  close_pos_.x = 0.5 * root_width_;
-  close_pos_.y = 0.9 * (root_height_ - launcher_size_);
+  close_pos_.x = 0.5 * pri_monitor_width_;
+  close_pos_.y = 0.9 * (pri_monitor_height_ - launcher_size_);
 
-  page_ind_pos_.x = 0.75 * root_width_;
+  page_ind_pos_.x = 0.75 * pri_monitor_width_;
   page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
 
   spot_pos_.x = (base_pos_.x + 422 + title_pos_.x) / 2;
-  spot_pos_.y = 0.25 * root_height_;
+  spot_pos_.y = 0.25 * pri_monitor_height_;
 
   inflexion_pos_.x = spot_pos_.x;
   inflexion_pos_.y = close_pos_.y + CLOSE_BUTTON_HEIGHT + 5;
@@ -147,14 +150,24 @@ Style::Style()
   }
 }
 
-gint Style::get_root_width()
+gint Style::get_screen_width()
 {
-  return root_width_;
+  return screen_width_;
 }
 
-gint Style::get_root_height()
+gint Style::get_screen_height()
 {
-  return root_height_;
+  return screen_height_;
+}
+
+gint Style::get_pri_monitor_width()
+{
+  return pri_monitor_width_;
+}
+
+gint Style::get_pri_monitor_height()
+{
+  return pri_monitor_height_;
 }
 
 std::string Style::get_background_url()
@@ -221,17 +234,17 @@ Point Style::cal_icon_position(int index)
   if (index == MID_LAUNCHER)
   {
     icon_pos.x = spot_pos_.x;
-    icon_pos.y = root_height_ - launcher_size_;
+    icon_pos.y = pri_monitor_height_ - launcher_size_;
   }
   else if (index == UNDER_PANEL)
   {
-    icon_pos.x = root_width_ - 100;
+    icon_pos.x = pri_monitor_width_ - 100;
     icon_pos.y = panel_height_;
   }
   else
   {
     icon_pos.x = (index - 1) * (icon_size_.CP(cv_) + SPACE_BETWEEN_ICONS.CP(cv_)) + SPACE_BETWEEN_ICONS.CP(cv_) + 0.5 * icon_size_.CP(cv_);
-    icon_pos.y = root_height_ - launcher_size_;
+    icon_pos.y = pri_monitor_height_ - launcher_size_;
   }
 
   return icon_pos;

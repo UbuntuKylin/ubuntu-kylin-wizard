@@ -64,7 +64,7 @@ gboolean first_run()
 gboolean wait_launcher(GdkScreen *screen, GdkDisplay *display)
 {
   GList* stack =  gdk_screen_get_window_stack(screen);
-
+//  XWindowAttributes win_attr;
   gboolean launcher_found = false;
   for( GList* iter = g_list_last(stack); iter; iter = iter->prev)
   {
@@ -72,6 +72,7 @@ gboolean wait_launcher(GdkScreen *screen, GdkDisplay *display)
     XID xid = GDK_WINDOW_XID(window);
     char *name;
     XFetchName(GDK_DISPLAY_XDISPLAY(display), xid, &name);
+//    XGetWindowAttributes(GDK_DISPLAY_XDISPLAY(display), xid, &win_attr);
     if (g_strcmp0(name, "unity-launcher") == 0)
     {
       launcher_found = true;
