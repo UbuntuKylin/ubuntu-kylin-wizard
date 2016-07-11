@@ -30,30 +30,33 @@
 #include <pango/pango.h>
 #include <math.h>
 
-const gchar* title_1 = "快速启动应用程序";
+const gchar* title_1 = _("Quick access to applications");
 const gchar* subtitle_1 = _("Launcher");
-const gchar* details_1 = "可以方便快捷的打开和切换各种应用，同时可以根据使用习惯添加、移除启动器上的应用。";
+                         // Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin.
+const gchar* details_1 = _("Open and switch all kinds of applications conveniently, add/delete applications in Launcher according to user's habit in the meantime");
 
-const gchar* title_2 = "快速的智能搜索";
+const gchar* title_2 = _("Quick intelligent search");
 const gchar* subtitle_2 = _("Dash");
-const gchar* details_2 = "可以提供强大的快速智能搜索功能，点击 Dash 图标可以方便快捷的搜索本地和在线的各种资源，包括：应用、文件、音乐、视频、图片等。";
+                         // Allows you to search for applications, files, music, and videos, and shows you items that you have used recently.
+const gchar* details_2 = _("Provide overall quick intelligent search function, local and on-line resources can be reached by clicking Dash, including applications, files, music, videos and pictures etc.");
 
-const gchar* title_3 = "浏览并管理文件";
+const gchar* title_3 = _("Browse and manage files");
 const gchar* subtitle_3 = _("Nautilus");
-const gchar* details_3 = "可以浏览和组织电脑上的文件或管理本地存储设备、文件服务器和网络共享上的文件。点击启动器上的图标，可以新建、删除、浏览、复制、移动文件或文件夹。";
+                        // Allows to browse directories, preview files and launch applications associated with them. It is also responsible for handling the icons on the desktop.
+const gchar* details_3 = _("Can brwose and organize files, manage local storage device, file server, files on-line, set up, delete, browse, copy, move files or directories by cliking Launcher");
 
-const gchar* title_4 = "查看和修改系统设置";
+const gchar* title_4 = _("Check and modify system configuration");
 const gchar* subtitle_4 = _("Youker assistant");
-const gchar* details_4 = "系统管理和配置工具。使用优客助手可以一键清理系统垃圾、系统定制美化以及查看系统信息等。";
+const gchar* details_4 = _("System management and configuration tools.Youker assistant can clear system trash,custom system,check system information etc");
 
-const gchar* title_5 = "常用工具配置";
+const gchar* title_5 = _("Frequently used tools configuration");
 const gchar* subtitle_5 = _("Unity control center");
-const gchar* details_5 = "集成了用户常用配置工具。通过控制面板可以设置个人喜好，网络、键盘、鼠标等常用硬件配置以及系统信息等。";
+const gchar* details_5 = _("Integrate frequently used configure tools. set personal preference by control panel, such as hardware configuration(internet/keyboard/mouse) and system information etc");
 
-const gchar* title_6 = "查看系统基本状态";
+const gchar* title_6 = _("Check system state");
 const gchar* subtitle_6 = _("Indicator");
-const gchar* details_6 = "可以在此区域方便快捷的查看系统声音、网络、时间信息，同时可以查看用户手册，设置锁屏、注销、重启、关闭系统等。";
-
+                         // A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session.
+const gchar* details_6 = _("In this area,you can check system information like volumn/internet/time, user's manual, set screen-lock and logout/restart/shundown system etc.");
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
 {
   if (event->button == 1)
@@ -163,24 +166,25 @@ Draw::Draw()
   GdkDisplay *display;
   GdkScreen *screen;
 
-//  // Get the thumbnail from current screen.
-//  GdkPixbuf *image_buf = gdk_pixbuf_new_from_file_at_size(PKGDATADIR"/computer.png", 422, 334, &error);
-//  if (!image_buf) {
-//    std::cout << "error message: " << error->message << std::endl;
-//  }
-//  GdkPixbuf *preview = gdk_pixbuf_copy (image_buf);
+  /* Get the thumbnail from current screen.
+  GdkPixbuf *image_buf = gdk_pixbuf_new_from_file_at_size(PKGDATADIR"/computer.png", 422, 334, &error);
+  if (!image_buf) {
+    std::cerr << "error message: " << error->message << std::endl;
+  }
+  GdkPixbuf *preview = gdk_pixbuf_copy (image_buf);
 
-//  GdkPixbuf *tmp = gdk_pixbuf_scale_simple(root_pixbuf_, 385, 230, GDK_INTERP_NEAREST);
+  GdkPixbuf *tmp = gdk_pixbuf_scale_simple(root_pixbuf_, 385, 230, GDK_INTERP_NEAREST);
 
-//  if (tmp)
-//  {
-//    gdk_pixbuf_composite(tmp, preview,
-//                         17, 22, 385, 230, 17, 22, 1,1,GDK_INTERP_NEAREST, 255);
-//    g_object_unref(tmp);
-//  }
-//  base_img_ = WID(builder_, WIDGET, "base_img");
-//  gtk_image_set_from_pixbuf(GTK_IMAGE(base_img_), preview);
-//  gtk_fixed_move(GTK_FIXED(fixed_), base_img_, style_->get_base_pos().x, style_->get_base_pos().y);
+  if (tmp)
+  {
+    gdk_pixbuf_composite(tmp, preview,
+                         17, 22, 385, 230, 17, 22, 1,1,GDK_INTERP_NEAREST, 255);
+    g_object_unref(tmp);
+  }
+  base_img_ = WID(builder_, WIDGET, "base_img");
+  gtk_image_set_from_pixbuf(GTK_IMAGE(base_img_), preview);
+  gtk_fixed_move(GTK_FIXED(fixed_), base_img_, style_->get_base_pos().x, style_->get_base_pos().y);
+  */
 
   base_img_ = WID(builder_, WIDGET, "base_img");
   GdkPixbuf *base_pixbuf = gdk_pixbuf_new_from_file(PKGDATADIR"/computer.png", &error);
@@ -358,19 +362,19 @@ void clip_rec(cairo_t *cr, int x, int y, int width, int height)
 
 void Draw::draw_page(cairo_t *cr)
 {
-  gint monitor_height = style_->get_pri_monitor_height();
-  gint monitor_width = style_->get_pri_monitor_width();
-  gint launcher_size = style_->get_launcher_size();
-  gint panel_height = style_->get_panel_height();
-  gint icon_size = style_->get_icon_size();
-  gint icon_padding = ICON_PADDING.CP(style_->cv_);
-  gint icon_y = monitor_height - launcher_size + icon_padding;
-  gint space = SPACE_BETWEEN_ICONS.CP(style_->cv_);
+  gint x = style_->trans_area_[page_num_].x;
+  gint y = style_->trans_area_[page_num_].y;
+  gint width = style_->trans_area_[page_num_].width;
+  gint height = style_->trans_area_[page_num_].height;
+  gboolean launcher_at_bottom = true;
+  if (!g_strcmp0(style_->get_launcher_position(), "Left"))
+    launcher_at_bottom = false;
+
+  clip_rec(cr, x, y, width, height);
+  draw_polyline(cr, launcher_at_bottom);
 
   switch (page_num_) {
   case 0:
-    clip_rec(cr, 0, monitor_height - launcher_size, monitor_width, launcher_size);
-    draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_1);
     gtk_label_set_text(GTK_LABEL(subtitle_),_(subtitle_1));
     gtk_label_set_text(GTK_LABEL(details_), details_1);
@@ -379,8 +383,6 @@ void Draw::draw_page(cairo_t *cr)
     gtk_widget_hide(left_box_);
     break;
  case 1:
-    clip_rec(cr, space, icon_y, icon_size, icon_size);
-    draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_2);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_2));
     gtk_label_set_text(GTK_LABEL(details_), details_2);
@@ -389,8 +391,6 @@ void Draw::draw_page(cairo_t *cr)
     gtk_widget_show(left_box_);
     break;
   case 2:
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, icon_y, icon_size, icon_size);
-    draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_3);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_3));
     gtk_label_set_text(GTK_LABEL(details_), details_3);
@@ -398,8 +398,6 @@ void Draw::draw_page(cairo_t *cr)
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_3.png");
     break;
   case 3:
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, icon_y, icon_size, icon_size);
-    draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_4);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_4));
     gtk_label_set_text(GTK_LABEL(details_), details_4);
@@ -407,8 +405,6 @@ void Draw::draw_page(cairo_t *cr)
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_4.png");
     break;
   case 4:
-    clip_rec(cr, style_->icon_pos_[page_num_].x - 0.5 * icon_size, icon_y, icon_size, icon_size);
-    draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_5);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_5));
     gtk_label_set_text(GTK_LABEL(details_), details_5);
@@ -417,8 +413,6 @@ void Draw::draw_page(cairo_t *cr)
     gtk_widget_show(right_box_);
     break;
   case 5:
-    clip_rec(cr, 0, 0, monitor_width, panel_height);
-    draw_polyline(cr);
     gtk_label_set_text(GTK_LABEL(title_), title_6);
     gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_6));
     gtk_label_set_text(GTK_LABEL(details_), details_6);
@@ -431,28 +425,46 @@ void Draw::draw_page(cairo_t *cr)
   }
 }
 
-void Draw::draw_polyline(cairo_t *cr)
+void Draw::draw_polyline(cairo_t *cr, gboolean at_bottom)
 {
   cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.9);
   cairo_set_line_width(cr, 2);
 
   Point p;
-  p.x = style_->icon_pos_[page_num_].x;
-  p.y = style_->icon_pos_[page_num_].y;
+  p.x = style_->focus_pos_[page_num_].x;
+  p.y = style_->focus_pos_[page_num_].y;
 
   cairo_move_to(cr, p.x, p.y);
-  gint inflexion_y = 0;
-  if (page_num_ != PAGES_NUM - 1)
-    inflexion_y = style_->get_inflexion_pos().y;
+
+  if (at_bottom)
+  {
+    gint inflexion_y = 0;
+    if (page_num_ != PAGES_NUM - 1)
+      inflexion_y = style_->get_inflexion_pos().y;
+    else
+      inflexion_y = (style_->get_spot_pos().y + style_->get_panel_height()) / 2;
+
+    cairo_line_to(cr, p.x, inflexion_y);
+    cairo_line_to(cr, style_->get_inflexion_pos().x, inflexion_y);
+    cairo_line_to(cr, style_->get_spot_pos().x, style_->get_spot_pos().y);
+    cairo_stroke(cr);
+  }
   else
-    inflexion_y = (style_->get_spot_pos().y + style_->get_panel_height()) / 2;
-
-  cairo_line_to(cr, p.x, inflexion_y);
-  cairo_line_to(cr, style_->get_inflexion_pos().x, inflexion_y);
-  cairo_line_to(cr, style_->get_spot_pos().x, style_->get_spot_pos().y);
-  cairo_stroke(cr);
-
-  draw_ring(cr, p.x, p.y);
+  {
+    if (page_num_ == PAGES_NUM - 1)
+    {
+      cairo_line_to(cr, p.x, style_->get_inflexion_pos().y);
+      cairo_line_to(cr, style_->get_spot_pos().x, style_->get_inflexion_pos().y);
+    }
+    else
+    {
+      cairo_line_to(cr, style_->get_inflexion_pos().x, p.y);
+      cairo_line_to(cr, style_->get_inflexion_pos().x, style_->get_spot_pos().y);
+    }
+    cairo_line_to(cr, style_->get_spot_pos().x, style_->get_spot_pos().y);
+    cairo_stroke(cr);
+  }
+  draw_ring(cr,  p.x, p.y);
   draw_ring(cr, style_->get_spot_pos().x, style_->get_spot_pos().y);
 }
 

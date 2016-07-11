@@ -7,19 +7,50 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/ubuntukylin\n"
-"POT-Creation-Date: 2016-06-14 15:28+0800\n"
+"POT-Creation-Date: 2016-07-11 16:24+0800\n"
 "PO-Revision-Date: 2016-05-31 15:40+0800\n"
 "Last-Translator: feng <jianfengli@ubuntukylin.com>\n"
 "Language-Team: Hindi\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "Browse and manage files"
+msgstr ""
+
+#. Allows to browse directories, preview files and launch applications associated with them. It is also responsible for handling the icons on the desktop.
+msgid ""
+"Can brwose and organize files, manage local storage device, file server, "
+"files on-line, set up, delete, browse, copy, move files or directories by "
+"cliking Launcher"
+msgstr ""
+
+msgid "Check and modify system configuration"
+msgstr ""
+
+msgid "Check system state"
+msgstr ""
 
 msgid "Dash"
 msgstr ""
 
+msgid "Frequently used tools configuration"
+msgstr ""
+
+#. A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session.
+msgid ""
+"In this area,you can check system information like volumn/internet/time, "
+"user's manual, set screen-lock and logout/restart/shundown system etc."
+msgstr ""
+
 msgid "Indicator"
+msgstr ""
+
+msgid ""
+"Integrate frequently used configure tools. set personal preference by "
+"control panel, such as hardware configuration(internet/keyboard/mouse) and "
+"system information etc"
 msgstr ""
 
 msgid "Launcher"
@@ -29,6 +60,30 @@ msgid "Login System"
 msgstr ""
 
 msgid "Nautilus"
+msgstr ""
+
+#. Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin.
+msgid ""
+"Open and switch all kinds of applications conveniently, add/delete "
+"applications in Launcher according to user's habit in the meantime"
+msgstr ""
+
+#. Allows you to search for applications, files, music, and videos, and shows you items that you have used recently.
+msgid ""
+"Provide overall quick intelligent search function, local and on-line "
+"resources can be reached by clicking Dash, including applications, files, "
+"music, videos and pictures etc."
+msgstr ""
+
+msgid "Quick access to applications"
+msgstr ""
+
+msgid "Quick intelligent search"
+msgstr ""
+
+msgid ""
+"System management and configuration tools.Youker assistant can clear system "
+"trash,custom system,check system information etc"
 msgstr ""
 
 msgid "Unity control center"

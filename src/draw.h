@@ -42,7 +42,7 @@ public:
   void draw_other(gint num);
   void draw_background(cairo_t *cr);
   void draw_page(cairo_t *cr);
-  void draw_polyline(cairo_t *cr);
+  void draw_polyline(cairo_t *cr, gboolean at_bottom);
   void draw_ring(cairo_t *cr, gint x, gint y);
   gint page();
   void next_page();

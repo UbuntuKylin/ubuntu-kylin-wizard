@@ -112,6 +112,9 @@ int main (int argc, char *argv[])
   GdkScreen *screen = gdk_screen_get_default();
   GdkDisplay *display = gdk_screen_get_display(screen);
 
+  /*  TODO: Take the screenshot after the launcher has shown on the screen, but this is so bad,
+   *        please replace this once you find a better method.
+   */
   gboolean launcher_showed = false;
   while(!launcher_showed)
   {

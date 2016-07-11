@@ -27,6 +27,7 @@
 
 const std::string LAUNCHER_SETTINGS = "com.canonical.Unity.Launcher";
 const std::string FAVORITES = "favorites";
+const std::string POSITION = "launcher-position";
 
 const std::string UBUNTU_UI_SETTINGS = "com.ubuntu.user-interface";
 const std::string SCALE_FACTOR = "scale-factor";
@@ -38,7 +39,7 @@ const std::string ICON_SIZE = "icon-size";
 const std::string BACKGROUND_SETTINGS = "org.gnome.desktop.background";
 const std::string PICTURE_URI = "picture-uri";
 
-const gint MID_LAUNCHER = -2;
+const gint LAUNCHER = -2;
 const gint UNDER_PANEL = -3;
 
 const RawPixel DEFAULT_ICON_SIZE  = 48_em;
@@ -103,50 +104,93 @@ Style::Style()
   launcher_size_ = launcher_size.CP(cv_) - (1_em).CP(cv_);
   panel_height_= PANEL_HEIGHT.CP(cv_);
 
-  left_arrow_pos_.x = 0.05 * (pri_monitor_width_ - ARROW_WIDTH);
-  left_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
+  launcher_position_ = g_settings_get_string(launcher_settings_, POSITION.c_str());
 
-  right_arrow_pos_.x = 0.95 * (pri_monitor_width_ - ARROW_WIDTH);
-  right_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
+  if (!g_strcmp0(launcher_position_, "Bottom"))
+  {
+    left_arrow_pos_.x = 0.05 * (pri_monitor_width_ - ARROW_WIDTH);
+    left_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
 
-  base_pos_.x = 0.125 * pri_monitor_width_;
-  base_pos_.y = 0.25 * pri_monitor_height_;
+    right_arrow_pos_.x = 0.95 * (pri_monitor_width_ - ARROW_WIDTH);
+    right_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
 
-  title_pos_.x = 0.5 * pri_monitor_width_;
-  title_pos_.y = 0.25 * pri_monitor_height_;
+    base_pos_.x = 0.125 * pri_monitor_width_;
+    base_pos_.y = 0.25 * pri_monitor_height_;
 
-  subtitle_pos_.x = title_pos_.x;
-  subtitle_pos_.y = 0.35 * pri_monitor_height_;
+    title_pos_.x = 0.5 * pri_monitor_width_;
+    title_pos_.y = 0.25 * pri_monitor_height_;
 
-  details_pos_.x = title_pos_.x;
-  details_pos_.y = 0.4 * pri_monitor_height_;
+    subtitle_pos_.x = title_pos_.x;
+    subtitle_pos_.y = 0.35 * pri_monitor_height_;
 
-  close_pos_.x = 0.5 * pri_monitor_width_;
-  close_pos_.y = 0.9 * (pri_monitor_height_ - launcher_size_);
+    details_pos_.x = title_pos_.x;
+    details_pos_.y = 0.4 * pri_monitor_height_;
 
-  page_ind_pos_.x = 0.75 * pri_monitor_width_;
-  page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
+    close_pos_.x = 0.5 * pri_monitor_width_;
+    close_pos_.y = 0.9 * (pri_monitor_height_ - launcher_size_);
 
-  spot_pos_.x = (base_pos_.x + 422 + title_pos_.x) / 2;
-  spot_pos_.y = 0.25 * pri_monitor_height_;
+    page_ind_pos_.x = 0.75 * pri_monitor_width_;
+    page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
 
-  inflexion_pos_.x = spot_pos_.x;
-  inflexion_pos_.y = close_pos_.y + CLOSE_BUTTON_HEIGHT + 5;
+    spot_pos_.x = (base_pos_.x + 422 + title_pos_.x) / 2;
+    spot_pos_.y = 0.25 * pri_monitor_height_;
 
-  icon_order_[0] = MID_LAUNCHER;
-  icon_order_[1] = 1;
-  // +1 because of dash is not in the favorites list.
-  icon_order_[2] = get_icon_order("Nautilus") + 1;
-  icon_order_[3] = get_icon_order("youker-assistant") + 1;
-  icon_order_[4] = get_icon_order("unity-control-center") + 1;
+    inflexion_pos_.x = spot_pos_.x;
+    inflexion_pos_.y = close_pos_.y + CLOSE_BUTTON_HEIGHT + 5;
+  }
+  else
+  {
+    left_arrow_pos_.x = 0.05 * (pri_monitor_width_ - ARROW_WIDTH) + launcher_size_;
+    left_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
+
+    right_arrow_pos_.x = 0.95 * (pri_monitor_width_ - ARROW_WIDTH);
+    right_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
+
+    base_pos_.x = 0.55 * pri_monitor_width_;
+    base_pos_.y = 0.25 * pri_monitor_height_;
+
+    spot_pos_.x = 0.5 * pri_monitor_width_;
+    spot_pos_.y = 0.25 * pri_monitor_height_;
+
+    title_pos_.x = 0.125 * pri_monitor_width_;
+    title_pos_.y = spot_pos_.y - 70;
+
+    subtitle_pos_.x = title_pos_.x;
+    subtitle_pos_.y = spot_pos_.y + 10;
+
+    details_pos_.x = title_pos_.x;
+    details_pos_.y = subtitle_pos_.y + 10;
+
+    close_pos_.x = 0.125 * pri_monitor_width_;
+    close_pos_.y = 0.9 * (pri_monitor_height_ - launcher_size_);
+
+    page_ind_pos_.x = 0.75 * pri_monitor_width_;
+    page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
+
+    inflexion_pos_.x = (launcher_size_ + title_pos_.x) / 2;
+    inflexion_pos_.y = (panel_height_ + base_pos_.y) / 2;  // This is only use for the last page(indicator).
+  }
+
+  icon_order_[0] = LAUNCHER;
+  icon_order_[1] = 0;
+  icon_order_[2] = get_icon_order("Nautilus");
+  icon_order_[3] = get_icon_order("youker-assistant");
+  icon_order_[4] = get_icon_order("unity-control-center");
   icon_order_[5] = UNDER_PANEL;
 
   Point p;
+  GdkRectangle trans_geo;
   for (int i = 0; i < PAGES_NUM; i++)
   {
-    p = cal_icon_position(icon_order_[i]);
-    icon_pos_[i].x = p.x;
-    icon_pos_[i].y = p.y;
+    p = cal_focus_point(icon_order_[i]);
+    focus_pos_[i].x = p.x;
+    focus_pos_[i].y = p.y;
+
+    trans_geo = cal_trans_area(icon_order_[i]);
+    trans_area_[i].x = trans_geo.x;
+    trans_area_[i].y = trans_geo.y;
+    trans_area_[i].width = trans_geo.width;
+    trans_area_[i].height = trans_geo.height;
   }
 }
 
@@ -178,6 +222,11 @@ std::string Style::get_background_url()
 gint Style::get_launcher_size()
 {
   return launcher_size_;
+}
+
+gchar* Style::get_launcher_position()
+{
+  return launcher_position_;
 }
 
 gint Style::get_panel_height()
@@ -216,38 +265,94 @@ gint Style::get_icon_order(std::string icon_name)
 
   if (!found)
   {
-    n = -1;
-    adjust = 0;
+    return -1;
   }
   return n + adjust;
 }
 
 Point Style::get_icon_position(int index)
 {
-  return icon_pos_[index];
+  return focus_pos_[index];
 }
 
-Point Style::cal_icon_position(int index)
+GdkRectangle Style::cal_trans_area(int index)
 {
-  Point icon_pos;
-
-  if (index == MID_LAUNCHER)
+  GdkRectangle trans_area;
+  if (index == LAUNCHER)
   {
-    icon_pos.x = spot_pos_.x;
-    icon_pos.y = pri_monitor_height_ - launcher_size_;
+    if (!g_strcmp0(launcher_position_, "Bottom"))
+    {
+      trans_area.x = 0;
+      trans_area.y = pri_monitor_height_ - launcher_size_;
+      trans_area.width = pri_monitor_width_;
+      trans_area.height = launcher_size_;
+    }
+    else
+    {
+      trans_area.x = 0;
+      trans_area.y = panel_height_;
+      trans_area.width = launcher_size_;
+      trans_area.height = pri_monitor_height_ - panel_height_;
+    }
   }
   else if (index == UNDER_PANEL)
   {
-    icon_pos.x = pri_monitor_width_ - 100;
-    icon_pos.y = panel_height_;
+    trans_area.x = 0;
+    trans_area.y = 0;
+    trans_area.width = pri_monitor_width_;
+    trans_area.height = panel_height_;
+  }
+  else if (!g_strcmp0(launcher_position_, "Bottom"))
+  {
+    trans_area.x = index * (icon_size_.CP(cv_) + SPACE_BETWEEN_ICONS.CP(cv_)) + SPACE_BETWEEN_ICONS.CP(cv_);
+    trans_area.y = pri_monitor_height_ - launcher_size_ + SPACE_BETWEEN_ICONS.CP(cv_);
+    trans_area.width = trans_area.height = icon_size_.CP(cv_);
   }
   else
   {
-    icon_pos.x = (index - 1) * (icon_size_.CP(cv_) + SPACE_BETWEEN_ICONS.CP(cv_)) + SPACE_BETWEEN_ICONS.CP(cv_) + 0.5 * icon_size_.CP(cv_);
-    icon_pos.y = pri_monitor_height_ - launcher_size_;
+    trans_area.x = SPACE_BETWEEN_ICONS.CP(cv_);
+    trans_area.y = panel_height_ + index * (icon_size_.CP(cv_) + SPACE_BETWEEN_ICONS.CP(cv_)) + SPACE_BETWEEN_ICONS.CP(cv_);
+    trans_area.width = icon_size_.CP(cv_);
+    trans_area.height = icon_size_.CP(cv_);
   }
 
-  return icon_pos;
+  return trans_area;
+}
+
+Point Style::cal_focus_point(int index)
+{
+  Point focus;
+
+  if (index == LAUNCHER)
+  {
+    if (!g_strcmp0(launcher_position_, "Bottom"))
+    {
+      focus.x = spot_pos_.x;
+      focus.y = pri_monitor_height_ - launcher_size_;
+    }
+    else
+    {
+      focus.x = launcher_size_;
+      focus.y = spot_pos_.y;
+    }
+  }
+  else if (index == UNDER_PANEL)
+  {
+    focus.x = pri_monitor_width_ - 100;
+    focus.y = panel_height_;
+  }
+  else if (!g_strcmp0(launcher_position_, "Bottom"))
+  {
+    focus.x = index * (icon_size_.CP(cv_) + SPACE_BETWEEN_ICONS.CP(cv_)) + SPACE_BETWEEN_ICONS.CP(cv_) + 0.5 * icon_size_.CP(cv_);
+    focus.y = pri_monitor_height_ - launcher_size_;
+  }
+  else
+  {
+    focus.x = launcher_size_;
+    focus.y = panel_height_ + index * (icon_size_.CP(cv_) + SPACE_BETWEEN_ICONS.CP(cv_)) + icon_size_.CP(cv_);
+  }
+
+  return focus;
 }
 
 Point Style::get_left_arrow_pos()

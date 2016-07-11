@@ -21,6 +21,7 @@
 #define STYLE_H
 
 #include <glib.h>
+#include <gtk/gtk.h>
 #include <gio/gio.h>
 #include <string>
 
@@ -53,6 +54,7 @@ public:
   gint get_pri_monitor_height();
   std::string get_background_url();
   gint get_launcher_size();
+  gchar *get_launcher_position();
   gint get_panel_height();
   gint get_icon_size();
   Point get_icon_position(int index);
@@ -67,12 +69,14 @@ public:
   Point get_spot_pos();
   Point get_inflexion_pos();
 
-  Point icon_pos_[PAGES_NUM];
+  Point focus_pos_[PAGES_NUM];
+  GdkRectangle trans_area_[PAGES_NUM];
   EMConverter::Ptr cv_;
 
 private:
   gint get_icon_order(std::string icon_name);
-  Point cal_icon_position(int index);
+  Point cal_focus_point(int index);
+  GdkRectangle cal_trans_area(int index);
   void UpdateDPI();
 
   gint screen_width_;
@@ -81,6 +85,7 @@ private:
   gint pri_monitor_height_;
   std::string background_url_;
   gint launcher_size_;
+  gchar* launcher_position_;
   gint panel_height_;
   RawPixel icon_size_;
   gint icon_order_[PAGES_NUM];
