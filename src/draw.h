@@ -42,6 +42,7 @@ public:
   void draw_other(gint num);
   void draw_background(cairo_t *cr);
   void draw_page(cairo_t *cr);
+  void draw_description(cairo_t *cr, const gchar *title, const gchar *subtitle, const gchar *details);
   void draw_polyline(cairo_t *cr, gboolean at_bottom);
   void draw_ring(cairo_t *cr, gint x, gint y);
   gint page();
@@ -66,10 +67,6 @@ private:
   GtkWidget *thumbnail_;
   GtkWidget *close_button_;
   GtkWidget *page_ind_;
-  GtkWidget *grid_;
-  GtkWidget *title_;
-  GtkWidget *subtitle_;
-  GtkWidget *details_;
 };
 
 #endif

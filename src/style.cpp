@@ -54,6 +54,16 @@ const gint PAGE_IND_WIDTH = 253;
 
 const double DEFAULT_DPI = 96.0f;
 
+gboolean get_app_installed(const gchar *app_name)
+{
+  gchar *path = g_find_program_in_path(app_name);
+  if (path)
+    return true;
+  else
+    return false;
+}
+
+
 void Style::UpdateDPI()
 {
   GSettings *ubuntu_ui_settings = g_settings_new(UBUNTU_UI_SETTINGS.c_str());
@@ -111,9 +121,6 @@ Style::Style()
     left_arrow_pos_.x = 0.05 * (pri_monitor_width_ - ARROW_WIDTH);
     left_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
 
-    right_arrow_pos_.x = 0.95 * (pri_monitor_width_ - ARROW_WIDTH);
-    right_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
-
     base_pos_.x = 0.125 * pri_monitor_width_;
     base_pos_.y = 0.25 * pri_monitor_height_;
 
@@ -121,16 +128,13 @@ Style::Style()
     title_pos_.y = 0.25 * pri_monitor_height_;
 
     subtitle_pos_.x = title_pos_.x;
-    subtitle_pos_.y = 0.35 * pri_monitor_height_;
+    subtitle_pos_.y = 0.33 * pri_monitor_height_;
 
     details_pos_.x = title_pos_.x;
     details_pos_.y = 0.4 * pri_monitor_height_;
 
     close_pos_.x = 0.5 * pri_monitor_width_;
     close_pos_.y = 0.9 * (pri_monitor_height_ - launcher_size_);
-
-    page_ind_pos_.x = 0.75 * pri_monitor_width_;
-    page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
 
     spot_pos_.x = (base_pos_.x + 422 + title_pos_.x) / 2;
     spot_pos_.y = 0.25 * pri_monitor_height_;
@@ -143,9 +147,6 @@ Style::Style()
     left_arrow_pos_.x = 0.05 * (pri_monitor_width_ - ARROW_WIDTH) + launcher_size_;
     left_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
 
-    right_arrow_pos_.x = 0.95 * (pri_monitor_width_ - ARROW_WIDTH);
-    right_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
-
     base_pos_.x = 0.55 * pri_monitor_width_;
     base_pos_.y = 0.25 * pri_monitor_height_;
 
@@ -153,28 +154,34 @@ Style::Style()
     spot_pos_.y = 0.25 * pri_monitor_height_;
 
     title_pos_.x = 0.125 * pri_monitor_width_;
-    title_pos_.y = spot_pos_.y - 70;
+    title_pos_.y = spot_pos_.y;
 
     subtitle_pos_.x = title_pos_.x;
-    subtitle_pos_.y = spot_pos_.y + 10;
+    subtitle_pos_.y = 0.33 * pri_monitor_height_;
 
     details_pos_.x = title_pos_.x;
-    details_pos_.y = subtitle_pos_.y + 10;
+    details_pos_.y = 0.4 * pri_monitor_height_;
 
     close_pos_.x = 0.125 * pri_monitor_width_;
     close_pos_.y = 0.9 * (pri_monitor_height_ - launcher_size_);
-
-    page_ind_pos_.x = 0.75 * pri_monitor_width_;
-    page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
 
     inflexion_pos_.x = (launcher_size_ + title_pos_.x) / 2;
     inflexion_pos_.y = (panel_height_ + base_pos_.y) / 2;  // This is only use for the last page(indicator).
   }
 
+  right_arrow_pos_.x = 0.95 * (pri_monitor_width_ - ARROW_WIDTH);
+  right_arrow_pos_.y = 0.5 * (pri_monitor_height_ - ARROW_HEIGHT);
+
+  page_ind_pos_.x = 0.75 * pri_monitor_width_;
+  page_ind_pos_.y = close_pos_.y + (CLOSE_BUTTON_HEIGHT - PAGE_IND_HEIGTH) / 2;
+
   icon_order_[0] = LAUNCHER;
   icon_order_[1] = 0;
   icon_order_[2] = get_icon_order("Nautilus");
-  icon_order_[3] = get_icon_order("youker-assistant");
+  if (get_app_installed("youker-assistant"))
+    icon_order_[3] = get_icon_order("youker-assistant");
+  else
+    icon_order_[3] = get_icon_order("Software");
   icon_order_[4] = get_icon_order("unity-control-center");
   icon_order_[5] = UNDER_PANEL;
 
@@ -252,7 +259,7 @@ gint Style::get_icon_order(std::string icon_name)
     std::string value = strings[i];
 
     if (value.find("devices") != std::string::npos || value.find("running") != std::string::npos ||
-        value.find("expo-icon") != std::string::npos || value.find("ubiquity") != std::string::npos)
+        value.find("ubiquity") != std::string::npos)
       adjust--;
 
     if (!value.empty() && value.find(icon_name) != std::string::npos)
@@ -349,7 +356,7 @@ Point Style::cal_focus_point(int index)
   else
   {
     focus.x = launcher_size_;
-    focus.y = panel_height_ + index * (icon_size_.CP(cv_) + SPACE_BETWEEN_ICONS.CP(cv_)) + icon_size_.CP(cv_);
+    focus.y = panel_height_ + index * (icon_size_.CP(cv_) + SPACE_BETWEEN_ICONS.CP(cv_)) + SPACE_BETWEEN_ICONS.CP(cv_) + 0.5 * icon_size_.CP(cv_);
   }
 
   return focus;

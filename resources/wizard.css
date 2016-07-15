@@ -1,3 +1,4 @@
+/*
 GtkLabel#title {
 color: white;
 font: Ubuntu 30;
@@ -12,6 +13,7 @@ GtkLabel#details {
 color: white;
 font: Ubuntu 16;
 }
+*/
 
 /* Theme button in it's normal state */
 GtkButton {

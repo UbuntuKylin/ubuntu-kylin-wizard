@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/ubuntukylin\n"
-"POT-Creation-Date: 2016-07-11 16:24+0800\n"
+"POT-Creation-Date: 2016-07-15 17:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Quick access to applications"
+msgid "Quick access area"
 msgstr ""
 
 msgid "Launcher"
 msgstr ""
 
-#. Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin.
-msgid "Open and switch all kinds of applications conveniently, add/delete applications in Launcher according to user's habit in the meantime"
+msgid "Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin."
 msgstr ""
 
 msgid "Quick intelligent search"
@@ -33,47 +32,44 @@ msgstr ""
 msgid "Dash"
 msgstr ""
 
-#. Allows you to search for applications, files, music, and videos, and shows you items that you have used recently.
-msgid "Provide overall quick intelligent search function, local and on-line resources can be reached by clicking Dash, including applications, files, music, videos and pictures etc."
+msgid "Allows you to search for applications, files, music, and videos, and shows you items that you have used recently."
 msgstr ""
 
-msgid "Browse and manage files"
+msgid "File manager"
 msgstr ""
 
 msgid "Nautilus"
 msgstr ""
 
-#. Allows to browse directories, preview files and launch applications associated with them. It is also responsible for handling the icons on the desktop.
-msgid "Can brwose and organize files, manage local storage device, file server, files on-line, set up, delete, browse, copy, move files or directories by cliking Launcher"
+msgid "Allows to browse directories, preview files and launch applications associated with them. "
 msgstr ""
 
-msgid "Check and modify system configuration"
+msgid "Desktop manager"
 msgstr ""
 
 msgid "Youker assistant"
 msgstr ""
 
-msgid "System management and configuration tools.Youker assistant can clear system trash,custom system,check system information etc"
+msgid "A system management and configuration tool we developed for Linux users, could show system information, cleanup system garbage and beautify system."
 msgstr ""
 
-msgid "Frequently used tools configuration"
+msgid "User & system settings"
 msgstr ""
 
 msgid "Unity control center"
 msgstr ""
 
-msgid "Integrate frequently used configure tools. set personal preference by control panel, such as hardware configuration(internet/keyboard/mouse) and system information etc"
+msgid "An improved user interface for configuring the desktop and other aspects of the system."
 msgstr ""
 
-msgid "Check system state"
+msgid "Check app & system status"
 msgstr ""
 
 msgid "Indicator"
 msgstr ""
 
-#. A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session.
-msgid "In this area,you can check system information like volumn/internet/time, user's manual, set screen-lock and logout/restart/shundown system etc."
+msgid "A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session."
 msgstr ""
 
-msgid "Login System"
+msgid "Login"
 msgstr ""

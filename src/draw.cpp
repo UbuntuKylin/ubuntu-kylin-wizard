@@ -27,36 +27,33 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
-#include <pango/pango.h>
+#include <pango/pangocairo.h>
 #include <math.h>
 
-const gchar* title_1 = _("Quick access to applications");
+const gchar* title_1 = _("Quick access area");
 const gchar* subtitle_1 = _("Launcher");
-                         // Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin.
-const gchar* details_1 = _("Open and switch all kinds of applications conveniently, add/delete applications in Launcher according to user's habit in the meantime");
+const gchar* details_1 = _("Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin.");
 
 const gchar* title_2 = _("Quick intelligent search");
 const gchar* subtitle_2 = _("Dash");
-                         // Allows you to search for applications, files, music, and videos, and shows you items that you have used recently.
-const gchar* details_2 = _("Provide overall quick intelligent search function, local and on-line resources can be reached by clicking Dash, including applications, files, music, videos and pictures etc.");
+const gchar* details_2 = _("Allows you to search for applications, files, music, and videos, and shows you items that you have used recently.");
 
-const gchar* title_3 = _("Browse and manage files");
+const gchar* title_3 = _("File manager");
 const gchar* subtitle_3 = _("Nautilus");
-                        // Allows to browse directories, preview files and launch applications associated with them. It is also responsible for handling the icons on the desktop.
-const gchar* details_3 = _("Can brwose and organize files, manage local storage device, file server, files on-line, set up, delete, browse, copy, move files or directories by cliking Launcher");
+const gchar* details_3 = _("Allows to browse directories, preview files and launch applications associated with them. ");
 
-const gchar* title_4 = _("Check and modify system configuration");
+const gchar* title_4 = _("Desktop manager");
 const gchar* subtitle_4 = _("Youker assistant");
-const gchar* details_4 = _("System management and configuration tools.Youker assistant can clear system trash,custom system,check system information etc");
+const gchar* details_4 = _("A system management and configuration tool we developed for Linux users, could show system information, cleanup system garbage and beautify system.");
 
-const gchar* title_5 = _("Frequently used tools configuration");
+const gchar* title_5 = _("User & system settings");
 const gchar* subtitle_5 = _("Unity control center");
-const gchar* details_5 = _("Integrate frequently used configure tools. set personal preference by control panel, such as hardware configuration(internet/keyboard/mouse) and system information etc");
+const gchar* details_5 = _("An improved user interface for configuring the desktop and other aspects of the system.");
 
-const gchar* title_6 = _("Check system state");
+const gchar* title_6 = _("Check app & system status");
 const gchar* subtitle_6 = _("Indicator");
-                         // A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session.
-const gchar* details_6 = _("In this area,you can check system information like volumn/internet/time, user's manual, set screen-lock and logout/restart/shundown system etc.");
+const gchar* details_6 = _("A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session.");
+
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
 {
   if (event->button == 1)
@@ -195,24 +192,6 @@ Draw::Draw()
   gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
   gtk_fixed_move(GTK_FIXED(fixed_), thumbnail_, style_->get_base_pos().x + 17, style_->get_base_pos().y + 24);
 
-  grid_ = WID(builder_, WIDGET, "grid");
-  gtk_fixed_move(GTK_FIXED(fixed_), grid_, style_->get_title_pos().x, style_->get_title_pos().y);
-
-  title_ = WID(builder_, WIDGET, "title");
-  gtk_label_set_text(GTK_LABEL(title_), title_1);
-  gtk_widget_set_name(GTK_WIDGET(title_),"title");   // name this so we can apply css to it later
-
-  subtitle_ = WID(builder_, WIDGET, "subtitle");
-  gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_1));
-  gtk_widget_set_name(GTK_WIDGET(subtitle_), "subtitle");
-  gtk_widget_set_size_request(subtitle_, -1, 50);
-
-  details_ = WID(builder_, WIDGET, "details");
-  gtk_widget_set_name(GTK_WIDGET(details_), "details");
-  gtk_label_set_text(GTK_LABEL(details_), details_1);
-  gtk_widget_set_size_request(details_, 0.8 * (style_->get_right_arrow_pos().x - style_->get_spot_pos().x), -1);
-  gtk_label_set_line_wrap(GTK_LABEL(details_), TRUE);
-
   left_box_ = WID(builder_, WIDGET, "left_box");
   arrow_left_img_ = WID(builder_, WIDGET, "arrow_left_img");
   gtk_image_set_from_file(GTK_IMAGE(arrow_left_img_), PKGDATADIR"/arrow_left.png");
@@ -225,7 +204,7 @@ Draw::Draw()
   gtk_fixed_move(GTK_FIXED(fixed_), right_box_, style_->get_right_arrow_pos().x, style_->get_right_arrow_pos().y);
 
   close_button_ = WID(builder_, WIDGET, "close_button");
-  gtk_button_set_label(GTK_BUTTON(close_button_), _("Login System"));
+  gtk_button_set_label(GTK_BUTTON(close_button_), _("Login"));
   gtk_widget_set_name(GTK_WIDGET(close_button_), "close_button");
   gtk_fixed_move(GTK_FIXED(fixed_), close_button_, style_->get_close_pos().x, style_->get_close_pos().y);
 
@@ -305,7 +284,7 @@ void Draw::draw_other(gint num)
     if (geo.x == 0 && geo.y == 0)
       continue;
 
-    GtkWidget *button = gtk_button_new_with_label(_("Login System"));
+    GtkWidget *button = gtk_button_new_with_label(_("Login"));
     gtk_widget_set_size_request(button, 115, 35);
     g_signal_connect(G_OBJECT(button), "button_press_event", G_CALLBACK(on_close_pressed), window_);
 
@@ -360,6 +339,37 @@ void clip_rec(cairo_t *cr, int x, int y, int width, int height)
   cairo_restore(cr);
 }
 
+void Draw::draw_description(cairo_t *cr, const gchar *title, const gchar *subtitle, const gchar *details)
+{
+  PangoLayout *layout;
+  PangoFontDescription *desc;
+  layout = pango_cairo_create_layout(cr);
+  desc = pango_font_description_from_string("Ubuntu 30");
+  pango_layout_set_font_description(layout, desc);
+
+  pango_layout_set_width(layout, 0.9 * (style_->get_right_arrow_pos().x - style_->get_spot_pos().x) * PANGO_SCALE);
+  pango_layout_set_wrap(layout, PANGO_WRAP_WORD_CHAR);
+  cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+  cairo_move_to(cr, style_->get_title_pos().x, style_->get_title_pos().y);
+  pango_layout_set_text (layout, _(title), -1);
+  pango_cairo_show_layout(cr, layout);
+
+  desc = pango_font_description_from_string("Ubuntu 24");
+  pango_layout_set_font_description(layout, desc);
+  cairo_move_to(cr, style_->get_subtitle_pos().x, style_->get_subtitle_pos().y);
+  pango_layout_set_text(layout, _(subtitle), -1);
+  pango_cairo_show_layout(cr, layout);
+
+  desc = pango_font_description_from_string("Ubuntu 16");
+  pango_layout_set_font_description(layout, desc);
+  cairo_move_to(cr, style_->get_details_pos().x, style_->get_details_pos().y);
+  pango_layout_set_text(layout, _(details), -1);
+  pango_cairo_show_layout(cr, layout);
+
+  pango_font_description_free(desc);
+  g_object_unref(layout);
+}
+
 void Draw::draw_page(cairo_t *cr)
 {
   gint x = style_->trans_area_[page_num_].x;
@@ -375,47 +385,35 @@ void Draw::draw_page(cairo_t *cr)
 
   switch (page_num_) {
   case 0:
-    gtk_label_set_text(GTK_LABEL(title_), title_1);
-    gtk_label_set_text(GTK_LABEL(subtitle_),_(subtitle_1));
-    gtk_label_set_text(GTK_LABEL(details_), details_1);
+    draw_description(cr, title_1, subtitle_1, details_1);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
     gtk_widget_hide(left_box_);
     break;
  case 1:
-    gtk_label_set_text(GTK_LABEL(title_), title_2);
-    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_2));
-    gtk_label_set_text(GTK_LABEL(details_), details_2);
+    draw_description(cr, title_2, subtitle_2, details_2);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_2.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_2.png");
     gtk_widget_show(left_box_);
     break;
   case 2:
-    gtk_label_set_text(GTK_LABEL(title_), title_3);
-    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_3));
-    gtk_label_set_text(GTK_LABEL(details_), details_3);
+    draw_description(cr, title_3, subtitle_3, details_3);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_3.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_3.png");
     break;
   case 3:
-    gtk_label_set_text(GTK_LABEL(title_), title_4);
-    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_4));
-    gtk_label_set_text(GTK_LABEL(details_), details_4);
+    draw_description(cr, title_4, subtitle_4, details_4);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_4.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_4.png");
     break;
   case 4:
-    gtk_label_set_text(GTK_LABEL(title_), title_5);
-    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_5));
-    gtk_label_set_text(GTK_LABEL(details_), details_5);
+    draw_description(cr, title_5, subtitle_5, details_5);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_5.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_5.png");
     gtk_widget_show(right_box_);
     break;
   case 5:
-    gtk_label_set_text(GTK_LABEL(title_), title_6);
-    gtk_label_set_text(GTK_LABEL(subtitle_), _(subtitle_6));
-    gtk_label_set_text(GTK_LABEL(details_), details_6);
+    draw_description(cr, title_6, subtitle_6, details_6);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_6.png");
     gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_6.png");
     gtk_widget_hide(right_box_);
