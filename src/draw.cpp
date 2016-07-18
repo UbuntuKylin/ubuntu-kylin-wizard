@@ -189,7 +189,10 @@ Draw::Draw()
   gtk_fixed_move(GTK_FIXED(fixed_), base_img_, style_->get_base_pos().x, style_->get_base_pos().y);
 
   thumbnail_ = WID(builder_, WIDGET, "thumbnail");
-  gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
+  if (!g_strcmp0(style_->get_launcher_position(), "Left"))
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_left_1.png");
+  else
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_bottom_1.png");
   gtk_fixed_move(GTK_FIXED(fixed_), thumbnail_, style_->get_base_pos().x + 17, style_->get_base_pos().y + 24);
 
   left_box_ = WID(builder_, WIDGET, "left_box");
@@ -372,6 +375,7 @@ void Draw::draw_description(cairo_t *cr, const gchar *title, const gchar *subtit
 
 void Draw::draw_page(cairo_t *cr)
 {
+  std::string thumbnail_name = "";
   gint x = style_->trans_area_[page_num_].x;
   gint y = style_->trans_area_[page_num_].y;
   gint width = style_->trans_area_[page_num_].width;
@@ -387,40 +391,59 @@ void Draw::draw_page(cairo_t *cr)
   case 0:
     draw_description(cr, title_1, subtitle_1, details_1);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
-    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_1.png");
+    if (launcher_at_bottom)
+      thumbnail_name = "/thumbnail_bottom_1.png";
+    else
+      thumbnail_name = "/thumbnail_left_1.png";
     gtk_widget_hide(left_box_);
     break;
  case 1:
     draw_description(cr, title_2, subtitle_2, details_2);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_2.png");
-    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_2.png");
+    if (launcher_at_bottom)
+      thumbnail_name = "/thumbnail_bottom_2.png";
+    else
+      thumbnail_name = "/thumbnail_left_2.png";
     gtk_widget_show(left_box_);
     break;
   case 2:
     draw_description(cr, title_3, subtitle_3, details_3);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_3.png");
-    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_3.png");
+    if (launcher_at_bottom)
+      thumbnail_name = "/thumbnail_bottom_3.png";
+    else
+      thumbnail_name = "/thumbnail_left_3.png";
     break;
   case 3:
     draw_description(cr, title_4, subtitle_4, details_4);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_4.png");
-    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_4.png");
+    if (launcher_at_bottom)
+      thumbnail_name = "/thumbnail_bottom_4.png";
+    else
+      thumbnail_name = "/thumbnail_left_4.png";
     break;
   case 4:
     draw_description(cr, title_5, subtitle_5, details_5);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_5.png");
-    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_5.png");
+    if (launcher_at_bottom)
+      thumbnail_name = "/thumbnail_bottom_5.png";
+    else
+      thumbnail_name = "/thumbnail_left_5.png";
     gtk_widget_show(right_box_);
     break;
   case 5:
     draw_description(cr, title_6, subtitle_6, details_6);
     gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_6.png");
-    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_6.png");
+    if (launcher_at_bottom)
+      thumbnail_name = "/thumbnail_bottom_6.png";
+    else
+      thumbnail_name = "/thumbnail_left_6.png";
     gtk_widget_hide(right_box_);
     break;
   default:
     break;
   }
+  gtk_image_set_from_file(GTK_IMAGE(thumbnail_), (PKGDATADIR + thumbnail_name).c_str());
 }
 
 void Draw::draw_polyline(cairo_t *cr, gboolean at_bottom)
