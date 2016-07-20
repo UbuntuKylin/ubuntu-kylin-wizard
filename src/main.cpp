@@ -112,6 +112,13 @@ int main (int argc, char *argv[])
   GdkScreen *screen = gdk_screen_get_default();
   GdkDisplay *display = gdk_screen_get_display(screen);
 
+  gint screen_width = gdk_screen_get_width(screen);
+  /* TODO: Add support for any screen resoluton.
+   *       And now, when the screen resolution less than 1152x864, then quit.
+   */
+  if (screen_width < 1152)
+      return 0;
+
   /*  TODO: Take the screenshot after the launcher has shown on the screen, but this is so bad,
    *        please replace this once you find a better method.
    */
