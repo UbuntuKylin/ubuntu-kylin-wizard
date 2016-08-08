@@ -112,7 +112,10 @@ int main (int argc, char *argv[])
   GdkScreen *screen = gdk_screen_get_default();
   GdkDisplay *display = gdk_screen_get_display(screen);
 
-  gint screen_width = gdk_screen_get_width(screen);
+  gint primary_monitor = gdk_screen_get_primary_monitor(screen);
+  GdkRectangle geo;
+  gdk_screen_get_monitor_geometry(screen, primary_monitor, &geo);
+  gint screen_width = geo.width;
   /* TODO: Add support for any screen resoluton.
    *       And now, when the screen resolution less than 1152x864, then quit.
    */

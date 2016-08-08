@@ -54,7 +54,7 @@ const gint PAGE_IND_WIDTH = 253;
 
 const double DEFAULT_DPI = 96.0f;
 
-gboolean get_app_installed(const gchar *app_name)
+gboolean is_installed(const gchar *app_name)
 {
   gchar *path = g_find_program_in_path(app_name);
   if (path)
@@ -178,7 +178,7 @@ Style::Style()
   icon_order_[0] = LAUNCHER;
   icon_order_[1] = 0;
   icon_order_[2] = get_icon_order("Nautilus");
-  if (get_app_installed("youker-assistant"))
+  if (is_installed("youker-assistant"))
     icon_order_[3] = get_icon_order("youker-assistant");
   else
     icon_order_[3] = get_icon_order("Software");

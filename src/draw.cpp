@@ -30,29 +30,18 @@
 #include <pango/pangocairo.h>
 #include <math.h>
 
-const gchar* title_1 = _("Quick access area");
-const gchar* subtitle_1 = _("Launcher");
-const gchar* details_1 = _("Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin.");
+const gchar* title[PAGES_NUM] = {_("Quick access area"), _("Quick intelligent search"), _("File manager"), _("Desktop manager"), _("User & system settings"), _("Check app & system status")};
+const gchar* subtitle[PAGES_NUM] = {_("Launcher"), _("Dash"), _("Nautilus"), _("Youker assistant"), _("Unity control center"), _("Indicator")};
+const gchar* details[PAGES_NUM] = {_("Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin."),
+                                  _("Allows you to search for applications, files, music, and videos, and shows you items that you have used recently."),
+                                  _("Allows to browse directories, preview files and launch applications associated with them. "),
+                                  _("A system management and configuration tool we developed for Linux users, could show system information, cleanup system garbage and beautify system."),
+                                  _("An improved user interface for configuring the desktop and other aspects of the system."),
+                                  _("A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session.")};
 
-const gchar* title_2 = _("Quick intelligent search");
-const gchar* subtitle_2 = _("Dash");
-const gchar* details_2 = _("Allows you to search for applications, files, music, and videos, and shows you items that you have used recently.");
-
-const gchar* title_3 = _("File manager");
-const gchar* subtitle_3 = _("Nautilus");
-const gchar* details_3 = _("Allows to browse directories, preview files and launch applications associated with them. ");
-
-const gchar* title_4 = _("Desktop manager");
-const gchar* subtitle_4 = _("Youker assistant");
-const gchar* details_4 = _("A system management and configuration tool we developed for Linux users, could show system information, cleanup system garbage and beautify system.");
-
-const gchar* title_5 = _("User & system settings");
-const gchar* subtitle_5 = _("Unity control center");
-const gchar* details_5 = _("An improved user interface for configuring the desktop and other aspects of the system.");
-
-const gchar* title_6 = _("Check app & system status");
-const gchar* subtitle_6 = _("Indicator");
-const gchar* details_6 = _("A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session.");
+const gchar* page_ind_name[PAGES_NUM] = {PKGDATADIR"/step_1.png", PKGDATADIR"/step_2.png", PKGDATADIR"/step_3.png", PKGDATADIR"/step_4.png", PKGDATADIR"/step_5.png", PKGDATADIR"/step_6.png"};
+const gchar* left_thumbnail_name[PAGES_NUM] = {PKGDATADIR"/thumbnail_left_1.png", PKGDATADIR"/thumbnail_left_2.png", PKGDATADIR"/thumbnail_left_3.png", PKGDATADIR"/thumbnail_left_4.png", PKGDATADIR"/thumbnail_left_5.png", PKGDATADIR"/thumbnail_left_6.png"};
+const gchar* bottom_thumbnail_name[PAGES_NUM] = {PKGDATADIR"/thumbnail_bottom_1.png", PKGDATADIR"/thumbnail_bottom_2.png", PKGDATADIR"/thumbnail_bottom_3.png", PKGDATADIR"/thumbnail_bottom_4.png", PKGDATADIR"/thumbnail_bottom_5.png", PKGDATADIR"/thumbnail_bottom_6.png"};
 
 static gboolean on_close_pressed(GtkWidget *widget, GdkEventButton *event, GtkWidget *win)
 {
@@ -190,9 +179,9 @@ Draw::Draw()
 
   thumbnail_ = WID(builder_, WIDGET, "thumbnail");
   if (!g_strcmp0(style_->get_launcher_position(), "Left"))
-    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_left_1.png");
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), left_thumbnail_name[0]);
   else
-    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), PKGDATADIR"/thumbnail_bottom_1.png");
+    gtk_image_set_from_file(GTK_IMAGE(thumbnail_), bottom_thumbnail_name[0]);
   gtk_fixed_move(GTK_FIXED(fixed_), thumbnail_, style_->get_base_pos().x + 17, style_->get_base_pos().y + 24);
 
   left_box_ = WID(builder_, WIDGET, "left_box");
@@ -212,7 +201,7 @@ Draw::Draw()
   gtk_fixed_move(GTK_FIXED(fixed_), close_button_, style_->get_close_pos().x, style_->get_close_pos().y);
 
   page_ind_ = WID(builder_, WIDGET, "page_ind");
-  gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
+  gtk_image_set_from_file(GTK_IMAGE(page_ind_), page_ind_name[0]);
   gtk_fixed_move(GTK_FIXED(fixed_), page_ind_, style_->get_page_ind_pos().x, style_->get_page_ind_pos().y);
 
   provider = gtk_css_provider_new();
@@ -252,6 +241,7 @@ Draw::Draw()
 
   root_pixbuf_ = gdk_pixbuf_get_from_window(gdk_get_default_root_window(), 0, 0, style_->get_screen_width(), style_->get_screen_height());
 
+  // Deal with multiple-screen
   gint screen_num = gdk_screen_get_n_monitors(gdk_screen_get_default());
   if (screen_num > 1)
     draw_other(screen_num);
@@ -375,11 +365,11 @@ void Draw::draw_description(cairo_t *cr, const gchar *title, const gchar *subtit
 
 void Draw::draw_page(cairo_t *cr)
 {
-  std::string thumbnail_name = "";
   gint x = style_->trans_area_[page_num_].x;
   gint y = style_->trans_area_[page_num_].y;
   gint width = style_->trans_area_[page_num_].width;
   gint height = style_->trans_area_[page_num_].height;
+
   gboolean launcher_at_bottom = true;
   if (!g_strcmp0(style_->get_launcher_position(), "Left"))
     launcher_at_bottom = false;
@@ -387,63 +377,33 @@ void Draw::draw_page(cairo_t *cr)
   clip_rec(cr, x, y, width, height);
   draw_polyline(cr, launcher_at_bottom);
 
-  switch (page_num_) {
+  int index = page_num_;
+  draw_description(cr, title[index], subtitle[index], details[index]);
+  gtk_image_set_from_file(GTK_IMAGE(page_ind_), page_ind_name[index]);
+
+  const gchar *thumbnail_name;
+  if (launcher_at_bottom)
+    thumbnail_name = bottom_thumbnail_name[index];
+  else
+    thumbnail_name = left_thumbnail_name[index];
+  gtk_image_set_from_file(GTK_IMAGE(thumbnail_), thumbnail_name);
+
+  switch (index) {
   case 0:
-    draw_description(cr, title_1, subtitle_1, details_1);
-    gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_1.png");
-    if (launcher_at_bottom)
-      thumbnail_name = "/thumbnail_bottom_1.png";
-    else
-      thumbnail_name = "/thumbnail_left_1.png";
     gtk_widget_hide(left_box_);
     break;
  case 1:
-    draw_description(cr, title_2, subtitle_2, details_2);
-    gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_2.png");
-    if (launcher_at_bottom)
-      thumbnail_name = "/thumbnail_bottom_2.png";
-    else
-      thumbnail_name = "/thumbnail_left_2.png";
     gtk_widget_show(left_box_);
     break;
-  case 2:
-    draw_description(cr, title_3, subtitle_3, details_3);
-    gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_3.png");
-    if (launcher_at_bottom)
-      thumbnail_name = "/thumbnail_bottom_3.png";
-    else
-      thumbnail_name = "/thumbnail_left_3.png";
-    break;
-  case 3:
-    draw_description(cr, title_4, subtitle_4, details_4);
-    gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_4.png");
-    if (launcher_at_bottom)
-      thumbnail_name = "/thumbnail_bottom_4.png";
-    else
-      thumbnail_name = "/thumbnail_left_4.png";
-    break;
   case 4:
-    draw_description(cr, title_5, subtitle_5, details_5);
-    gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_5.png");
-    if (launcher_at_bottom)
-      thumbnail_name = "/thumbnail_bottom_5.png";
-    else
-      thumbnail_name = "/thumbnail_left_5.png";
     gtk_widget_show(right_box_);
     break;
   case 5:
-    draw_description(cr, title_6, subtitle_6, details_6);
-    gtk_image_set_from_file(GTK_IMAGE(page_ind_), PKGDATADIR"/step_6.png");
-    if (launcher_at_bottom)
-      thumbnail_name = "/thumbnail_bottom_6.png";
-    else
-      thumbnail_name = "/thumbnail_left_6.png";
     gtk_widget_hide(right_box_);
     break;
   default:
     break;
   }
-  gtk_image_set_from_file(GTK_IMAGE(thumbnail_), (PKGDATADIR + thumbnail_name).c_str());
 }
 
 void Draw::draw_polyline(cairo_t *cr, gboolean at_bottom)

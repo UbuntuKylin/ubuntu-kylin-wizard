@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/ubuntukylin\n"
-"POT-Creation-Date: 2016-07-19 09:26+0800\n"
+"POT-Creation-Date: 2016-08-08 14:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,52 +20,52 @@ msgstr ""
 msgid "Quick access area"
 msgstr ""
 
-msgid "Launcher"
-msgstr ""
-
-msgid "Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin."
-msgstr ""
-
 msgid "Quick intelligent search"
-msgstr ""
-
-msgid "Dash"
-msgstr ""
-
-msgid "Allows you to search for applications, files, music, and videos, and shows you items that you have used recently."
 msgstr ""
 
 msgid "File manager"
 msgstr ""
 
-msgid "Nautilus"
-msgstr ""
-
-msgid "Allows to browse directories, preview files and launch applications associated with them. "
-msgstr ""
-
 msgid "Desktop manager"
-msgstr ""
-
-msgid "Youker assistant"
-msgstr ""
-
-msgid "A system management and configuration tool we developed for Linux users, could show system information, cleanup system garbage and beautify system."
 msgstr ""
 
 msgid "User & system settings"
 msgstr ""
 
-msgid "Unity control center"
-msgstr ""
-
-msgid "An improved user interface for configuring the desktop and other aspects of the system."
-msgstr ""
-
 msgid "Check app & system status"
 msgstr ""
 
+msgid "Launcher"
+msgstr ""
+
+msgid "Dash"
+msgstr ""
+
+msgid "Nautilus"
+msgstr ""
+
+msgid "Youker assistant"
+msgstr ""
+
+msgid "Unity control center"
+msgstr ""
+
 msgid "Indicator"
+msgstr ""
+
+msgid "Provides you with quick access to applications, workspaces, removable devices and the Recycle Bin."
+msgstr ""
+
+msgid "Allows you to search for applications, files, music, and videos, and shows you items that you have used recently."
+msgstr ""
+
+msgid "Allows to browse directories, preview files and launch applications associated with them. "
+msgstr ""
+
+msgid "A system management and configuration tool we developed for Linux users, could show system information, cleanup system garbage and beautify system."
+msgstr ""
+
+msgid "An improved user interface for configuring the desktop and other aspects of the system."
 msgstr ""
 
 msgid "A comprehensive set of indicators provide convenient and powerful access to application features and system facilities such as power, sound, messaging, and the current session."
