@@ -1,4 +1,4 @@
-// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 2 -*-
+// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
 /*
  * Copyright (C) 2014 Canonical Ltd
  *
@@ -25,33 +25,33 @@
 class EMConverter
 {
 public:
-  typedef std::shared_ptr<EMConverter> Ptr;
+    typedef std::shared_ptr<EMConverter> Ptr;
 
-  EMConverter(int font_size = 0, double dpi = 96.0);
+    EMConverter(int font_size = 0, double dpi = 96.0);
 
-  bool SetFontSize(int font_size);
-  bool SetDPI(double dpi);
+    bool SetFontSize(int font_size);
+    bool SetDPI(double dpi);
 
-  int    GetFontSize() const;
-  double GetDPI() const;
+    int    GetFontSize() const;
+    double GetDPI() const;
 
-  double CP(int pixels) const;
-  double DPIScale() const;
+    double CP(int pixels) const;
+    double DPIScale() const;
 
-  double PtToPx(int pt);
+    double PtToPx(int pt);
 
 private:
-  void UpdatePixelsPerEM();
-  void UpdateBasePixelsPerEM();
+    void UpdatePixelsPerEM();
+    void UpdateBasePixelsPerEM();
 
-  double  EMToPixels(double em) const;
-  double PixelsToBaseEM(int pixels) const;
+    double  EMToPixels(double em) const;
+    double PixelsToBaseEM(int pixels) const;
 
-  double pixels_per_em_;
-  double base_pixels_per_em_;
+    double pixels_per_em_;
+    double base_pixels_per_em_;
 
-  double dpi_;
-  int font_size_;
+    double dpi_;
+    int font_size_;
 };
 
 #endif // EM_CONVERTER_H

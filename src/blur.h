@@ -1,4 +1,4 @@
-// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 2 -*-
+// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
 /*
  * Copyright (C) 2015 Canonical Ltd
  *               2015, National University of Defense Technology(NUDT) & Kylin Ltd

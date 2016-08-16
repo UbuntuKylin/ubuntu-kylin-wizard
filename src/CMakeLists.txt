@@ -1,9 +1,11 @@
 set (SRC_LIST main.cpp
               blur.cpp
-              draw.cpp
-              style.cpp
-              rawpixel.cpp
+              BaseWindow.cpp
               EMConverter.cpp
+              Page.cpp
+              RawPixel.cpp
+              Wizard.cpp
+              WizardSettings.cpp
 )
 
 include_directories(${CACHED_WIZARD_DEPS_INCLUDE_DIRS})

@@ -1,1 +1,8 @@
-draw.cpp
+Page.cpp
+Wizard.cpp
+RawPixel.cpp
+WizardSettings.cpp
+blur.cpp
+BaseWindow.cpp
+EMConverter.cpp
+main.cpp

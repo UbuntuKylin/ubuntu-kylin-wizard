@@ -1,4 +1,4 @@
-// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 2 -*-
+// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
 /*
  * Copyright (C) 2014 Canonical Ltd
  *
@@ -25,15 +25,15 @@
 class RawPixel
 {
 public:
-  RawPixel(double raw_pixel = 0);
+    RawPixel(double raw_pixel = 0);
 
-  int CP(EMConverter::Ptr const&) const;
-  int CP(double scale) const;
+    int CP(EMConverter::Ptr const&) const;
+    int CP(double scale) const;
 
-  operator int() const;
+    operator int() const;
 
 private:
-  double raw_pixel_;
+    double raw_pixel_;
 };
 
 // User-Defined Literals (ex: 10_em, 10.0_em)

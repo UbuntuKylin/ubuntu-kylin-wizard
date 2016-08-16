@@ -1,4 +1,4 @@
-// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 2 -*-
+// -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
 /*
  * Copyright (C) 2014 Canonical Ltd
  *
@@ -25,87 +25,87 @@ double const DEFAULT_PPE     = 10.0;
 double const PIXELS_PER_INCH = 72.0;
 
 EMConverter::EMConverter(int font_size, double dpi)
-  : pixels_per_em_(DEFAULT_PPE)
-  , base_pixels_per_em_(DEFAULT_PPE)
-  , dpi_(dpi)
-  , font_size_(font_size)
+    : pixels_per_em_(DEFAULT_PPE)
+    , base_pixels_per_em_(DEFAULT_PPE)
+    , dpi_(dpi)
+    , font_size_(font_size)
 {
-  UpdatePixelsPerEM();
-  UpdateBasePixelsPerEM();
+    UpdatePixelsPerEM();
+    UpdateBasePixelsPerEM();
 }
 
 double EMConverter::PtToPx(int pt)
 {
-  return pt * dpi_ / PIXELS_PER_INCH;
+    return pt * dpi_ / PIXELS_PER_INCH;
 }
 
 void EMConverter::UpdatePixelsPerEM()
 {
-  pixels_per_em_ = font_size_ * dpi_ / PIXELS_PER_INCH;
+    pixels_per_em_ = font_size_ * dpi_ / PIXELS_PER_INCH;
 
-  if (pixels_per_em_ == 0)
-    pixels_per_em_ = DEFAULT_PPE;
+    if (pixels_per_em_ == 0)
+        pixels_per_em_ = DEFAULT_PPE;
 }
 
 void EMConverter::UpdateBasePixelsPerEM()
 {
-  base_pixels_per_em_ = font_size_ * BASE_DPI / PIXELS_PER_INCH;
+    base_pixels_per_em_ = font_size_ * BASE_DPI / PIXELS_PER_INCH;
 
-  if (base_pixels_per_em_ == 0)
-    base_pixels_per_em_ = DEFAULT_PPE;
+    if (base_pixels_per_em_ == 0)
+        base_pixels_per_em_ = DEFAULT_PPE;
 }
 
 bool EMConverter::SetFontSize(int font_size)
 {
-  if (font_size != font_size_)
-  {
-    font_size_ = font_size;
-    UpdatePixelsPerEM();
-    UpdateBasePixelsPerEM();
-    return true;
-  }
+    if (font_size != font_size_)
+    {
+        font_size_ = font_size;
+        UpdatePixelsPerEM();
+        UpdateBasePixelsPerEM();
+        return true;
+    }
 
-  return false;
+    return false;
 }
 
 bool EMConverter::SetDPI(double dpi)
 {
-  if (dpi != dpi_)
-  {
-    dpi_ = dpi;
-    UpdatePixelsPerEM();
-    return true;
-  }
+    if (dpi != dpi_)
+    {
+        dpi_ = dpi;
+        UpdatePixelsPerEM();
+        return true;
+    }
 
-  return false;
+    return false;
 }
 
 int EMConverter::GetFontSize() const
 {
-  return font_size_;
+    return font_size_;
 }
 
 double EMConverter::GetDPI() const
 {
-  return dpi_;
+    return dpi_;
 }
 
 double EMConverter::EMToPixels(double em) const
 {
-  return (em * pixels_per_em_);
+    return (em * pixels_per_em_);
 }
 
 double EMConverter::PixelsToBaseEM(int pixels) const
 {
-  return (pixels / base_pixels_per_em_);
+    return (pixels / base_pixels_per_em_);
 }
 
 double EMConverter::CP(int pixels) const
 {
-  return std::round(pixels * DPIScale());
+    return std::round(pixels * DPIScale());
 }
 
 double EMConverter::DPIScale() const
 {
-  return dpi_ / BASE_DPI;
+    return dpi_ / BASE_DPI;
 }
