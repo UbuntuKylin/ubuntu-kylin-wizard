@@ -1,6 +1,5 @@
 set (SRC_LIST main.cpp
               blur.cpp
-              BaseWindow.cpp
               EMConverter.cpp
               Page.cpp
               RawPixel.cpp

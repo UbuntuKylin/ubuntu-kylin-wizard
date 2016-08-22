@@ -23,7 +23,6 @@
 #include <vector>
 #include <glib/gi18n.h>
 
-#include "BaseWindow.h"
 #include "config.h"
 #include "Page.h"
 
@@ -44,19 +43,34 @@ public:
     void NextPage();
     void Quit();
     void DrawOtherMonitor(int screen_num);
+    void DrawDesc(cairo_t *cr);
 
 private:
     int IsValid(std::string name);
+    void InitWidgets();
+    void DrawBackground(cairo_t *cr);
+    void DrawPolyline(cairo_t *cr);
+    void DrawRing(cairo_t *cr, int x, int y);
+    void ClipRec(cairo_t *cr);
 
     GtkBuilder *builder_;
     std::vector<Page*> pages_;
-    BaseWindow* base_window_;
+    GdkPixbuf *root_pixbuf_;
 
     GtkWidget *grid_;
     GtkWidget *win_;
     GtkWidget *fixed_;
+    GtkWidget *desc_area_;
+    GtkWidget *right_box_;
+    GtkWidget *left_box_;
+    GtkWidget *base_img_;
+    GtkWidget *thumbnail_;
+    GtkWidget *arrow_left_img_;
+    GtkWidget *arrow_right_img_;
+    GtkWidget *close_button_;
+    GtkWidget *page_ind_;
+
     int page_index_;
-    int pre_index_;
 
     int screen_width_;
     int screen_height_;

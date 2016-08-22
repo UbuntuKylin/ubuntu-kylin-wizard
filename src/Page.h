@@ -23,6 +23,7 @@
 #include <cairo.h>
 #include <gtk/gtk.h>
 #include <string>
+#include <vector>
 
 #include "WizardSettings.h"
 
@@ -33,16 +34,16 @@ class Page
 public:
     Page(std::string title, std::string subtitle, std::string desc, GtkBuilder *builder, int width, int height, std::string ind_pic, std::string thumbnail_pic, int icon_order);
 
-    void DrawDesc(cairo_t *desc_cr);
-    void Draw(cairo_t *win_cr);
-
-    bool GetActive();
-    void SetActive(bool active);
+    std::string GetTitle();
+    std::string GetName();
+    std::string GetDescription();
+    std::string GetThumbnail();
+    std::string GetPageInd();
+    GdkRectangle *GetTransparentRect();
+    std::vector<GdkPoint> &GetPolylinePath();
 
 private:
-    void ClipRec(cairo_t *win_cr);
-    void DrawPolyline(cairo_t *win_cr);
-    void DrawRing(cairo_t *win_cr, int x, int y);
+    void SetPolylinePath();
 
     std::string title_;
     std::string name_;
@@ -58,22 +59,15 @@ private:
     int space_between_icons_;
 
     GtkBuilder *builder_;
-    GtkWidget *desc_area_;
-    GtkWidget *page_ind_;
-    GtkWidget *thumbnail_;
 
     int width_;
     int height_;
 
-    int rec_x_;
-    int rec_y_;
-    int rec_width_;
-    int rec_height_;
+    GdkRectangle trans_rec_;
+    std::vector<GdkPoint> polyline_path_;
 
     GdkPoint fixed_spot_;
     GdkPoint focus_spot_;
-
-    bool active_;
 };
 
 #endif
