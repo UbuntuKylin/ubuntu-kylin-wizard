@@ -332,7 +332,7 @@ int Wizard::IsValid(std::string name)
 
     if (!found || (n + adjust <= 0))
     {
-      return -255;
+        return -255;
     }
 
     return n + adjust;
@@ -343,16 +343,16 @@ void Wizard::DrawOtherMonitor(int screen_num)
     int current_screen = 0;
     for (int i = 0; i < screen_num; i++)
     {
-      if (i == current_screen)
-        continue;
+        if (i == current_screen)
+            continue;
 
-      GdkRectangle geo;
-      gdk_screen_get_monitor_geometry(gdk_screen_get_default(), i, &geo);
+        GdkRectangle geo;
+        gdk_screen_get_monitor_geometry(gdk_screen_get_default(), i, &geo);
 
-      GtkWidget *button = gtk_button_new_with_label(_("Login"));
-      gtk_widget_set_size_request(button, 115, 35);
-      g_signal_connect(G_OBJECT(button), "button_press_event", G_CALLBACK(quit), this);
-      gtk_fixed_put(GTK_FIXED(fixed_), button, geo.x + (geo.width - 115)/2, geo.y + (geo.height - 35)/2);
+        GtkWidget *button = gtk_button_new_with_label(_("Login"));
+        gtk_widget_set_size_request(button, 115, 35);
+        g_signal_connect(G_OBJECT(button), "button_press_event", G_CALLBACK(quit), this);
+        gtk_fixed_put(GTK_FIXED(fixed_), button, geo.x + (geo.width - 115)/2, geo.y + (geo.height - 35)/2);
     }
 }
 
@@ -425,17 +425,17 @@ void Wizard::DrawPolyline(cairo_t *cr)
 
 void Wizard::DrawRing(cairo_t *cr, int x, int y)
 {
-  cairo_set_source_rgba(cr, 1., 1., 1., 0.1);
-  cairo_arc(cr, x, y, 10, 0., 2 * M_PI);
-  cairo_fill(cr);
+    cairo_set_source_rgba(cr, 1., 1., 1., 0.1);
+    cairo_arc(cr, x, y, 10, 0., 2 * M_PI);
+    cairo_fill(cr);
 
-  cairo_set_source_rgba(cr, 1., 1., 1., 0.4);
-  cairo_arc(cr, x, y, 7, 0., 2 * M_PI);
-  cairo_fill(cr);
+    cairo_set_source_rgba(cr, 1., 1., 1., 0.4);
+    cairo_arc(cr, x, y, 7, 0., 2 * M_PI);
+    cairo_fill(cr);
 
-  cairo_set_source_rgba(cr, 1., 1., 1., 0.9);
-  cairo_arc(cr, x, y, 4, 0., 2 * M_PI);
-  cairo_fill(cr);
+    cairo_set_source_rgba(cr, 1., 1., 1., 0.9);
+    cairo_arc(cr, x, y, 4, 0., 2 * M_PI);
+    cairo_fill(cr);
 }
 
 void Wizard::ClipRec(cairo_t *cr)
