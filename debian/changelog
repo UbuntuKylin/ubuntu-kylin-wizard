@@ -1,8 +1,12 @@
-ubuntu-kylin-wizard (16.10.0) yakkety; urgency=medium
+ubuntu-kylin-wizard (16.10.0) UNRELEASED; urgency=medium
 
+  [ feng-kylin ]
   * Code rafactor. 
   * Quit when resolution less than 1024x768 or in live mode.
   * Add support for gtk3.20.
+
+  [ Iain Lane ]
+  * debian/copyright: Some files are ⓒ Canonical.
 
  -- feng-kylin <jianfengli@ubuntukylin.com>  Thu, 18 Aug 2016 19:18:04 +0000
 
