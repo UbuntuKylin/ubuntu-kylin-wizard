@@ -6,12 +6,12 @@ ubuntu-kylin-wizard (16.10.0) yakkety; urgency=medium
   * Add support for gtk3.20.
 
   [ Iain Lane ]
-  * debian/copyright: Some files are ⓒ Canonical.
+  * debian/copyright: Some files are copyright Canonical.
 
  -- feng-kylin <jianfengli@ubuntukylin.com>  Mon, 03 Oct 2016 12:59:24 +0100
 
 ubuntu-kylin-wizard (16.04.0) xenial; urgency=medium
 
-  * Init vertion. (LP: #1609207)
+  * Initial version. (LP: #1609207)
 
  -- feng-kylin <jianfengli@ubuntukylin.com>  Tue, 12 Apr 2016 09:38:14 +0000
