@@ -12,6 +12,6 @@ ubuntu-kylin-wizard (16.10.0) UNRELEASED; urgency=medium
 
 ubuntu-kylin-wizard (16.04.0) xenial; urgency=medium
 
-  * Init vertion.
+  * Init vertion. (LP: #1629601)
 
  -- feng-kylin <jianfengli@ubuntukylin.com>  Tue, 12 Apr 2016 09:38:14 +0000
