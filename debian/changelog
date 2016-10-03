@@ -1,4 +1,4 @@
-ubuntu-kylin-wizard (16.10.0) UNRELEASED; urgency=medium
+ubuntu-kylin-wizard (16.10.0) yakkety; urgency=medium
 
   [ feng-kylin ]
   * Code rafactor. 
@@ -8,7 +8,7 @@ ubuntu-kylin-wizard (16.10.0) UNRELEASED; urgency=medium
   [ Iain Lane ]
   * debian/copyright: Some files are ⓒ Canonical.
 
- -- feng-kylin <jianfengli@ubuntukylin.com>  Thu, 18 Aug 2016 19:18:04 +0000
+ -- feng-kylin <jianfengli@ubuntukylin.com>  Mon, 03 Oct 2016 12:59:24 +0100
 
 ubuntu-kylin-wizard (16.04.0) xenial; urgency=medium
 
