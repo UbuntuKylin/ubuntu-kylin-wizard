@@ -16,4 +16,6 @@ Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
 Description: Setup wizard for Ubuntu Kylin
- The ubuntu-kylin-wizard providing a friendly guide when user first login, and show them some basic informations about launcher, dash, indicator, contro center and so on.
+ The Ubuntu Kylin wizard provides a friendly guide when user first logs in. It
+ shows them some basic information about the launcher, dash, indicators,
+ control center, and so on.
