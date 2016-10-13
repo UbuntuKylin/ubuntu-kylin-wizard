@@ -1,5 +1,5 @@
 /* Theme button in it's normal state */
-button *{
+button {
     font: Ubuntu 12;
     color: white;
     padding: 5px;

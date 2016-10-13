@@ -385,19 +385,19 @@ void Wizard::DrawDesc(cairo_t *cr)
     pango_layout_set_width(layout, 0.7 * area_width * PANGO_SCALE);
     pango_layout_set_wrap(layout, PANGO_WRAP_WORD_CHAR);
     cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
-    cairo_move_to(cr, area_width * 0.25, area_height * 0.2);
+    cairo_move_to(cr, area_width * 0.25, area_height * 0.15);
     pango_layout_set_text (layout, _(pages_[page_index_]->GetTitle().c_str()), -1);
     pango_cairo_show_layout(cr, layout);
 
     desc = pango_font_description_from_string("Ubuntu 24");
     pango_layout_set_font_description(layout, desc);
-    cairo_move_to(cr, area_width * 0.25, area_height * 0.3);
+    cairo_move_to(cr, area_width * 0.25, area_height * 0.30);
     pango_layout_set_text(layout, _(pages_[page_index_]->GetName().c_str()), -1);
     pango_cairo_show_layout(cr, layout);
 
     desc = pango_font_description_from_string("Ubuntu 16");
     pango_layout_set_font_description(layout, desc);
-    cairo_move_to(cr, area_width * 0.25, area_height * 0.4);
+    cairo_move_to(cr, area_width * 0.25, area_height * 0.43);
     pango_layout_set_text(layout, _(pages_[page_index_]->GetDescription().c_str()), -1);
     pango_cairo_show_layout(cr, layout);
 
