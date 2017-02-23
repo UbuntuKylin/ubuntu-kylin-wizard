@@ -1,3 +1,9 @@
+ubuntu-kylin-wizard (17.04.0) zesty; urgency=medium
+
+  * Fixed some theme errors. 
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 23 Feb 2017 10:03:48 +0800
+
 ubuntu-kylin-wizard (16.10.0) yakkety; urgency=medium
 
   [ feng-kylin ]

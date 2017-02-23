@@ -1,6 +1,6 @@
 /* Theme button in it's normal state */
 button {
-    font: Ubuntu 12;
+    font-size: 12px;
     color: white;
     padding: 5px;
     background-image: none;
