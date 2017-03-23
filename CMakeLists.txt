@@ -45,6 +45,11 @@ if (GETTEXT_FOUND)
 endif(GETTEXT_FOUND)
 
 #
+# man
+#
+set (mandir "${PREFIXPATH}/share/man")
+
+#
 # XDG Autostart
 #
 
@@ -78,3 +83,4 @@ set (WIZARD_DEPS
 pkg_check_modules (CACHED_WIZARD_DEPS REQUIRED ${WIZARD_DEPS})
 
 add_subdirectory (src)
+add_subdirectory (man)
