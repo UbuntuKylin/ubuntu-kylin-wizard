@@ -27,7 +27,8 @@
 
 const std::string UBIQUITY_DESKTOP = "/usr/share/applications/ubiquity.desktop";
 
-bool live_mode()
+bool
+live_mode()
 {
     if (g_file_test(UBIQUITY_DESKTOP.c_str(), G_FILE_TEST_EXISTS))
         return true;
@@ -35,7 +36,8 @@ bool live_mode()
         return false;
 }
 
-bool first_run()
+bool
+first_run()
 {
     std::string config_dir = g_get_user_config_dir();
     std::string wizard_config = config_dir.append(G_DIR_SEPARATOR_S "unity" G_DIR_SEPARATOR_S);
@@ -56,7 +58,8 @@ bool first_run()
     return false;
 }
 
-bool wait_launcher(GdkScreen *screen, GdkDisplay *display)
+bool
+wait_launcher(GdkScreen *screen, GdkDisplay *display)
 {
     GList* stack =  gdk_screen_get_window_stack(screen);
     bool launcher_found = false;
@@ -79,7 +82,8 @@ bool wait_launcher(GdkScreen *screen, GdkDisplay *display)
     return launcher_found;
 }
 
-void call_unity_hint()
+void
+call_unity_hint()
 {
     KeySym key = XK_Super_L;
     GdkDisplay *gdk_display = gdk_display_get_default();
@@ -89,7 +93,39 @@ void call_unity_hint()
     XSync(display, False);
 }
 
-int main(int argc, char *argv[])
+bool
+is_desktop (const gchar *name)
+{
+   const gchar *xdg_current_desktop;
+   g_auto(GStrv) tokens = NULL;
+   int i;
+
+   xdg_current_desktop = g_getenv ("XDG_CURRENT_DESKTOP");
+   if (xdg_current_desktop == NULL)
+     return FALSE;
+
+   tokens = g_strsplit (xdg_current_desktop, ":", -1);
+   for (i = 0; tokens[i] != NULL; i++)
+     if (strcmp (tokens[i], name) == 0)
+       return TRUE;
+
+   return FALSE;
+}
+
+void
+check_resolution ()
+{
+    // Quit when resolution less than 1024x768
+    int monitor = gdk_screen_get_primary_monitor(screen);
+    GdkRectangle geo;
+    gdk_screen_get_monitor_geometry(screen, monitor, &geo);
+    int monitor_width = geo.width;
+    if (monitor_width < 1024)
+        exit (0);
+}
+
+int
+main(int argc, char *argv[])
 {
     if (live_mode() || !first_run())
         return 0;
@@ -110,33 +146,27 @@ int main(int argc, char *argv[])
                                               GTK_STYLE_PROVIDER(provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     const gchar* css_file = PKGDATADIR"/wizard.css";
-    gtk_css_provider_load_from_path(provider,
-                                    css_file,
-                                    NULL);
+    gtk_css_provider_load_from_path(provider, css_file, NULL);
     g_object_unref(provider);
-
-    // Quit when resolution less than 1024x768
-    int monitor = gdk_screen_get_primary_monitor(screen);
-    GdkRectangle geo;
-    gdk_screen_get_monitor_geometry(screen, monitor, &geo);
-    int monitor_width = geo.width;
-    if (monitor_width < 1024)
-        return 0;
 
     // Take screenshot after launcher has shown on the screen.
     bool launcher_showed = false;
     while (!launcher_showed)
         launcher_showed = wait_launcher(screen, display);
 
-    Wizard *w = new Wizard();
+    Wizard *w;
+    if (is_desktop ("UKUI"))
+        w = new UkuiWizard ();
+    else if (is_desktop ("unity"))
+        w = new UnityWizard ();
+    else
+        return 0;
+
     w->Show();
 
     gtk_main();
 
     delete w;
-
-    sleep(1);
-    call_unity_hint();
 
     return 0;
 }

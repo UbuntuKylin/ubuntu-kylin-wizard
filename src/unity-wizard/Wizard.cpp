@@ -139,7 +139,7 @@ static gboolean window_focus_changed(GtkWidget *widget, GParamSpec *psepc)
 Wizard::Wizard()
     : page_index_(0)
     , builder_(gtk_builder_new_from_file(PKGDATADIR"/wizard.ui"))
-{   
+{
     Settings settings;
     InitWidgets();
 
