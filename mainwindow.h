@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class AppModel;
+
 namespace Ui {
 class MainWindow;
 }
@@ -16,10 +18,11 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_closeButton_clicked();
 
 private:
     Ui::MainWindow *ui;
+    AppModel       *appmodel;
 };
 
 #endif // MAINWINDOW_H
