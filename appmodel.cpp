@@ -23,8 +23,8 @@ QVariant AppModel::data(const QModelIndex &index, int role) const
 {
     int row = index.row();
     int col = index.column();
-    qDebug() << QString("row %1, col %2, role %3")
-                .arg(row).arg(col).arg(role);
+//    qDebug() << QString("row %1, col %2, role %3")
+//                .arg(row).arg(col).arg(role);
 
     switch (role) {
     case Qt::DisplayRole:
