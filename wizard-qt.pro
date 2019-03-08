@@ -25,16 +25,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    appmodel.cpp
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/appmodel.cpp \
+    src/appinfo.cpp
 
 HEADERS += \
-        mainwindow.h \
-    appmodel.h
+    src/mainwindow.h \
+    src/appmodel.h \
+    src/appinfo.h
 
 FORMS += \
-        mainwindow.ui
+    src/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -42,4 +44,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    resource.qrc
+    data/wizard.qrc
+
+desktop.files = data/ubuntu-kylin-wizard.desktop
+desktop.path = /etc/xdg/autostart/
+
+INSTALLS += desktop

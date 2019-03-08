@@ -54,7 +54,7 @@
         <item>
          <widget class="QCheckBox" name="checkBox">
           <property name="text">
-           <string>CheckBox</string>
+           <string>Open kylin software later</string>
           </property>
           <property name="tristate">
            <bool>false</bool>
@@ -64,7 +64,7 @@
         <item>
          <widget class="QPushButton" name="installButton">
           <property name="text">
-           <string>PushButton</string>
+           <string>Install</string>
           </property>
          </widget>
         </item>

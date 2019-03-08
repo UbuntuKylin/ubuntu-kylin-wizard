@@ -2,16 +2,24 @@
 #include <QBrush>
 #include <QIcon>
 #include <QDebug>
+#include <QSqlQuery>
+#include <QSqlError>
 #include "appmodel.h"
+#include "appinfo.h"
+
+static QStringList APP_LIST = {"wps-office", "sogoupinyin", "foxitreader"};
 
 AppModel::AppModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
+    for (int i = 0; i < APP_LIST.size(); ++i) {
+        app_list.append(AppInfo(APP_LIST[i]));
+    }
 }
 
 int AppModel::rowCount(const QModelIndex & /*parent*/) const
 {
-    return 10;
+    return app_list.length() / 2 + 1;
 }
 
 int AppModel::columnCount(const QModelIndex &/*parent*/) const
@@ -23,16 +31,19 @@ QVariant AppModel::data(const QModelIndex &index, int role) const
 {
     int row = index.row();
     int col = index.column();
-//    qDebug() << QString("row %1, col %2, role %3")
-//                .arg(row).arg(col).arg(role);
+    int i = row * 2 + col;
+    if (i >= app_list.length())
+        return QVariant();
 
     switch (role) {
-    case Qt::DisplayRole:
-        return QString("Row%1, Column%2")
-                .arg(row + 1)
-                .arg(col +1);
-    case Qt::DecorationRole:
-        return QIcon(":/wechat.png");
+    case Qt::DisplayRole: {
+        return QString("%1\n%2")
+                .arg(app_list[i].getName())
+                .arg(app_list[i].getSummary());
+    }
+    case Qt::DecorationRole: {
+        return app_list[i].getIcon();
+    }
     case Qt::FontRole:
         if (row == 0 && col == 0) { //change font only for cell(0,0)
             QFont boldFont;

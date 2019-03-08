@@ -1,0 +1,25 @@
+ubuntu-kylin-wizard (17.04.0) zesty; urgency=medium
+
+  * Fix some theme errors.
+  * Update the thumbnail pictures for zesty.
+  * Add manpage for ubuntu-kylin-wizard.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 23 Feb 2017 10:03:48 +0800
+
+ubuntu-kylin-wizard (16.10.0) yakkety; urgency=medium
+
+  [ feng-kylin ]
+  * Code rafactor.
+  * Quit when resolution less than 1024x768 or in live mode.
+  * Add support for gtk3.20.
+
+  [ Iain Lane ]
+  * debian/copyright: Some files are copyright Canonical.
+
+ -- feng-kylin <jianfengli@ubuntukylin.com>  Mon, 03 Oct 2016 12:59:24 +0100
+
+ubuntu-kylin-wizard (16.04.0) xenial; urgency=medium
+
+  * Initial version. (LP: #1609207)
+
+ -- feng-kylin <jianfengli@ubuntukylin.com>  Tue, 12 Apr 2016 09:38:14 +0000

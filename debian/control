@@ -1,0 +1,17 @@
+Source: ubuntu-kylin-wizard
+Section: gnome
+Priority: optional
+Maintainer: feng-kylin <jianfengli@ubuntukylin.com>
+Build-Depends: debhelper (>= 12),
+               qt5-default,
+Standards-Version: 4.3.0
+Homepage: https://github.com/UbuntuKylin/ubuntu-kylin-wizard
+
+Package: ubuntu-kylin-wizard
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: Setup wizard for Ubuntu Kylin
+ The Ubuntu Kylin wizard provides a friendly guide when user first logs in. It
+ shows them some basic information about the launcher, dash, indicators,
+ control center, and so on.

@@ -2,6 +2,9 @@
 #define APPMODEL_H
 
 #include <QAbstractTableModel>
+#include <QSqlDatabase>
+
+#include "appinfo.h"
 
 class AppModel : public QAbstractTableModel
 {
@@ -11,6 +14,9 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+private:
+    QList<AppInfo> app_list;
 };
 
 #endif // APPMODEL_H
