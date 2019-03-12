@@ -51,7 +51,7 @@ void MainWindow::on_closeButton_clicked()
     close();
 }
 
-void MainWindow::doInstall ()
+void MainWindow::doInstall()
 {
     QDBusConnection bus = QDBusConnection::systemBus();
     if (!bus.isConnected())
@@ -62,15 +62,18 @@ void MainWindow::doInstall ()
     QDBusInterface dbus_iface("com.ubuntukylin.softwarecenter", "/",
                               "com.ubuntukylin.softwarecenter", bus);
     if (dbus_iface.isValid()) {
+        QDBusReply<QString> reply_update = dbus_iface.call("update", true);
+        if (reply_update.isValid() && reply_update.value() == "True") {
+            qDebug() << "Update success!";
+        } else {
+            qDebug() << "Update failed!" << reply_update.value();
+        }
         for (int i = 0; i < install_list.size(); ++i) {
-                QDBusReply<bool> reply = dbus_iface.call("install", install_list[i]);
-                if (reply.isValid()) {
-                    if (reply.value())
+                QDBusReply<bool> reply_install = dbus_iface.call("install", install_list[i]);
+                if (reply_install.isValid() && reply_install.value())
                         qDebug() << "Install " << install_list[i] << " success!";
-                    else {
+                else
                         qDebug() << "Install " << install_list[i] << " failed";
-                    }
-                }
         }
     }
     /*

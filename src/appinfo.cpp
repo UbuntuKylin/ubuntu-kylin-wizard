@@ -8,7 +8,7 @@
 
 #include "appinfo.h"
 
-static const QString ICON_PREFIX = "/usr/share/ubuntu-kylin-software-center/data/icons";
+static const QString ICON_PREFIX = "/usr/share/ubuntu-kylin-software-center/data/icons/";
 static const QString DEFAULT_ICON = ICON_PREFIX + "ubufox.png";
 static const QString SOFTWARE_DATABASE = "/usr/share/ubuntu-kylin-software-center/data/uksc.db";
 
@@ -17,7 +17,7 @@ QSqlDatabase AppInfo::db = QSqlDatabase::addDatabase("QSQLITE");
 AppInfo::AppInfo(QString app_name)
 {
     name = app_name;
-    QString icon_path = ICON_PREFIX + "/" + name + ".png";
+    QString icon_path = ICON_PREFIX + name + ".png";
     if (fileExist(icon_path))
         icon = QIcon(icon_path);
     else
