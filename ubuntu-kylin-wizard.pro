@@ -38,13 +38,16 @@ HEADERS += \
 FORMS += \
     src/mainwindow.ui
 
+TRANSLATIONS += \
+    po/zh_CN.ts
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    data/wizard.qrc
+    wizard.qrc
 
 desktop.files = data/ubuntu-kylin-wizard.desktop
 desktop.path = /etc/xdg/autostart/

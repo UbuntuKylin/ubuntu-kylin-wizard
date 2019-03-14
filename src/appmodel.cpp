@@ -37,7 +37,7 @@ QVariant AppModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Qt::DisplayRole: {
-        return QString("%1\n%2")
+        return QString(tr("%1\n%2"))
                 .arg(app_list[i].getName())
                 .arg(app_list[i].getSummary());
     }
@@ -59,10 +59,10 @@ QVariant AppModel::data(const QModelIndex &index, int role) const
         if (row == 2 && col == 0) //change text alignment only for cell(1,1)
             return Qt::AlignRight + Qt::AlignVCenter;
         break;
-    case Qt::CheckStateRole:
-        if (row == 1 && col == 0) //add a checkbox to cell(1,0)
-            return Qt::Checked;
-        break;
+//    case Qt::CheckStateRole:
+//        if (row == 1 && col == 0) //add a checkbox to cell(1,0)
+//            return Qt::Checked;
+//        break;
     }
     return QVariant();
 }

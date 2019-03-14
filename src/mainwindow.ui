@@ -35,7 +35,7 @@
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text">
-         <string>close button</string>
+         <string/>
         </property>
        </widget>
       </item>

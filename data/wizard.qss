@@ -1,9 +1,33 @@
+QMainWindow  {
+    background-color: white;
+}
+
+QWidget#centralWidget {
+    padding: 500px;
+}
+
+QPushButton#closeButton {
+    background-color: white;
+    border: none;
+}
+
 QTableView {
-    padding: 20px;
-    selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.5, y2: 0.5,
-                                stop: 0 #FF92BB, stop: 1 white);
+    border: none;
+    selection-background-color: #d7d6d5
+}
+
+QTableView::item::selected {
+    border: 0px;
+}
+
+QTableView::item::focus {
+    border: 1px solid red;
 }
 
 QTableView::indicator:checked {
     background-color: #d7d6d5
+}
+
+QPushButton#installButton {
+    background-color: blue;
 }

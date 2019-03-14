@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QTranslator>
+#include <QLocale>
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
@@ -22,19 +24,28 @@ bool isLiveCD()
 int main(int argc, char *argv[])
 {
     if (isLiveCD()) {
-        qDebug() << "Don't start in live CD!";
+        qDebug() << "Do not start in live CD!";
         return 0;
     }
 
+    Q_INIT_RESOURCE(wizard);
+
     QApplication a(argc, argv);
-    MainWindow w;
 
-    QFile styleFile(":/style/wizard.qss");
+    QTranslator wizardTranslator;
+    if (wizardTranslator.load(QLocale::system().name(), ":/i18n/po")) {
+        a.installTranslator(&wizardTranslator);
+    } else {
+        qDebug() << "Faild to load " << QLocale::system().name() << ".qm !";
+    }
+
+    QFile styleFile(":/style/data/wizard.qss");
     styleFile.open(QFile::ReadOnly);
-
     QString style(styleFile.readAll());
     a.setStyleSheet(style);
 
+    // This should be after i18n
+    MainWindow w;
     w.show();
 
     return a.exec();

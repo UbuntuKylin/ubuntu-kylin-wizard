@@ -17,11 +17,19 @@ MainWindow::MainWindow(QWidget *parent) :
     resize (860, 500);
     move(QGuiApplication::primaryScreen()->availableGeometry().center() - this->rect().center());
     setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+    ui->centralWidget->setObjectName("centralWidget");
+
+    ui->closeButton->setIcon(QIcon("/usr/share/icons/ukui-icon-theme/24x24/actions/dialog-close.png"));
+    ui->closeButton->setObjectName("closeButton");
+    ui->verticalLayout->setAlignment(ui->closeButton, Qt::AlignRight);
+
+    ui->titleLabel->setText(tr("You can install the third-party software from kylin software center"));
 
     initTableView();
-    ui->verticalLayout->setAlignment(ui->closeButton, Qt::AlignRight);
-    ui->titleLabel->setText("You can install the third-party software from kylin software center");
+
     ui->horizontalLayout->setAlignment(ui->checkBox, Qt::AlignLeft);
+
+    ui->installButton->setObjectName("installButton");
     ui->horizontalLayout->setAlignment(ui->installButton, Qt::AlignRight);
 
 }
@@ -36,6 +44,7 @@ void MainWindow::initTableView()
     ui->tableView->horizontalHeader()->hide();
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableView->setShowGrid(false);
+//    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->setRowHeight(0, 70);
     ui->tableView->setRowHeight(1, 70);
 }

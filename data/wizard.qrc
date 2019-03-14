@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/style">
-        <file>wizard.qss</file>
-    </qresource>
-</RCC>
