@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
+#include <QStandardPaths>
 
 bool isLiveCD()
 {

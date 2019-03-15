@@ -19,23 +19,18 @@
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="45"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <source>Here you can install the following third-party applications from &quot;kylin software center&quot;:</source>
+        <translation>在此，您可以安装来自&quot;麒麟软件中心&quot;的第三方应用：</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="57"/>
-        <source>Open kylin software later</source>
-        <translation>稍后打开软件中心</translation>
+        <source>Go to the &quot;kylin software center&quot; later to see more apps</source>
+        <translation>稍后去&quot;麒麟软件中心&quot;，查看更多应用。</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="67"/>
         <source>Install</source>
         <translation>立即安装</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="26"/>
-        <source>You can install the third-party software from kylin software center</source>
-        <translation>你可以安装来自麒麟助手的第三方软件</translation>
     </message>
 </context>
 </TS>

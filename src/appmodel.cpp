@@ -27,6 +27,14 @@ int AppModel::columnCount(const QModelIndex &/*parent*/) const
     return 2;
 }
 
+Qt::ItemFlags AppModel::flags(const QModelIndex &index) const
+{
+    if (index.row() * 2 + index.column() == app_list.length())
+        return Qt::NoItemFlags;
+    else
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+}
+
 QVariant AppModel::data(const QModelIndex &index, int role) const
 {
     int row = index.row();
@@ -44,13 +52,11 @@ QVariant AppModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole: {
         return app_list[i].getIcon();
     }
-    case Qt::FontRole:
-        if (row == 0 && col == 0) { //change font only for cell(0,0)
+    case Qt::FontRole: {
             QFont boldFont;
-            boldFont.setBold(true);
+            boldFont.setPixelSize(14);
             return boldFont;
-        }
-        break;
+    }
     case Qt::BackgroundRole:
         if (row == 1 && col == 1)  //change background only for cell(1,2)
             return QBrush(Qt::red);
@@ -59,10 +65,9 @@ QVariant AppModel::data(const QModelIndex &index, int role) const
         if (row == 2 && col == 0) //change text alignment only for cell(1,1)
             return Qt::AlignRight + Qt::AlignVCenter;
         break;
-//    case Qt::CheckStateRole:
-//        if (row == 1 && col == 0) //add a checkbox to cell(1,0)
-//            return Qt::Checked;
-//        break;
+//    case Qt::CheckStateRole: {
+//        return Qt::Unchecked;
+//    }
     }
     return QVariant();
 }

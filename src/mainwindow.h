@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QItemSelection>
 
 class AppModel;
 
@@ -20,6 +21,7 @@ public:
 private slots:
     void on_closeButton_clicked();
     void on_installButton_clicked();
+    void on_selectionChanged(const QItemSelection &, const QItemSelection &);
 
 private:
     void initTableView();

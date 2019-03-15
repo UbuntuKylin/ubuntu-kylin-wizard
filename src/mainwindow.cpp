@@ -18,12 +18,11 @@ MainWindow::MainWindow(QWidget *parent) :
     move(QGuiApplication::primaryScreen()->availableGeometry().center() - this->rect().center());
     setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     ui->centralWidget->setObjectName("centralWidget");
+    ui->centralWidget->layout()->setContentsMargins(60, 0, 0, 0);
 
-    ui->closeButton->setIcon(QIcon("/usr/share/icons/ukui-icon-theme/24x24/actions/dialog-close.png"));
+    ui->closeButton->setIcon(QIcon(":/icon/data/dialog-close.png"));
     ui->closeButton->setObjectName("closeButton");
     ui->verticalLayout->setAlignment(ui->closeButton, Qt::AlignRight);
-
-    ui->titleLabel->setText(tr("You can install the third-party software from kylin software center"));
 
     initTableView();
 
@@ -47,6 +46,9 @@ void MainWindow::initTableView()
 //    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->setRowHeight(0, 70);
     ui->tableView->setRowHeight(1, 70);
+
+    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+            SLOT(on_selectionChanged(const QItemSelection &, const QItemSelection &)));
 }
 
 MainWindow::~MainWindow()
@@ -130,4 +132,9 @@ void MainWindow::on_installButton_clicked()
     doInstall();
     if (ui->checkBox->isChecked())
         startProgram();
+}
+
+void MainWindow::on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    qDebug() << "changeddddddddddd";
 }

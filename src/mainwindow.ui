@@ -42,7 +42,7 @@
       <item>
        <widget class="QLabel" name="titleLabel">
         <property name="text">
-         <string>TextLabel</string>
+         <string>Here you can install the following third-party applications from &quot;kylin software center&quot;:</string>
         </property>
        </widget>
       </item>
@@ -54,7 +54,7 @@
         <item>
          <widget class="QCheckBox" name="checkBox">
           <property name="text">
-           <string>Open kylin software later</string>
+           <string>Go to the &quot;kylin software center&quot; later to see more apps</string>
           </property>
           <property name="tristate">
            <bool>false</bool>

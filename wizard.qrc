@@ -5,4 +5,7 @@
     <qresource prefix="/style">
         <file>data/wizard.qss</file>
     </qresource>
+    <qresource prefix="/icon">
+        <file>data/dialog-close.png</file>
+    </qresource>
 </RCC>

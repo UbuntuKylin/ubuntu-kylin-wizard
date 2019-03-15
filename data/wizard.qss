@@ -3,31 +3,66 @@ QMainWindow  {
 }
 
 QWidget#centralWidget {
-    padding: 500px;
+    margin: 500px;
 }
 
 QPushButton#closeButton {
     background-color: white;
     border: none;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+QLabel {
+    font: 20px;
+    margin-top: 20px;
 }
 
 QTableView {
     border: none;
-    selection-background-color: #d7d6d5
+    margin-right: 60px;
 }
 
 QTableView::item::selected {
-    border: 0px;
+    background-color: #ededed;
 }
 
 QTableView::item::focus {
-    border: 1px solid red;
+    background-color: #ededed;
+    selection-background-color: transparent;
 }
 
+/*
 QTableView::indicator:checked {
-    background-color: #d7d6d5
+    background-color: #ededed
+}
+*/
+
+QCheckBox {
+    font: 14px;
+    margin-bottom: 30px;
 }
 
 QPushButton#installButton {
-    background-color: blue;
+    background-color: #4a8bdc;
+    border: 1px;
+    border-color: #e1e1e1;
+    font: 18px;
+    color: #ffffff;
+    height: 40px;
+    width: 130px;
+    margin-right: 60px;
+    margin-bottom: 38px;
+}
+
+QPushButton#installButton:hover {
+    background-color: #69a4ee;
+    font: 18px;
+    color: #ffffff;
+}
+
+QPushButton#installButton:pressed {
+    background-color: #3276cb;
+    border-style: inset;
+    color: #ffffff;
 }
