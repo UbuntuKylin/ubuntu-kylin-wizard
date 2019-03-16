@@ -1,9 +1,8 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Source: https://launchpad.net/ubuntu-kylin-wizard
 
 Files: *
-Copyright: 2015, National University of Defense Technology(NUDT) & Kylin Ltd
-           2014-2015, Canonical Ltd
+Copyright: 2019, National University of Defense Technology(NUDT) & Kylin Ltd
 License: GPL-3
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License version 3 as

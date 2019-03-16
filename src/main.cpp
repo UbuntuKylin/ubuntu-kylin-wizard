@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     if (wizardTranslator.load(QLocale::system().name(), ":/i18n/po")) {
         a.installTranslator(&wizardTranslator);
     } else {
-        qDebug() << "Faild to load " << QLocale::system().name() << ".qm !";
+        qDebug() << "Failed to load " << QLocale::system().name() << ".qm !";
     }
 
     // Load qss

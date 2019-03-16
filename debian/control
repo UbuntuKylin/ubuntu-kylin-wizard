@@ -3,9 +3,11 @@ Section: gnome
 Priority: optional
 Maintainer: feng-kylin <jianfengli@ubuntukylin.com>
 Build-Depends: debhelper (>= 12),
-               qt5-default,
+               qtbase5-dev,
 Standards-Version: 4.3.0
 Homepage: https://github.com/UbuntuKylin/ubuntu-kylin-wizard
+Vcs-Git: https://github.com/ubuntukylin/ubuntu-kylin-wizard.git
+Vcs-Browser: https://github.com/ubuntukylin/uubuntu-kylin-wizard
 
 Package: ubuntu-kylin-wizard
 Architecture: any

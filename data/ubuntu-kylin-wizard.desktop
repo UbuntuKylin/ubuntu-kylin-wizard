@@ -6,4 +6,4 @@ Type=Application
 StartupNotify=false
 Categories=GTK;System;
 OnlyShowIn=UKUI;
-
+X-UKUI-Autostart-Delay=10;

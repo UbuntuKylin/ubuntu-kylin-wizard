@@ -2,7 +2,7 @@ QT       += core gui dbus sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = wizard-qt
+TARGET = ubuntu-kylin-wizard
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -35,10 +35,7 @@ FORMS += \
 TRANSLATIONS += \
     po/zh_CN.ts
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+target.path = /usr/bin/
 
 RESOURCES += \
     wizard.qrc
@@ -46,4 +43,4 @@ RESOURCES += \
 desktop.files = data/ubuntu-kylin-wizard.desktop
 desktop.path = /etc/xdg/autostart/
 
-INSTALLS += desktop
+INSTALLS += target desktop
