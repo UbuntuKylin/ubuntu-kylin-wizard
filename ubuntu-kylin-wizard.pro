@@ -1,10 +1,4 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2019-03-04T21:55:41
-#
-#-------------------------------------------------
-
-QT       += core gui dbus sql
+QT       += core gui dbus sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

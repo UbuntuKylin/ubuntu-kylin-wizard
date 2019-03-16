@@ -32,7 +32,20 @@ Qt::ItemFlags AppModel::flags(const QModelIndex &index) const
     if (index.row() * 2 + index.column() == app_list.length())
         return Qt::NoItemFlags;
     else
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+        return Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;// Qt::ItemIsSelectable;
+}
+bool AppModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!index.isValid())
+        return false;
+    if (role == Qt::CheckStateRole) {
+        if (value == Qt::Checked) {
+            itemCheckStateMap[index.row() * 2 + index.column()] = Qt::Checked;
+        } else {
+            itemCheckStateMap[index.row() * 2 + index.column()] = Qt::Unchecked;
+        }
+    }
+    return true;
 }
 
 QVariant AppModel::data(const QModelIndex &index, int role) const
@@ -57,17 +70,19 @@ QVariant AppModel::data(const QModelIndex &index, int role) const
             boldFont.setPixelSize(14);
             return boldFont;
     }
-    case Qt::BackgroundRole:
-        if (row == 1 && col == 1)  //change background only for cell(1,2)
-            return QBrush(Qt::red);
-        break;
-    case Qt::TextAlignmentRole:
-        if (row == 2 && col == 0) //change text alignment only for cell(1,1)
-            return Qt::AlignRight + Qt::AlignVCenter;
-        break;
-//    case Qt::CheckStateRole: {
-//        return Qt::Unchecked;
-//    }
+//    case Qt::BackgroundRole:
+//        if (row == 1 && col == 1)  //change background only for cell(1,2)
+//            return QBrush(Qt::red);
+//        break;
+//    case Qt::TextAlignmentRole:
+//        if (row == 2 && col == 0) //change text alignment only for cell(1,1)
+//            return Qt::AlignRight + Qt::AlignVCenter;
+//        break;
+    case Qt::CheckStateRole: {
+        if (itemCheckStateMap.contains(i))
+                return itemCheckStateMap[i] == Qt::Checked ? Qt::Checked : Qt::Unchecked;
+        return Qt::Unchecked;
+    }
     }
     return QVariant();
 }

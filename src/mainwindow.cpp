@@ -3,6 +3,7 @@
 #include <QtCore/QDebug>
 #include <QtDBus/QtDBus>
 #include <QScreen>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -44,11 +45,10 @@ void MainWindow::initTableView()
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableView->setShowGrid(false);
 //    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->tableView->setRowHeight(0, 70);
-    ui->tableView->setRowHeight(1, 70);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(80);
 
-    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
-            SLOT(on_selectionChanged(const QItemSelection &, const QItemSelection &)));
+//    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+//            SLOT(on_selectionChanged(const QItemSelection &, const QItemSelection &)));
 }
 
 MainWindow::~MainWindow()
@@ -62,8 +62,18 @@ void MainWindow::on_closeButton_clicked()
     close();
 }
 
+int MainWindow::showMessageDialog(const char * message)
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr(message));
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    int ret = msgBox.exec();
+    return ret;
+}
+
 void MainWindow::doInstall()
 {
+    int ret;
     QDBusConnection bus = QDBusConnection::systemBus();
     if (!bus.isConnected())
     {
@@ -76,17 +86,25 @@ void MainWindow::doInstall()
         QDBusReply<QString> reply_update = dbus_iface.call("update", true);
         if (reply_update.isValid() && reply_update.value() == "True") {
             qDebug() << "Update success!";
+            QString messages;
+            for (int i = 0; i < install_list.size(); ++i) {
+                QDBusReply<bool> reply_install = dbus_iface.call("install", install_list[i]);
+                if (reply_install.isValid() && reply_install.value()) {
+                        messages += "Install " + install_list[i] + " success!\n";
+                } else {
+                        messages += "Install " + install_list[i] + " success!\n";
+                }
+            }
+            ret = showMessageDialog(messages.toStdString().c_str());
         } else {
             qDebug() << "Update failed!" << reply_update.value();
-        }
-        for (int i = 0; i < install_list.size(); ++i) {
-                QDBusReply<bool> reply_install = dbus_iface.call("install", install_list[i]);
-                if (reply_install.isValid() && reply_install.value())
-                        qDebug() << "Install " << install_list[i] << " success!";
-                else
-                        qDebug() << "Install " << install_list[i] << " failed";
+            QString err_str = tr("Error when install software, please open ubuntu kylin software center to install them manally!");
+            ret = showMessageDialog(err_str.toStdString().c_str());
         }
     }
+
+    launchSoftwareCenter();
+    QCoreApplication::quit();
     /*
     if (dbus_iface.isValid()) {
         QDBusReply<QStringList> reply = dbus_iface.call("get_sources", QVariant(true));
@@ -110,31 +128,48 @@ void delayMsec(int msec)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
 
-void MainWindow::startProgram()
+void MainWindow::launchSoftwareCenter()
 {
+    if (!ui->checkBox->isChecked())
+        return;
     hide();
     QString program = "/usr/bin/ubuntu-kylin-software-center";
     QProcess().startDetached(program);
     // TODO: Delete this delay once find other method.
     delayMsec(3000);
-    close();
+    QCoreApplication::quit();
 }
 
 void MainWindow::on_installButton_clicked()
 {
-    QModelIndexList selection_list = ui->tableView->selectionModel()->selectedIndexes();
-    for (int i = 0; i < selection_list.count(); ++i) {
-        QString tmp = ui->tableView->model()->data(selection_list.at(i)).toString();
-        int pos = tmp.indexOf("\n");
-        qDebug() << tmp.mid(0, pos);
-        install_list.append(tmp.mid(0, pos));
+    QAbstractItemModel *model = ui->tableView->model();
+    int rows = model->rowCount();
+    int column = model->columnCount();
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < column; ++j) {
+            QModelIndex item = model->index(i, j);
+            if (model->data(item, Qt::CheckStateRole) == Qt::Checked) {
+                QString tmp = model->data(item).toString();
+                int pos = tmp.indexOf("\n");
+                qDebug() << tmp.mid(0, pos);
+                install_list.append(tmp.mid(0, pos));
+            }
+        }
     }
-    doInstall();
-    if (ui->checkBox->isChecked())
-        startProgram();
+    if (!install_list.empty())
+        doInstall();
+    launchSoftwareCenter();
 }
 
 void MainWindow::on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
-    qDebug() << "changeddddddddddd";
+    QModelIndexList selection_list = selected.indexes();
+    for (int i = 0; i < selection_list.count(); ++i) {
+        ui->tableView->model()->setData(selection_list.at(i), Qt::Checked, Qt::CheckStateRole);
+    }
+
+    QModelIndexList deselection_list = deselected.indexes();
+    for (int i = 0; i < deselection_list.count(); ++i) {
+        ui->tableView->model()->setData(deselection_list.at(i), Qt::Unchecked, Qt::CheckStateRole);
+    }
 }

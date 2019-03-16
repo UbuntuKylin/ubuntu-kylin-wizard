@@ -21,18 +21,20 @@ QLabel {
 QTableView {
     border: none;
     margin-right: 60px;
+    selection-background-color: #ededed;
 }
+
 
 QTableView::item::selected {
-    background-color: #ededed;
-}
-
-QTableView::item::focus {
-    background-color: #ededed;
-    selection-background-color: transparent;
+    background-color: transparent;
 }
 
 /*
+QTableView::item::focus {
+    background-color: transparent;
+    selection-background-color: transparent;
+}
+
 QTableView::indicator:checked {
     background-color: #ededed
 }

@@ -26,7 +26,8 @@ private slots:
 private:
     void initTableView();
     void doInstall();
-    void startProgram();
+    void launchSoftwareCenter();
+    int showMessageDialog(const char *);
 
     Ui::MainWindow *ui;
     AppModel       *appmodel;
