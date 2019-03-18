@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Ubuntu Kylin Wizard
-Exec=ubuntu-kylin-wizard
-Terminal=false
-Type=Application
-StartupNotify=false
-Categories=GTK;System;
-OnlyShowIn=Unity;
-
