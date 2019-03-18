@@ -1,3 +1,9 @@
+ubuntu-kylin-wizard (19.04.0) disco; urgency=medium
+
+  * Redesign for UKUI.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Sat, 16 Mar 2019 17:23:56 +0800
+
 ubuntu-kylin-wizard (17.04.0) zesty; urgency=medium
 
   * Fix some theme errors.

@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/i18n">
+        <file>po/zh_CN.qm</file>
+    </qresource>
+    <qresource prefix="/style">
+        <file>data/wizard.qss</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file>data/dialog-close.png</file>
+    </qresource>
+</RCC>
