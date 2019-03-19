@@ -4,7 +4,7 @@
 <context>
     <name>AppModel</name>
     <message>
-        <location filename="../src/appmodel.cpp" line="40"/>
+        <location filename="../src/appmodel.cpp" line="61"/>
         <source>%1
 %2</source>
         <translation type="unfinished"></translation>
@@ -31,6 +31,19 @@
         <location filename="../src/mainwindow.ui" line="67"/>
         <source>Install</source>
         <translation>立即安装</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="101"/>
+        <source>Error when install software, please open ubuntu kylin software center to install them manally!</source>
+        <translation>安装错误，请打开麒麟软件中心手动安装！</translation>
+    </message>
+</context>
+<context>
+    <name>QMessageBox</name>
+    <message>
+        <location filename="../src/main.cpp" line="56"/>
+        <source>You are offline, please connect to the network first and then press &apos;OK&apos; to run this wizard, or press &apos;Cancel&apos; to quit.</source>
+        <translation>您处于离线状态，请先连接网络然后按&apos;确认&apos;键以继续进行，或者按&apos;取消&apos;键退出。</translation>
     </message>
 </context>
 </TS>

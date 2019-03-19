@@ -1,5 +1,5 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Source: https://launchpad.net/ubuntu-kylin-wizard
+Source: https://github.com/ubuntukylin/ubuntu-kylin-wizard
 
 Files: *
 Copyright: 2019, National University of Defense Technology(NUDT) & Kylin Ltd
