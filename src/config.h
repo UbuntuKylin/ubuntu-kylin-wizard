@@ -17,30 +17,24 @@
  * Authored by: handsome_feng <jianfengli@ubuntukylin.com>
  */
 
-#ifndef APPINFO_H
-#define APPINFO_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
-#include <QString>
-#include <QSqlDatabase>
-#include <QIcon>
+#include <QObject>
 
-class AppInfo
+class QGSettings;
+
+class Config : public QObject
 {
+    Q_OBJECT
 public:
-    explicit AppInfo(const QString &app_name);
-    QString getName() const;
-    QIcon   getIcon() const;
-    QString getSummary() const;
+    explicit Config(QObject *parent);
+    ~Config();
+    QStringList getAppList();
 
 private:
-    QString fetchSummary();
-    bool fileExist(QString file_name);
-
-    static QSqlDatabase db;
-
-    QString name;
-    QIcon   icon;
-    QString summary;
+    QGSettings *gsettings;
+    QStringList appList;
 };
 
-#endif // APPINFO_H
+#endif // CONFIG_H

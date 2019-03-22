@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: feng-kylin <jianfengli@ubuntukylin.com>
 Build-Depends: debhelper (>= 12),
                qtbase5-dev,
+               libgsettings-qt-dev,
 Standards-Version: 4.3.0
 Homepage: https://github.com/UbuntuKylin/ubuntu-kylin-wizard
 Vcs-Git: https://github.com/ubuntukylin/ubuntu-kylin-wizard.git
@@ -14,6 +15,5 @@ Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
 Description: Setup wizard for Ubuntu Kylin
- The Ubuntu Kylin wizard provides a friendly guide when user first logs in. It
- shows them some basic information about the launcher, dash, indicators,
- control center, and so on.
+ The Ubuntu Kylin wizard provides a friendly interface to install the
+ third-party applications when user first logs in.

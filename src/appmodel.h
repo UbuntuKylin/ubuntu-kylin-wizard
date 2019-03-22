@@ -29,7 +29,7 @@ class AppModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    AppModel(QObject *parent = nullptr);
+    explicit AppModel(QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;

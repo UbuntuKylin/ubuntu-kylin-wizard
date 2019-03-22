@@ -1,4 +1,6 @@
 QT       += core gui dbus sql network
+CONFIG += c++11 link_pkgconfig
+PKGCONFIG += gsettings-qt
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,23 +13,18 @@ TEMPLATE = app
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-# You can also make your code fail to compile if you use deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
-CONFIG += c++11
-
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/appmodel.cpp \
-    src/appinfo.cpp
+    src/appinfo.cpp \
+    src/config.cpp
 
 HEADERS += \
     src/mainwindow.h \
     src/appmodel.h \
-    src/appinfo.h
+    src/appinfo.h \
+    src/config.h
 
 FORMS += \
     src/mainwindow.ui
@@ -35,7 +32,11 @@ FORMS += \
 TRANSLATIONS += \
     po/zh_CN.ts
 
-target.path = /usr/bin/
+isEmpty(PREFIX){
+    PREFIX = /usr
+}
+
+target.path = $${PREFIX}/bin/
 
 RESOURCES += \
     wizard.qrc
@@ -43,4 +44,7 @@ RESOURCES += \
 desktop.files = data/ubuntu-kylin-wizard.desktop
 desktop.path = /etc/xdg/autostart/
 
-INSTALLS += target desktop
+gsettings.files = data/org.ukui.wizard.gschema.xml
+gsettings.path = /usr/share/glib-2.0/schemas/
+
+INSTALLS += target desktop gsettings

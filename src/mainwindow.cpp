@@ -92,26 +92,26 @@ int MainWindow::showMessageDialog(const char * message)
 
 void MainWindow::doInstall()
 {
-    int ret;
     QDBusConnection bus = QDBusConnection::systemBus();
     if (!bus.isConnected())
     {
-        fprintf(stderr, "Cannot connect to the D-Bus session bus.");
+        qDebug() << "Cannot connect to the D-Bus session bus.";
         return;
     }
     QDBusInterface dbus_iface("com.ubuntukylin.softwarecenter", "/",
                               "com.ubuntukylin.softwarecenter", bus);
     if (dbus_iface.isValid()) {
         QDBusReply<QString> reply_update = dbus_iface.call("update", true);
+        int ret;
         if (reply_update.isValid() && reply_update.value() == "True") {
             qDebug() << "Update success!";
             QString messages;
             for (int i = 0; i < install_list.size(); ++i) {
                 QDBusReply<bool> reply_install = dbus_iface.call("install", install_list[i]);
                 if (reply_install.isValid() && reply_install.value()) {
-                        messages += "Install " + install_list[i] + " success!\n";
+                        messages += QString(tr("Install %1 success!\n")).arg(install_list[i]);
                 } else {
-                        messages += "Install " + install_list[i] + " success!\n";
+                        messages += QString(tr("Install %1 failed!\n")).arg(install_list[i]);
                 }
             }
             ret = showMessageDialog(messages.toStdString().c_str());
@@ -120,6 +120,8 @@ void MainWindow::doInstall()
             QString err_str = tr("Error when install software, please open ubuntu kylin software center to install them manally!");
             ret = showMessageDialog(err_str.toStdString().c_str());
         }
+    } else {
+        qDebug() << "Failed to init dbus interface!";
     }
 
     launchSoftwareCenter();
@@ -155,7 +157,7 @@ void MainWindow::launchSoftwareCenter()
     QString program = "/usr/bin/ubuntu-kylin-software-center";
     QProcess().startDetached(program);
     // TODO: Delete this delay once find other method.
-    delayMsec(3000);
+    delayMsec(4000);
     QCoreApplication::quit();
 }
 

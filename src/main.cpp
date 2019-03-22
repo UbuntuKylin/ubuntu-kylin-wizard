@@ -18,6 +18,7 @@
  */
 
 #include "mainwindow.h"
+
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>

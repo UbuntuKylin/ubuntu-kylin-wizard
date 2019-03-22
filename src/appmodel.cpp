@@ -23,17 +23,22 @@
 #include <QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
+
 #include "appmodel.h"
 #include "appinfo.h"
+#include "config.h"
 
 static QStringList APP_LIST = {"wps-office", "sogoupinyin", "foxitreader"};
 
 AppModel::AppModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    for (int i = 0; i < APP_LIST.size(); ++i) {
-        app_list.append(AppInfo(APP_LIST[i]));
+    Config *config = new Config(this);
+    QStringList list = config->getAppList();
+    for (int i = 0; i < list.size(); ++i) {
+        app_list.append(AppInfo(list.at(i)));
     }
+    delete config;
 }
 
 int AppModel::rowCount(const QModelIndex & /*parent*/) const

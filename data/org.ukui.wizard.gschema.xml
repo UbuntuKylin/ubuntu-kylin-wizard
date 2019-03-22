@@ -1,0 +1,9 @@
+<schemalist gettext-domain="ubuntu-kylin-wizard">
+  <schema id="org.ukui.wizard" path="/org/ukui/wizard/">
+    <key name="app-list" type="as">
+      <default>['wps-office', 'sogoupinyin', 'foxitreader']</default>
+      <summary>Set the apps to be installed</summary>
+      <description>This key specifies the list of app to be installed.</description>
+    </key>
+  </schema>
+</schemalist>

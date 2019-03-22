@@ -17,30 +17,27 @@
  * Authored by: handsome_feng <jianfengli@ubuntukylin.com>
  */
 
-#ifndef APPINFO_H
-#define APPINFO_H
+#include "config.h"
 
-#include <QString>
-#include <QSqlDatabase>
-#include <QIcon>
+#include <QGSettings/QGSettings>
+#include <QVariant>
 
-class AppInfo
+#define GSETTINGS_SCHEMA_WIZARD "org.ukui.wizard"
+#define KEY_APP_LIST "app-list"
+
+Config::Config(QObject *parent) : QObject(parent)
 {
-public:
-    explicit AppInfo(const QString &app_name);
-    QString getName() const;
-    QIcon   getIcon() const;
-    QString getSummary() const;
+    gsettings = new QGSettings (GSETTINGS_SCHEMA_WIZARD, "", this);
 
-private:
-    QString fetchSummary();
-    bool fileExist(QString file_name);
+    appList = gsettings->get(KEY_APP_LIST).toStringList();
+}
 
-    static QSqlDatabase db;
+QStringList Config::getAppList()
+{
+    return appList;
+}
 
-    QString name;
-    QIcon   icon;
-    QString summary;
-};
-
-#endif // APPINFO_H
+Config::~Config()
+{
+    delete gsettings;
+}

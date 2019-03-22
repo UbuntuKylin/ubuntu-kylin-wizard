@@ -33,9 +33,9 @@ static const QString SOFTWARE_DATABASE = "/usr/share/ubuntu-kylin-software-cente
 
 QSqlDatabase AppInfo::db = QSqlDatabase::addDatabase("QSQLITE");
 
-AppInfo::AppInfo(QString app_name)
+AppInfo::AppInfo(const QString & app_name)
+    : name(app_name)
 {
-    name = app_name;
     QString icon_path = ICON_PREFIX + name + ".png";
     if (fileExist(icon_path))
         icon = QIcon(icon_path);
@@ -60,9 +60,9 @@ QString AppInfo::getSummary() const
     return summary;
 }
 
-bool AppInfo::fileExist(QString path)
+bool AppInfo::fileExist(QString file_name)
 {
-    QFileInfo file(path);
+    QFileInfo file(file_name);
     if (file.exists() && file.isFile())
         return true;
     else
