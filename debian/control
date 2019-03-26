@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: handsome_feng <jianfengli@ubuntukylin.com>
 Build-Depends: debhelper (>= 12),
                qtbase5-dev,
+               pkg-config,
                libgsettings-qt-dev,
 Standards-Version: 4.3.0
 Homepage: https://github.com/UbuntuKylin/ubuntu-kylin-wizard

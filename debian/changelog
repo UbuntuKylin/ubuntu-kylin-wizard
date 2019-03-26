@@ -1,4 +1,4 @@
-ubuntu-kylin-wizard (19.04.0) disco; urgency=medium
+ubuntu-kylin-wizard (19.04.1) disco; urgency=medium
 
   * New design implemented with qt5.
   * debian/control:
